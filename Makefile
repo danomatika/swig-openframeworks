@@ -29,7 +29,7 @@ TARGET = desktop
 NAME = openFrameworks_wrap
 
 # where to copy the generated bindings
-DEST_DIR = ../src
+DEST_DIR = ../src/bindings
 
 # path to OF headers
 OF_HEADERS = ../../../libs/openFrameworks
