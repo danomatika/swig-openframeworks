@@ -12,7 +12,15 @@
 
 	2014 Dan Wilcox <danomatika@gmail.com>
 */
-%module of
+
+//workaround when compiling Python in MinGW
+%begin %{
+#ifdef TARGET_WIN32
+#include <cmath>
+#endif
+%}
+
+%module MODULE_NAME
 %{
 #include "ofMain.h"
 %}
@@ -27,6 +35,8 @@
 
 // ----- Renaming -----
 
+#ifdef RENAME
+
 // strip "of" prefix from classes
 %rename("%(strip:[of])s", %$isclass) "";
 
@@ -36,6 +46,8 @@
 // strip "OF_" from constants & enums
 %rename("%(strip:[OF_])s", %$isconstant) "";
 %rename("%(strip:[OF_])s", %$isenumitem) "";
+
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // ----- BINDINGS --------------------------------------------------------------
@@ -73,6 +85,15 @@
 // This forward delcaration is then overridden by the actual implentation after
 // %include "SomeClass.h" later on.
 
+#ifdef OF_LANG_python
+// Overloading operators
+%rename(__getitem__) *::operator[];
+%rename(__mul__) *::operator*;
+%rename(__div__) *::operator/;
+%rename(__add__) *::operator+;
+%rename(__sub__) *::operator-;
+#endif
+
 // SWIG doesn't understand C++ streams
 %ignore operator <<;
 %ignore operator >>;
@@ -103,9 +124,11 @@ class ofBaseHasPixels {};
 // TODO: ofFbo.h: SWIG Warning 325 due to Settings nested struct
 %ignore ofFbo::Settings; // doesn't seem to silence warning
 
+#ifdef OF_LANG_lua
 // DIFF: ofFbo.h: beginFbo() & endFbo() since "end" is a Lua keyword
 %rename(beginFbo) ofFbo::begin;
 %rename(endFbo) ofFbo::end;
+#endif
 
 %include "gl/ofFbo.h"
 
@@ -357,9 +380,11 @@ class fstream {};
 
 // ----- ofCamera.h -----
 
+#ifdef OF_LANG_lua
 // DIFF: ofCamera.h: beginCamera() & endCamera() since "end" is a Lua keyword
 %rename(beginCamera) ofCamera::begin;
 %rename(endCamera) ofCamera::end;
+#endif
 
 %include "3d/ofCamera.h"
 
@@ -432,18 +457,21 @@ class fstream {};
 %include "gl/ofLight.h"
 
 // ----- ofMaterial.h -----
-
+#ifdef OF_LANG_lua
 // DIFF: ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
 %rename(beginMaterial) ofMaterial::begin;
 %rename(endMaterial) ofMaterial::end;
+#endif
 
 %include "gl/ofMaterial.h"
 
 // ----- ofShader.h -----
 
+#ifdef OF_LANG_lua
 // DIFF: ofShader.h: beginShader() & endShader() since "end" is a Lua keyword
 %rename(beginShader) ofShader::begin;
 %rename(endShader) ofShader::end;
+#endif
 
 %include "gl/ofShader.h"
 
@@ -600,7 +628,9 @@ public:
 
 // ----- ofMatrix3x3.h -----
 
+#ifdef RENAME
 %rename(Matrix3x3) ofMatrix3x3;
+#endif
 
 %include "math/ofMatrix3x3.h"
 
@@ -718,6 +748,8 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 %include "events/ofEvents.h"
 
+#ifdef OF_LANG_lua
+
 ////////////////////////////////////////////////////////////////////////////////
 // ----- LUA -------------------------------------------------------------------
 
@@ -793,3 +825,18 @@ function class(base, __init)
 end
 
 }
+
+#endif
+
+#ifdef OF_LANG_python
+#ifndef RENAME
+
+%pythoncode %{
+
+# Renaming log -> ofLog
+ofLog = log
+del log
+%}
+
+#endif
+#endif
