@@ -12,13 +12,14 @@
 
 	2014 Dan Wilcox <danomatika@gmail.com>
 */
-
+#ifdef OF_LANG_python
 //workaround when compiling Python in MinGW
 %begin %{
 #ifdef TARGET_WIN32
 #include <cmath>
 #endif
 %}
+#endif
 
 %module MODULE_NAME
 %{
