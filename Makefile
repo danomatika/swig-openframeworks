@@ -35,7 +35,7 @@ TARGET = desktop
 NAME = openFrameworks_wrap
 
 # where to copy the generated bindings
-DEST_DIR = ../src
+DEST_DIR = ../src/bindings
 
 # where to copy the generated specific language files
 DEST_LANG_DIR = .
