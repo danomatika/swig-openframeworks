@@ -24,6 +24,7 @@
 %module MODULE_NAME
 %{
 #include "ofMain.h"
+#undef check
 %}
 
 %include <attribute.i>
