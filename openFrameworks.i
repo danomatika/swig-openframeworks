@@ -2,7 +2,7 @@
 	SWIG (http://www.swig.org) interface wrapper for the OpenFrameworks core API
 
 	Creates an "of" module and renames functions, classes, constants, & enums
-	
+
 	    * function: ofBackground -> of.background
 	    * class: ofColor -> of.Color
 	    * constant: OF_LOG_VERBOSE -> of.LOG_VERBOSE
@@ -15,7 +15,7 @@
 #ifdef OF_LANG_python
 //workaround when compiling Python in MinGW
 %begin %{
-#ifdef TARGET_WIN32
+#if defined( __WIN32__ ) || defined( _WIN32 )
 #include <cmath>
 #endif
 %}
@@ -82,7 +82,7 @@
 // or make a forward declaration before %inluding SomeClass.h:
 //
 //    class SomeClass {};
-//    %include AnotherClass.h 
+//    %include AnotherClass.h
 //
 // This forward delcaration is then overridden by the actual implentation after
 // %include "SomeClass.h" later on.
@@ -418,7 +418,7 @@ class fstream {};
 
 // deprecated
 %ignore ofSetupOpenGL(ofAppBaseWindow *, int, int, int);
-%ignore ofRunApp(ofBaseApp *); 
+%ignore ofRunApp(ofBaseApp *);
 
 // TODO: ofAppRunner.h: is ofSetAppPtr applicable in a target language?
 %ignore ofSetAppPtr;
@@ -581,13 +581,13 @@ public:
 
 	ofTrueTypeFont();
 	virtual ~ofTrueTypeFont();
-	
+
 	static void setGlobalDpi(int newDpi);
-			
+
 	bool loadFont(string filename, int fontsize, bool _bAntiAliased=true,
 		bool _bFullCharacterSet=false, bool makeContours=false,
 		float simplifyAmt=0.3, int dpi=0);
-	
+
 	bool isLoaded();
 	bool isAntiAliased();
 	bool hasFullCharacterSet();
@@ -601,14 +601,14 @@ public:
 	void setSpaceSize(float size);
 	float stringWidth(string s);
 	float stringHeight(string s);
-	
+
 	ofRectangle getStringBoundingBox(string s, float x, float y);
-	
+
 	void drawString(string s, float x, float y);
 	void drawStringAsShapes(string s, float x, float y);
-	
+
 	int getNumCharacters();
-	
+
 	ofTTFCharacter getCharacterAsPoints(int character, bool vflip=ofIsVFlipped());
 	vector<ofTTFCharacter> getStringAsPoints(string str, bool vflip=ofIsVFlipped());
 	ofMesh & getStringMesh(string s, float x, float y);
@@ -805,7 +805,7 @@ function class(base, __init)
    setmetatable(obj,c)
    if class_tbl.__init then
 	  class_tbl.__init(obj,...)
-   else 
+   else
 	  -- make sure that any stuff from the base class is initialized!
 	  if base and base.__init then
 	  base.__init(obj, ...)
@@ -816,7 +816,7 @@ function class(base, __init)
    c.__init = __init
    c.is_a = function(self, klass)
 	  local m = getmetatable(self)
-	  while m do 
+	  while m do
 		 if m == klass then return true end
 		 m = m._base
 	  end
