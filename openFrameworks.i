@@ -2,7 +2,7 @@
 	SWIG (http://www.swig.org) interface wrapper for the OpenFrameworks core API
 
 	Creates an "of" module and renames functions, classes, constants, & enums
-	
+
 	    * function: ofBackground -> of.background
 	    * class: ofColor -> of.Color
 	    * constant: OF_LOG_VERBOSE -> of.LOG_VERBOSE
@@ -12,9 +12,19 @@
 
 	2014 Dan Wilcox <danomatika@gmail.com>
 */
-%module of
+#ifdef OF_LANG_python
+//workaround when compiling Python in MinGW
+%begin %{
+#if defined( __WIN32__ ) || defined( _WIN32 )
+#include <cmath>
+#endif
+%}
+#endif
+
+%module MODULE_NAME
 %{
 #include "ofMain.h"
+#undef check
 %}
 
 %include <attribute.i>
@@ -27,6 +37,8 @@
 
 // ----- Renaming -----
 
+#ifdef RENAME
+
 // strip "of" prefix from classes
 %rename("%(strip:[of])s", %$isclass) "";
 
@@ -36,6 +48,8 @@
 // strip "OF_" from constants & enums
 %rename("%(strip:[OF_])s", %$isconstant) "";
 %rename("%(strip:[OF_])s", %$isenumitem) "";
+
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // ----- BINDINGS --------------------------------------------------------------
@@ -68,10 +82,19 @@
 // or make a forward declaration before %inluding SomeClass.h:
 //
 //    class SomeClass {};
-//    %include AnotherClass.h 
+//    %include AnotherClass.h
 //
 // This forward delcaration is then overridden by the actual implentation after
 // %include "SomeClass.h" later on.
+
+#ifdef OF_LANG_python
+// Overloading operators
+%rename(__getitem__) *::operator[];
+%rename(__mul__) *::operator*;
+%rename(__div__) *::operator/;
+%rename(__add__) *::operator+;
+%rename(__sub__) *::operator-;
+#endif
 
 // SWIG doesn't understand C++ streams
 %ignore operator <<;
@@ -103,9 +126,11 @@ class ofBaseHasPixels {};
 // TODO: ofFbo.h: SWIG Warning 325 due to Settings nested struct
 %ignore ofFbo::Settings; // doesn't seem to silence warning
 
-// DIFF: ofFbo.h: beginFbo() & endFbo() since "end" is a Lua keyword
+#ifdef OF_LANG_lua
+// DIFF: (Lua) ofFbo.h: beginFbo() & endFbo() since "end" is a Lua keyword
 %rename(beginFbo) ofFbo::begin;
 %rename(endFbo) ofFbo::end;
+#endif
 
 %include "gl/ofFbo.h"
 
@@ -131,10 +156,15 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofBaseImage;
 %ignore ofBaseFloatImage;
 %ignore ofBaseShortImage;
+#ifdef RENAME
 %template(BaseImage) ofBaseImage_<unsigned char>;
 %template(BaseFloatImage) ofBaseImage_<float>;
 %template(BaseShortImage) ofBaseImage_<unsigned short>;
-
+#else
+%template(ofBaseImage) ofBaseImage_<unsigned char>;
+%template(ofBaseFloatImage) ofBaseImage_<float>;
+%template(ofBaseShortImage) ofBaseImage_<unsigned short>;
+#endif
 // DIFF: ofImage.h: ignore global helper functions
 %ignore ofLoadImage;
 %ignore ofSaveImage;
@@ -144,9 +174,15 @@ template<typename T> class ofBaseImage_ {};
 %include "graphics/ofImage.h"
 
 // handle template implementations
+#ifdef RENAME
 %template(Image) ofImage_<unsigned char>;
 %template(FloatImage) ofImage_<float>;
 %template(ShortImage) ofImage_<unsigned short>;
+#else
+%template(ofImage) ofImage_<unsigned char>;
+%template(ofFloatImage) ofImage_<float>;
+%template(ofShortImage) ofImage_<unsigned short>;
+#endif
 
 // ----- SOUND -----------------------------------------------------------------
 
@@ -200,10 +236,15 @@ class ofBaseSoundPlayer {};
 %include "types/ofColor.h"
 
 // tell SWIG about template classes
+#ifdef RENAME
 %template(Color) ofColor_<unsigned char>;
 %template(FloatColor) ofColor_<float>;
 %template(ShortColor) ofColor_<unsigned short>;
-
+#else
+%template(ofColor) ofColor_<unsigned char>;
+%template(ofFloatColor) ofColor_<float>;
+%template(ofShortColor) ofColor_<unsigned short>;
+#endif
 // TODO: ofColor.h: pixel data access as attributes doesn't seem to work yet
 // %attribute(Color, unsigned char, r, getR, setR);
 // %attribute(Color, unsigned char, g, getG, setG);
@@ -357,9 +398,11 @@ class fstream {};
 
 // ----- ofCamera.h -----
 
-// DIFF: ofCamera.h: beginCamera() & endCamera() since "end" is a Lua keyword
+#ifdef OF_LANG_lua
+// DIFF: (Lua) ofCamera.h: beginCamera() & endCamera() since "end" is a Lua keyword
 %rename(beginCamera) ofCamera::begin;
 %rename(endCamera) ofCamera::end;
+#endif
 
 %include "3d/ofCamera.h"
 
@@ -391,7 +434,7 @@ class fstream {};
 
 // deprecated
 %ignore ofSetupOpenGL(ofAppBaseWindow *, int, int, int);
-%ignore ofRunApp(ofBaseApp *); 
+%ignore ofRunApp(ofBaseApp *);
 
 // TODO: ofAppRunner.h: is ofSetAppPtr applicable in a target language?
 %ignore ofSetAppPtr;
@@ -432,18 +475,21 @@ class fstream {};
 %include "gl/ofLight.h"
 
 // ----- ofMaterial.h -----
-
-// DIFF: ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
+#ifdef OF_LANG_lua
+// DIFF: (Lua) ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
 %rename(beginMaterial) ofMaterial::begin;
 %rename(endMaterial) ofMaterial::end;
+#endif
 
 %include "gl/ofMaterial.h"
 
 // ----- ofShader.h -----
 
-// DIFF: ofShader.h: beginShader() & endShader() since "end" is a Lua keyword
+#ifdef OF_LANG_lua
+// DIFF: (Lua) ofShader.h: beginShader() & endShader() since "end" is a Lua keyword
 %rename(beginShader) ofShader::begin;
 %rename(endShader) ofShader::end;
+#endif
 
 %include "gl/ofShader.h"
 
@@ -476,9 +522,15 @@ class fstream {};
 %include "graphics/ofPixels.h"
 
 // tell SWIG about template classes
+#ifdef RENAME
 %template(Pixels) ofPixels_<unsigned char>;
 %template(FloatPixels) ofPixels_<float>;
 %template(ShortPixels) ofPixels_<unsigned short>;
+#else
+%template(ofPixels) ofPixels_<unsigned char>;
+%template(ofFloatPixels) ofPixels_<float>;
+%template(ofShortPixels) ofPixels_<unsigned short>;
+#endif
 
 // ----- ofPath.h -----
 
@@ -551,13 +603,13 @@ public:
 
 	ofTrueTypeFont();
 	virtual ~ofTrueTypeFont();
-	
+
 	static void setGlobalDpi(int newDpi);
-			
+
 	bool loadFont(string filename, int fontsize, bool _bAntiAliased=true,
 		bool _bFullCharacterSet=false, bool makeContours=false,
 		float simplifyAmt=0.3, int dpi=0);
-	
+
 	bool isLoaded();
 	bool isAntiAliased();
 	bool hasFullCharacterSet();
@@ -571,14 +623,14 @@ public:
 	void setSpaceSize(float size);
 	float stringWidth(string s);
 	float stringHeight(string s);
-	
+
 	ofRectangle getStringBoundingBox(string s, float x, float y);
-	
+
 	void drawString(string s, float x, float y);
 	void drawStringAsShapes(string s, float x, float y);
-	
+
 	int getNumCharacters();
-	
+
 	ofTTFCharacter getCharacterAsPoints(int character, bool vflip=ofIsVFlipped());
 	vector<ofTTFCharacter> getStringAsPoints(string str, bool vflip=ofIsVFlipped());
 	ofMesh & getStringMesh(string s, float x, float y);
@@ -600,7 +652,9 @@ public:
 
 // ----- ofMatrix3x3.h -----
 
+#ifdef RENAME
 %rename(Matrix3x3) ofMatrix3x3;
+#endif
 
 %include "math/ofMatrix3x3.h"
 
@@ -647,10 +701,17 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %include "math/ofMath.h"
 
 // tell SWIG about template functions
+#ifdef RENAME
 %template(interpolateCosine) ofInterpolateCosine<float>;
 %template(interpolateCubic) ofInterpolateCubic<float>;
 %template(interpolateCatmullRom) ofInterpolateCatmullRom<float>;
 %template(interpolateHermite) ofInterpolateHermite<float>;
+#else
+%template(ofInterpolateCosine) ofInterpolateCosine<float>;
+%template(ofInterpolateCubic) ofInterpolateCubic<float>;
+%template(ofInterpolateCatmullRom) ofInterpolateCatmullRom<float>;
+%template(ofInterpolateHermite) ofInterpolateHermite<float>;
+#endif
 
 // ----- UTILS -----------------------------------------------------------------
 
@@ -718,6 +779,8 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 %include "events/ofEvents.h"
 
+#ifdef OF_LANG_lua
+
 ////////////////////////////////////////////////////////////////////////////////
 // ----- LUA -------------------------------------------------------------------
 
@@ -771,7 +834,7 @@ function class(base, __init)
    setmetatable(obj,c)
    if class_tbl.__init then
 	  class_tbl.__init(obj,...)
-   else 
+   else
 	  -- make sure that any stuff from the base class is initialized!
 	  if base and base.__init then
 	  base.__init(obj, ...)
@@ -782,7 +845,7 @@ function class(base, __init)
    c.__init = __init
    c.is_a = function(self, klass)
 	  local m = getmetatable(self)
-	  while m do 
+	  while m do
 		 if m == klass then return true end
 		 m = m._base
 	  end
@@ -793,3 +856,18 @@ function class(base, __init)
 end
 
 }
+
+#endif
+
+#ifdef OF_LANG_python
+#ifndef RENAME
+
+%pythoncode %{
+
+# Renaming log -> ofLog
+ofLog = log
+del log
+%}
+
+#endif
+#endif

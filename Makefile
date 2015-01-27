@@ -7,7 +7,7 @@
 # running `make ios` generates ios lua bindings, etc
 #
 # override any of the following variables using make,
-# i.e. to generate Puthon bindings with a different
+# i.e. to generate Python bindings with a different
 # filename and dest location:
 #
 #     make LANG=python NAME=ofxPythonBindings DEST_DIR=../src/bindings
@@ -18,6 +18,12 @@ SWIG = swig
 
 # default output language, see swig -h for more
 LANG = lua
+
+# module name
+MODULE_NAME = of
+
+# strip "of" from function names?
+RENAME = true
 
 # default platform target, available targets are:
 #   * desktop: win, linux, & mac osx
@@ -31,12 +37,30 @@ NAME = openFrameworks_wrap
 # where to copy the generated bindings
 DEST_DIR = ../src/bindings
 
+# where to copy the generated specific language files
+DEST_LANG_DIR = .
+
 # path to OF headers
 OF_HEADERS = ../../../libs/openFrameworks
 
+# Python specific preferences
+# typically, long names are used in Python,
+# and function names remain unaltered (see pyOpenGL for instance)
+ifeq ($(LANG),python)
+	MODULE_NAME = openframeworks
+	RENAME = false
+endif
+
+ifeq ($(RENAME),true)
+	RENAMECFLAGS = -DRENAME
+else
+	RENAMECFLAGS = 
+endif
+
 # C & C++ flags
-CFLAGS = -I$(OF_HEADERS)
+CFLAGS = -I$(OF_HEADERS) -DOF_LANG_$(LANG) -DMODULE_NAME=$(MODULE_NAME) $(RENAMECFLAGS)
 CXXFLAGS = $(CFLAGS)
+
 
 .PHONY: all debug clean desktop ios linuxarm
 
@@ -49,7 +73,7 @@ bindings:
 	@echo NAME = $(NAME)
 	@echo DEST_DIR = $(DEST_DIR)
 	
-	$(SWIG) -c++ -$(LANG) -fcompact -fvirtual $(CXXFLAGS) openFrameworks.i
+	$(SWIG) -c++ -$(LANG) -fcompact -fvirtual $(CXXFLAGS) -outdir $(DEST_LANG_DIR) openFrameworks.i
 	mv openFrameworks_wrap.cxx $(NAME).cpp
 
 	$(SWIG) -c++ -$(LANG) -external-runtime $(NAME).h
