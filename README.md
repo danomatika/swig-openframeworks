@@ -44,12 +44,16 @@ OF API Bindings
 
 Currently it covers *most* of the api while leaving out base classes.
 
-There is a main "of" module and functions, classes, constants, & enums are renamed:
-	
+It creates a module containing all the imported classes, functions, classes, constants & enums. By default this module is named "of". This can be changed with the `MODULE_NAME` variable.
+
+The contents of the module are renamed by default:
+
 * **function**: ofBackground -> of.background
 * **class**: ofColor -> of.Color
 * **constant**: OF_LOG_VERBOSE -> of.LOG_VERBOSE
 * **enum**: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
+
+The renaming can be controlled with the `RENAME` variable.
 
 To see the main differences with the OF C++ API run the following:
 
@@ -58,6 +62,13 @@ To see the main differences with the OF C++ API run the following:
 To see work to be done on the bindings run:
 
     grep TODO swig/openFrameworks.i
+
+Language Default Options
+------------------------
+
+In Lua, the module is called "of" and all its members are renamed.
+
+In Python, the module is called "openframeworks" and its members retain the "of-" prefix.
 
 Usage
 -----
