@@ -156,10 +156,15 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofBaseImage;
 %ignore ofBaseFloatImage;
 %ignore ofBaseShortImage;
+#ifdef RENAME
 %template(BaseImage) ofBaseImage_<unsigned char>;
 %template(BaseFloatImage) ofBaseImage_<float>;
 %template(BaseShortImage) ofBaseImage_<unsigned short>;
-
+#else
+%template(ofBaseImage) ofBaseImage_<unsigned char>;
+%template(ofBaseFloatImage) ofBaseImage_<float>;
+%template(ofBaseShortImage) ofBaseImage_<unsigned short>;
+#endif
 // DIFF: ofImage.h: ignore global helper functions
 %ignore ofLoadImage;
 %ignore ofSaveImage;
@@ -169,9 +174,15 @@ template<typename T> class ofBaseImage_ {};
 %include "graphics/ofImage.h"
 
 // handle template implementations
+#ifdef RENAME
 %template(Image) ofImage_<unsigned char>;
 %template(FloatImage) ofImage_<float>;
 %template(ShortImage) ofImage_<unsigned short>;
+#else
+%template(ofImage) ofImage_<unsigned char>;
+%template(ofFloatImage) ofImage_<float>;
+%template(ofShortImage) ofImage_<unsigned short>;
+#endif
 
 // ----- SOUND -----------------------------------------------------------------
 
@@ -225,10 +236,15 @@ class ofBaseSoundPlayer {};
 %include "types/ofColor.h"
 
 // tell SWIG about template classes
+#ifdef RENAME
 %template(Color) ofColor_<unsigned char>;
 %template(FloatColor) ofColor_<float>;
 %template(ShortColor) ofColor_<unsigned short>;
-
+#else
+%template(ofColor) ofColor_<unsigned char>;
+%template(ofFloatColor) ofColor_<float>;
+%template(ofShortColor) ofColor_<unsigned short>;
+#endif
 // TODO: ofColor.h: pixel data access as attributes doesn't seem to work yet
 // %attribute(Color, unsigned char, r, getR, setR);
 // %attribute(Color, unsigned char, g, getG, setG);
@@ -506,9 +522,15 @@ class fstream {};
 %include "graphics/ofPixels.h"
 
 // tell SWIG about template classes
+#ifdef RENAME
 %template(Pixels) ofPixels_<unsigned char>;
 %template(FloatPixels) ofPixels_<float>;
 %template(ShortPixels) ofPixels_<unsigned short>;
+#else
+%template(ofPixels) ofPixels_<unsigned char>;
+%template(ofFloatPixels) ofPixels_<float>;
+%template(ofShortPixels) ofPixels_<unsigned short>;
+#endif
 
 // ----- ofPath.h -----
 
@@ -679,10 +701,17 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %include "math/ofMath.h"
 
 // tell SWIG about template functions
+#ifdef RENAME
 %template(interpolateCosine) ofInterpolateCosine<float>;
 %template(interpolateCubic) ofInterpolateCubic<float>;
 %template(interpolateCatmullRom) ofInterpolateCatmullRom<float>;
 %template(interpolateHermite) ofInterpolateHermite<float>;
+#else
+%template(ofInterpolateCosine) ofInterpolateCosine<float>;
+%template(ofInterpolateCubic) ofInterpolateCubic<float>;
+%template(ofInterpolateCatmullRom) ofInterpolateCatmullRom<float>;
+%template(ofInterpolateHermite) ofInterpolateHermite<float>;
+#endif
 
 // ----- UTILS -----------------------------------------------------------------
 
