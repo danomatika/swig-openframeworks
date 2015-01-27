@@ -127,7 +127,7 @@ class ofBaseHasPixels {};
 %ignore ofFbo::Settings; // doesn't seem to silence warning
 
 #ifdef OF_LANG_lua
-// DIFF: ofFbo.h: beginFbo() & endFbo() since "end" is a Lua keyword
+// DIFF: (Lua) ofFbo.h: beginFbo() & endFbo() since "end" is a Lua keyword
 %rename(beginFbo) ofFbo::begin;
 %rename(endFbo) ofFbo::end;
 #endif
@@ -399,7 +399,7 @@ class fstream {};
 // ----- ofCamera.h -----
 
 #ifdef OF_LANG_lua
-// DIFF: ofCamera.h: beginCamera() & endCamera() since "end" is a Lua keyword
+// DIFF: (Lua) ofCamera.h: beginCamera() & endCamera() since "end" is a Lua keyword
 %rename(beginCamera) ofCamera::begin;
 %rename(endCamera) ofCamera::end;
 #endif
@@ -476,7 +476,7 @@ class fstream {};
 
 // ----- ofMaterial.h -----
 #ifdef OF_LANG_lua
-// DIFF: ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
+// DIFF: (Lua) ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
 %rename(beginMaterial) ofMaterial::begin;
 %rename(endMaterial) ofMaterial::end;
 #endif
@@ -486,7 +486,7 @@ class fstream {};
 // ----- ofShader.h -----
 
 #ifdef OF_LANG_lua
-// DIFF: ofShader.h: beginShader() & endShader() since "end" is a Lua keyword
+// DIFF: (Lua) ofShader.h: beginShader() & endShader() since "end" is a Lua keyword
 %rename(beginShader) ofShader::begin;
 %rename(endShader) ofShader::end;
 #endif
