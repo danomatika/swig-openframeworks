@@ -42,18 +42,7 @@ The master branch of swig-openframeworks will work with the current stable versi
 OF API Bindings
 ---------------
 
-Currently it covers *most* of the api while leaving out base classes.
-
-It creates a module containing all the imported classes, functions, classes, constants & enums. By default this module is named "of". This can be changed with the `MODULE_NAME` variable.
-
-The contents of the module are renamed by default:
-
-* **function**: ofBackground -> of.background
-* **class**: ofColor -> of.Color
-* **constant**: OF_LOG_VERBOSE -> of.LOG_VERBOSE
-* **enum**: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
-
-The renaming can be controlled with the `RENAME` variable.
+Currently the swig interface file covers *most* of the api while leaving out base classes. It creates a module containing all the imported functions, classes, constants & enums.
 
 To see the main differences with the OF C++ API run the following:
 
@@ -63,12 +52,33 @@ To see work to be done on the bindings run:
 
     grep TODO swig/openFrameworks.i
 
-Language Default Options
-------------------------
+Currently supported (aka tested) scripting languages are:
 
-In Lua, the module is called "of" and all its members are renamed.
+* Lua
+* Python
 
-In Python, the module is called "openframeworks" and its members retain the "of-" prefix.
+Other language bindgins supported by swig can be generated. Feel free to create a PR adding required updates to the Makefile and interface file.
+
+### Lua
+
+In Lua, all wrapped functions, classes, defines, and enums are added to an "of" module (aka table) like a Lua library.
+
+The contents of the module are renamed by default:
+
+* **function**: ofBackground -> of.background
+* **class**: ofColor -> of.Color
+* **constant**: OF_LOG_VERBOSE -> of.LOG_VERBOSE
+* **enum**: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
+
+### Python
+
+In Python, the module (aka library) is called "openframeworks" and its members retain the "of" prefix:
+
+    import openframeworks
+    
+    ofBackground(255)
+    color = ofColor()
+    ...
 
 Usage
 -----
@@ -118,6 +128,20 @@ The Makefile generates bindings files using the NAME makefile variable and is `o
 Example: To generate python bindings for desktop with the name "ofxPythonBindings":
 
     make desktop LANG=python NAME=ofxPythonBindings
+
+### Module Name
+
+The scripting language bindings use the "of" module by default. In the case of Lua, this refers to the parent "of" table that contains all warped functions, classes, and defines. This may not be desirable for particular scripting languages (ie. Python), so the module name can be set using the MODULE_NAME makefile variable.
+
+Example: To egenrate python bindings with the module name "openframeworks":
+
+    make LANG=python MODULE_NAME=openframeworks
+
+### Renaming
+
+By default, functions, classes, enums, & defines are reamed to strip the "of" prefix. This may not be desirable for particular scripting languages (ie. Python) and can be disabled by setting the MODULE_NAME makefile variable to false:
+
+    make RENAME=false
 
 ### Scripting
 

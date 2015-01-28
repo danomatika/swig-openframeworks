@@ -1,13 +1,15 @@
 /*
 	SWIG (http://www.swig.org) interface wrapper for the OpenFrameworks core API
 
-	Creates an "of" module and renames functions, classes, constants, & enums
+	(Lua) Creates an "of" module and renames functions, classes, constants, & enums
 
 	    * function: ofBackground -> of.background
 	    * class: ofColor -> of.Color
 	    * constant: OF_LOG_VERBOSE -> of.LOG_VERBOSE
 	    * enum: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
 
+	(Python) Creates an "openframeworks" module
+	
 	Deprecations are ignored (aka not wrapped)
 
 	2014 Dan Wilcox <danomatika@gmail.com>
@@ -37,7 +39,7 @@
 
 // ----- Renaming -----
 
-#ifdef RENAME
+#ifdef OF_SWIG_RENAME
 
 // strip "of" prefix from classes
 %rename("%(strip:[of])s", %$isclass) "";
@@ -156,7 +158,7 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofBaseImage;
 %ignore ofBaseFloatImage;
 %ignore ofBaseShortImage;
-#ifdef RENAME
+#ifdef OF_SWIG_RENAME
 %template(BaseImage) ofBaseImage_<unsigned char>;
 %template(BaseFloatImage) ofBaseImage_<float>;
 %template(BaseShortImage) ofBaseImage_<unsigned short>;
@@ -174,7 +176,7 @@ template<typename T> class ofBaseImage_ {};
 %include "graphics/ofImage.h"
 
 // handle template implementations
-#ifdef RENAME
+#ifdef OF_SWIG_RENAME
 %template(Image) ofImage_<unsigned char>;
 %template(FloatImage) ofImage_<float>;
 %template(ShortImage) ofImage_<unsigned short>;
@@ -236,7 +238,7 @@ class ofBaseSoundPlayer {};
 %include "types/ofColor.h"
 
 // tell SWIG about template classes
-#ifdef RENAME
+#ifdef OF_SWIG_RENAME
 %template(Color) ofColor_<unsigned char>;
 %template(FloatColor) ofColor_<float>;
 %template(ShortColor) ofColor_<unsigned short>;
@@ -522,7 +524,7 @@ class fstream {};
 %include "graphics/ofPixels.h"
 
 // tell SWIG about template classes
-#ifdef RENAME
+#ifdef OF_SWIG_RENAME
 %template(Pixels) ofPixels_<unsigned char>;
 %template(FloatPixels) ofPixels_<float>;
 %template(ShortPixels) ofPixels_<unsigned short>;
@@ -652,7 +654,7 @@ public:
 
 // ----- ofMatrix3x3.h -----
 
-#ifdef RENAME
+#ifdef OF_SWIG_RENAME
 %rename(Matrix3x3) ofMatrix3x3;
 #endif
 
@@ -701,7 +703,7 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %include "math/ofMath.h"
 
 // tell SWIG about template functions
-#ifdef RENAME
+#ifdef OF_SWIG_RENAME
 %template(interpolateCosine) ofInterpolateCosine<float>;
 %template(interpolateCubic) ofInterpolateCubic<float>;
 %template(interpolateCatmullRom) ofInterpolateCatmullRom<float>;
@@ -860,10 +862,9 @@ end
 #endif
 
 #ifdef OF_LANG_python
-#ifndef RENAME
+#ifndef OF_SWIG_RENAME
 
 %pythoncode %{
-
 # Renaming log -> ofLog
 ofLog = log
 del log

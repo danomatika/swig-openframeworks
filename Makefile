@@ -22,7 +22,7 @@ LANG = lua
 # module name
 MODULE_NAME = of
 
-# strip "of" from function names?
+# strip "of" from function, class, & define/enum names?
 RENAME = true
 
 # default platform target, available targets are:
@@ -46,21 +46,20 @@ OF_HEADERS = ../../../libs/openFrameworks
 # Python specific preferences
 # typically, long names are used in Python,
 # and function names remain unaltered (see pyOpenGL for instance)
-ifeq ($(LANG),python)
+ifeq ($(LANG), python)
 	MODULE_NAME = openframeworks
 	RENAME = false
 endif
 
-ifeq ($(RENAME),true)
-	RENAMECFLAGS = -DRENAME
+ifeq ($(RENAME), true)
+	RENAME_CFLAGS = -DOF_SWIG_RENAME
 else
-	RENAMECFLAGS = 
+	RENAME_CFLAGS = 
 endif
 
 # C & C++ flags
-CFLAGS = -I$(OF_HEADERS) -DOF_LANG_$(LANG) -DMODULE_NAME=$(MODULE_NAME) $(RENAMECFLAGS)
+CFLAGS = -I$(OF_HEADERS) -DOF_LANG_$(LANG) -DMODULE_NAME=$(MODULE_NAME) $(RENAME_CFLAGS)
 CXXFLAGS = $(CFLAGS)
-
 
 .PHONY: all debug clean desktop ios linuxarm
 
