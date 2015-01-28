@@ -74,7 +74,7 @@ The contents of the module are renamed by default:
 
 In Python, the module (aka library) is called "openframeworks" and its members retain the "of" prefix:
 
-    import openframeworks
+    from openframeworks import *
     
     ofBackground(255)
     color = ofColor()
