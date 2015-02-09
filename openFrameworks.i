@@ -109,8 +109,9 @@ namespace std {
 	%template(StringVector) std::vector<std::string>;
 };
 
-// Needed to use functions with GLint args
+// GL types used as OF arguments, etc so swig needs to know about them
 typedef int GLint;
+typedef float GLfloat;
 
 // ----- ofConstants.h -----
 
@@ -188,6 +189,25 @@ template<typename T> class ofBaseImage_ {};
 %template(ofFloatImage) ofImage_<float>;
 %template(ofShortImage) ofImage_<unsigned short>;
 #endif
+
+// extend with GLint enums used by ofTexture for convenience
+%extend ofTexture {
+	
+	enum Type {
+		LUMINENCE = GL_LUMINENCE,
+		RGB = GL_RGB,
+		RGBA = GL_RGBA
+	};
+
+	enum Wrap {
+		CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+	#ifndef TARGET_OPENGLES
+		CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER,
+	#endif
+		MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+		REPEAT = GL_REPEAT
+	};
+};
 
 // ----- SOUND -----------------------------------------------------------------
 
