@@ -109,6 +109,9 @@ namespace std {
 	%template(StringVector) std::vector<std::string>;
 };
 
+// Needed to use functions with GLint args
+typedef int GLint;
+
 // ----- ofConstants.h -----
 
 %include "utils/ofConstants.h"
