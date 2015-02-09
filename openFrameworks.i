@@ -190,7 +190,7 @@ template<typename T> class ofBaseImage_ {};
 %template(ofShortImage) ofImage_<unsigned short>;
 #endif
 
-// extend with GLint enums used by ofTexture for convenience
+// DIFF: ofTexture extended with GLint texture type and wrap enums for convenience
 %extend ofTexture {
 	
 	enum Type {
