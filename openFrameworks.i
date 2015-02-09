@@ -190,24 +190,18 @@ template<typename T> class ofBaseImage_ {};
 %template(ofShortImage) ofImage_<unsigned short>;
 #endif
 
-// DIFF: ofTexture extended with GLint texture type and wrap enums for convenience
-%extend ofTexture {
-	
-	enum Type {
-		LUMINENCE = GL_LUMINENCE,
-		RGB = GL_RGB,
-		RGBA = GL_RGBA
-	};
+// DIFF: defined GLint texture types for convenience: OF_TEXTURE_LUMINENCE, etc
+#define OF_TEXTURE_LUMINENCE = GL_LUMINENCE
+#define OF_TEXTURE_RGB = GL_RGB
+#define OF_TEXTURE_RGBA = GL_RGBA
 
-	enum Wrap {
-		CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
-	#ifndef TARGET_OPENGLES
-		CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER,
-	#endif
-		MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
-		REPEAT = GL_REPEAT
-	};
-};
+// DIFF: defined GLfloat texture wrap defines for convenience: OF_TEXTURE_REPEAT, etc
+#define OF_CLAMP_TO_EDGE GL_CLAMP_TO_EDGE
+#ifndef TARGET_OPENGLES
+	#define OF_CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
+#endif
+#define OF_MIRRORED_REPEAT = GL_MIRRORED_REPEAT
+#define OF_REPEAT = GL_REPEAT
 
 // ----- SOUND -----------------------------------------------------------------
 
