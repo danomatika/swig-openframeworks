@@ -884,6 +884,48 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 %include "events/ofEvents.h"
 
+// ----- CALLBACKS -------------------------------------------------------------
+// DIFF: We create callback classes
+
+%inline %{
+    class CallBack{
+    public:
+        virtual void _call(){}
+    };
+%}
+
+%{
+
+    CallBack * global_CallBack = NULL;
+
+    void _setCallBackPointer(CallBack* c)
+    {
+        global_CallBack = c;
+    }
+
+%}
+
+%inline %{
+    CallBack * _getCallBackPointer()
+    {
+        return global_CallBack;
+    }
+
+%}
+
+#ifdef OF_LANG_python
+%extend CallBack{
+%pythoncode %{
+    def call(self,*args,**kwargs):
+        CallBack._args = args
+        CallBack._kwargs = kwargs
+        self._call()
+        CallBack._args = None
+        CallBack._kwargs = None
+%}
+}
+#endif
+
 #ifdef OF_LANG_lua
 
 ////////////////////////////////////////////////////////////////////////////////
