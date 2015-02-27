@@ -1,18 +1,18 @@
 /*
-	SWIG (http://www.swig.org) interface wrapper for the OpenFrameworks core API
+    SWIG (http://www.swig.org) interface wrapper for the OpenFrameworks core API
 
-	(Lua) Creates an "of" module and renames functions, classes, constants, & enums
+    (Lua) Creates an "of" module and renames functions, classes, constants, & enums
 
-	    * function: ofBackground -> of.background
-	    * class: ofColor -> of.Color
-	    * constant: OF_LOG_VERBOSE -> of.LOG_VERBOSE
-	    * enum: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
+        * function: ofBackground -> of.background
+        * class: ofColor -> of.Color
+        * constant: OF_LOG_VERBOSE -> of.LOG_VERBOSE
+        * enum: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
 
-	(Python) Creates an "openframeworks" module
-	
-	Deprecations are ignored (aka not wrapped)
+    (Python) Creates an "openframeworks" module
+    
+    Deprecations are ignored (aka not wrapped)
 
-	2014 Dan Wilcox <danomatika@gmail.com>
+    2014 Dan Wilcox <danomatika@gmail.com>
 */
 #ifdef OF_LANG_python
 //workaround when compiling Python in MinGW
@@ -104,9 +104,9 @@
 
 // needed for functions and return types
 namespace std {
-	%template(IntVector) std::vector<int>;
-	%template(FloatVector) std::vector<float>;
-	%template(StringVector) std::vector<std::string>;
+    %template(IntVector) std::vector<int>;
+    %template(FloatVector) std::vector<float>;
+    %template(StringVector) std::vector<std::string>;
 };
 
 // GL types used as OF arguments, etc so swig needs to know about them
@@ -198,7 +198,7 @@ template<typename T> class ofBaseImage_ {};
 // DIFF: defined GLfloat texture wrap defines for convenience: OF_TEXTURE_REPEAT, etc
 #define OF_CLAMP_TO_EDGE GL_CLAMP_TO_EDGE
 #ifndef TARGET_OPENGLES
-	#define OF_CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
+    #define OF_CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
 #endif
 #define OF_MIRRORED_REPEAT = GL_MIRRORED_REPEAT
 #define OF_REPEAT = GL_REPEAT
@@ -244,23 +244,23 @@ class ofBaseSoundPlayer {};
 // DIFF: ofColor.h: added target language tostring wrapper for ofColor_::operator <<
 %extend ofColor_ {
 
-	// pixel channel getters
-	PixelType getR() {return $self->r;}
-	PixelType getG() {return $self->g;}
-	PixelType getB() {return $self->b;}
-	PixelType getA() {return $self->a;}
+    // pixel channel getters
+    PixelType getR() {return $self->r;}
+    PixelType getG() {return $self->g;}
+    PixelType getB() {return $self->b;}
+    PixelType getA() {return $self->a;}
 
-	// pixel channel setters
-	void setR(PixelType r) {$self->r = r;}
-	void setG(PixelType g) {$self->g = g;}
-	void setB(PixelType b) {$self->b = b;}
-	void setA(PixelType a) {$self->a = a;}
+    // pixel channel setters
+    void setR(PixelType r) {$self->r = r;}
+    void setG(PixelType g) {$self->g = g;}
+    void setB(PixelType b) {$self->b = b;}
+    void setA(PixelType a) {$self->a = a;}
 
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
+    const char* __str__() {
+        stringstream str;
+        str << (*$self);
+        return str.str().c_str();
+    }
 };
 
 %attributeVar(ofColor_<unsigned char>, unsigned char, r, r, r);
@@ -369,9 +369,9 @@ class fstream {};
 
 // function wrapper for ofLog class
 %inline %{
-	void log(ofLogLevel level, const string & message) {
-		ofLog(level, message);
-	}
+    void log(ofLogLevel level, const string & message) {
+        ofLog(level, message);
+    }
 %}
 
 // DIFF: ofLog.h: ignore stream based log classes since target languages won't support it
@@ -421,16 +421,16 @@ class fstream {};
 // TODO: ofRectangle.h: SWIG Warning 302: due to manual override of x & y attributes
 %extend ofRectangle {
 
-	// override these since they are float references in the orig file and we
-	// want to access them as floats
-	float x;
-	float y;
+    // override these since they are float references in the orig file and we
+    // want to access them as floats
+    float x;
+    float y;
 
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
+    const char* __str__() {
+        stringstream str;
+        str << (*$self);
+        return str.str().c_str();
+    }
 };
 
 %include "types/ofRectangle.h"
@@ -513,13 +513,13 @@ class fstream {};
 // conditional compilation for iOS and Android
 #if !defined(TARGET_IOS) && !defined(TARGET_ANDROID)
 
-	// ----- ofArduino.h -----
+    // ----- ofArduino.h -----
 
-	%include "communication/ofArduino.h"
+    %include "communication/ofArduino.h"
 
-	// ----- ofSerial.h -----
+    // ----- ofSerial.h -----
 
-	%include "communication/ofSerial.h"
+    %include "communication/ofSerial.h"
 
 #endif
 
@@ -611,8 +611,8 @@ class fstream {};
 
 // no PDF export support on mobile
 #if defined(TARGET_IOS) || defined(TARGET_ANDROID)
-	%ignore ofBeginSaveScreenAsPDF;
-	%ignore ofEndSaveScreenAsPDF();
+    %ignore ofBeginSaveScreenAsPDF;
+    %ignore ofEndSaveScreenAsPDF();
 #endif
 
 // DIFF: ofGraphics.h: get/set current renderer not applicable to target language
@@ -656,46 +656,46 @@ class ofTrueTypeFont{
 
 public:
 
-	ofTrueTypeFont();
-	virtual ~ofTrueTypeFont();
+    ofTrueTypeFont();
+    virtual ~ofTrueTypeFont();
 
-	static void setGlobalDpi(int newDpi);
+    static void setGlobalDpi(int newDpi);
 
-	bool loadFont(string filename, int fontsize, bool _bAntiAliased=true,
-		bool _bFullCharacterSet=false, bool makeContours=false,
-		float simplifyAmt=0.3, int dpi=0);
+    bool loadFont(string filename, int fontsize, bool _bAntiAliased=true,
+        bool _bFullCharacterSet=false, bool makeContours=false,
+        float simplifyAmt=0.3, int dpi=0);
 
-	bool isLoaded();
-	bool isAntiAliased();
-	bool hasFullCharacterSet();
+    bool isLoaded();
+    bool isAntiAliased();
+    bool hasFullCharacterSet();
 
-	int getSize();
-	float getLineHeight();
-	void setLineHeight(float height);
-	float getLetterSpacing();
-	void setLetterSpacing(float spacing);
-	float getSpaceSize();
-	void setSpaceSize(float size);
-	float stringWidth(string s);
-	float stringHeight(string s);
+    int getSize();
+    float getLineHeight();
+    void setLineHeight(float height);
+    float getLetterSpacing();
+    void setLetterSpacing(float spacing);
+    float getSpaceSize();
+    void setSpaceSize(float size);
+    float stringWidth(string s);
+    float stringHeight(string s);
 
-	ofRectangle getStringBoundingBox(string s, float x, float y);
+    ofRectangle getStringBoundingBox(string s, float x, float y);
 
-	void drawString(string s, float x, float y);
-	void drawStringAsShapes(string s, float x, float y);
+    void drawString(string s, float x, float y);
+    void drawStringAsShapes(string s, float x, float y);
 
-	int getNumCharacters();
+    int getNumCharacters();
 
-	ofTTFCharacter getCharacterAsPoints(int character, bool vflip=ofIsVFlipped());
-	vector<ofTTFCharacter> getStringAsPoints(string str, bool vflip=ofIsVFlipped());
-	ofMesh & getStringMesh(string s, float x, float y);
-	ofTexture & getFontTexture();
+    ofTTFCharacter getCharacterAsPoints(int character, bool vflip=ofIsVFlipped());
+    vector<ofTTFCharacter> getStringAsPoints(string str, bool vflip=ofIsVFlipped());
+    ofMesh & getStringMesh(string s, float x, float y);
+    ofTexture & getFontTexture();
 
-	void bind();
-	void unbind();
+    void bind();
+    void unbind();
 
-	ofTextEncoding getEncoding() const;
-	void setEncoding(ofTextEncoding encoding);
+    ofTextEncoding getEncoding() const;
+    void setEncoding(ofTextEncoding encoding);
 };
 
 // DIFF: ofTrueTypeFont.h: added attributes: lineHeight, letterSpacing, & spaceSize
@@ -714,11 +714,11 @@ public:
 %include "math/ofMatrix3x3.h"
 
 %extend ofMatrix3x3 {
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
+    const char* __str__() {
+        stringstream str;
+        str << (*$self);
+        return str.str().c_str();
+    }
 };
 
 // ----- ofMatrix4x4.h -----
@@ -728,11 +728,11 @@ public:
 %include "math/ofMatrix4x4.h"
 
 %extend ofMatrix4x4 {
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
+    const char* __str__() {
+        stringstream str;
+        str << (*$self);
+        return str.str().c_str();
+    }
 };
 
 // ----- ofQuaternion.h -----
@@ -747,11 +747,11 @@ public:
 %include "math/ofQuaternion.h"
 
 %extend ofQuaternion {
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
+    const char* __str__() {
+        stringstream str;
+        str << (*$self);
+        return str.str().c_str();
+    }
 };
 
 // ----- ofVecs -----
@@ -762,31 +762,31 @@ public:
 %include "math/ofVec2f.h"
 
 %extend ofVec2f {
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
+    const char* __str__() {
+        stringstream str;
+        str << (*$self);
+        return str.str().c_str();
+    }
 };
 
 %include "math/ofVec3f.h"
 
 %extend ofVec3f {
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
+    const char* __str__() {
+        stringstream str;
+        str << (*$self);
+        return str.str().c_str();
+    }
 };
 
 %include "math/ofVec4f.h"
 
 %extend ofVec4f {
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
+    const char* __str__() {
+        stringstream str;
+        str << (*$self);
+        return str.str().c_str();
+    }
 };
 
 // ----- ofMath.h -----
@@ -964,14 +964,14 @@ of.Point = of.Vec3f
 function class(base, __init)
    local c = {}    -- a new class instance
    if not __init and type(base) == 'function' then
-	  __init = base
-	  base = nil
+      __init = base
+      base = nil
    elseif type(base) == 'table' then
-	-- our new class is a shallow copy of the base class!
-	  for i,v in pairs(base) do
-		 c[i] = v
-	  end
-	  c._base = base
+    -- our new class is a shallow copy of the base class!
+      for i,v in pairs(base) do
+         c[i] = v
+      end
+      c._base = base
    end
    -- the class will be the metatable for all its objects,
    -- and they will look up their methods in it.
@@ -983,23 +983,23 @@ function class(base, __init)
    local obj = {}
    setmetatable(obj,c)
    if class_tbl.__init then
-	  class_tbl.__init(obj,...)
+      class_tbl.__init(obj,...)
    else
-	  -- make sure that any stuff from the base class is initialized!
-	  if base and base.__init then
-	  base.__init(obj, ...)
-	  end
+      -- make sure that any stuff from the base class is initialized!
+      if base and base.__init then
+      base.__init(obj, ...)
+      end
    end
    return obj
    end
    c.__init = __init
    c.is_a = function(self, klass)
-	  local m = getmetatable(self)
-	  while m do
-		 if m == klass then return true end
-		 m = m._base
-	  end
-	  return false
+      local m = getmetatable(self)
+      while m do
+         if m == klass then return true end
+         m = m._base
+      end
+      return false
    end
    setmetatable(c, mt)
    return c
