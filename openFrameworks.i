@@ -112,6 +112,14 @@ namespace std {
 // Needed to use functions with GLint args
 typedef int GLint;
 
+
+// ofIndexType not fully defined in ofConstants.h
+#if TARGET_OS_IPHONE || ANDROID || __ARMEL__
+typedef unsigned short ofIndexType;
+#else
+typedef unsigned int ofIndexType;
+#endif
+
 // ----- ofConstants.h -----
 
 %include "utils/ofConstants.h"
