@@ -109,8 +109,9 @@ namespace std {
 	%template(StringVector) std::vector<std::string>;
 };
 
-// Needed to use functions with GLint args
+// GL types used as OF arguments, etc so swig needs to know about them
 typedef int GLint;
+typedef float GLfloat;
 
 
 // ofIndexType not fully defined in ofConstants.h
@@ -197,6 +198,19 @@ template<typename T> class ofBaseImage_ {};
 %template(ofShortImage) ofImage_<unsigned short>;
 #endif
 
+// DIFF: defined GLint texture types for convenience: OF_TEXTURE_LUMINENCE, etc
+#define OF_TEXTURE_LUMINENCE = GL_LUMINENCE
+#define OF_TEXTURE_RGB = GL_RGB
+#define OF_TEXTURE_RGBA = GL_RGBA
+
+// DIFF: defined GLfloat texture wrap defines for convenience: OF_TEXTURE_REPEAT, etc
+#define OF_CLAMP_TO_EDGE GL_CLAMP_TO_EDGE
+#ifndef TARGET_OPENGLES
+	#define OF_CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
+#endif
+#define OF_MIRRORED_REPEAT = GL_MIRRORED_REPEAT
+#define OF_REPEAT = GL_REPEAT
+
 // ----- SOUND -----------------------------------------------------------------
 
 // ----- ofSoundStream.h -----
@@ -221,9 +235,20 @@ class ofBaseSoundPlayer {};
 
 // ----- ofColor.h -----
 
-// DIFF: ofColor.h: SWIG Warning 570 ignores nested union that provides r, g, b, & a access,
-// DIFF:            added ofColor_ pixel channel getters getR(), getG(), getB(), getA()
-// DIFF:            added ofColor_ pixel channel setters getR(), getG(), getB(), getA()
+// custom attribute wrapper for nested union var access
+%define %attributeVar(Class, AttributeType, AttributeName, GetVar, SetVar...)
+  #if #SetVar != ""
+    %attribute_custom(%arg(Class), %arg(AttributeType), AttributeName, GetVar, SetVar, self_->GetVar, self_->SetVar = val_)
+  #else
+    %attribute_readonly(%arg(Class), %arg(AttributeType), AttributeName, GetVar, self_->GetVar)
+  #endif
+%enddef
+
+%include "types/ofColor.h"
+
+// TODO: ofColor.h: SWIG Warning 312 ignores nested union that provides r, g, b, & a access
+// DIFF: ofColor.h: added ofColor_ pixel channel getters getR(), getG(), getB(), getA()
+// DIFF:            added ofColor_ pixel channel setters setR(), setG(), setB(), setA()
 // DIFF: ofColor.h: added target language tostring wrapper for ofColor_::operator <<
 %extend ofColor_ {
 
@@ -246,7 +271,20 @@ class ofBaseSoundPlayer {};
 	}
 };
 
-%include "types/ofColor.h"
+%attributeVar(ofColor_<unsigned char>, unsigned char, r, r, r);
+%attributeVar(ofColor_<unsigned char>, unsigned char, g, g, g);
+%attributeVar(ofColor_<unsigned char>, unsigned char, b, b, b);
+%attributeVar(ofColor_<unsigned char>, unsigned char, a, a, a);
+
+%attributeVar(ofColor_<float>, float, r, r, r);
+%attributeVar(ofColor_<float>, float, g, g, g);
+%attributeVar(ofColor_<float>, float, b, b, b);
+%attributeVar(ofColor_<float>, float, a, a, a);
+
+%attributeVar(ofColor_<unsigned short>, unsigned short, r, r, r);
+%attributeVar(ofColor_<unsigned short>, unsigned short, g, g, g);
+%attributeVar(ofColor_<unsigned short>, unsigned short, b, b, b);
+%attributeVar(ofColor_<unsigned short>, unsigned short, a, a, a);
 
 // tell SWIG about template classes
 #ifdef OF_SWIG_RENAME
@@ -258,11 +296,6 @@ class ofBaseSoundPlayer {};
 %template(ofFloatColor) ofColor_<float>;
 %template(ofShortColor) ofColor_<unsigned short>;
 #endif
-// TODO: ofColor.h: pixel data access as attributes doesn't seem to work yet
-// %attribute(Color, unsigned char, r, getR, setR);
-// %attribute(Color, unsigned char, g, getG, setG);
-// %attribute(Color, unsigned char, b, getB, setB);
-// %attribute(Color, unsigned char, a, getA, setA);
 
 // ----- ofBaseTypes.h -----
 
@@ -382,21 +415,38 @@ class fstream {};
 
 // ----- ofPoint.h -----
 
+// this file is just a typedef which swig cannot wrap, so the types need to be 
+// handled in the scripting language, see the Lua, Python, etc code at the end
 %include "types/ofPoint.h"
 
 // ----- ofRectangle.h -----
-
-// SWIG converts the x & y float & types into pointers,
-// so specify x & y as attributes using the get & set functions
-%attribute(ofRectangle, float, x, getX, setX);
-%attribute(ofRectangle, float, y, getY, setY);
 
 // DIFF: ofRectangle.h: renamed functions due to ambiguous overloading:
 // DIFF:                scaleToScaleMode() & scaleToAspectRatio()
 %rename(scaleToScaleMode) ofRectangle::scaleTo(ofRectangle const &, ofScaleMode);
 %rename(scaleToAspectRatio) ofRectangle::scaleTo(ofRectangle const &, ofAspectRatioMode);
 
+// TODO: ofRectangle.h: SWIG Warning 302: due to manual override of x & y attributes
+%extend ofRectangle {
+
+	// override these since they are float references in the orig file and we
+	// want to access them as floats
+	float x;
+	float y;
+
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
+
 %include "types/ofRectangle.h"
+
+// SWIG converts the x & y float& types into pointers,
+// so specify x & y as attributes using the get & set functions
+%attribute(ofRectangle, float, x, getX, setX);
+%attribute(ofRectangle, float, y, getY, setY);
 
 // ----- 3D --------------------------------------------------------------------
 
@@ -671,11 +721,27 @@ public:
 
 %include "math/ofMatrix3x3.h"
 
+%extend ofMatrix3x3 {
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
+
 // ----- ofMatrix4x4.h -----
 
 %ignore ofMatrix4x4::operator()(int,int) const;
 
 %include "math/ofMatrix4x4.h"
+
+%extend ofMatrix4x4 {
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
 
 // ----- ofQuaternion.h -----
 
@@ -688,14 +754,48 @@ public:
 
 %include "math/ofQuaternion.h"
 
+%extend ofQuaternion {
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
+
 // ----- ofVecs -----
 
 // TODO: ofVec4f.h: ignoring ofVec4f::set(f), defined but not implemented in OF 0.8.4
 %ignore ofVec4f::set(float);
 
 %include "math/ofVec2f.h"
+
+%extend ofVec2f {
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
+
 %include "math/ofVec3f.h"
+
+%extend ofVec3f {
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
+
 %include "math/ofVec4f.h"
+
+%extend ofVec4f {
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
 
 // ----- ofMath.h -----
 
@@ -822,6 +922,9 @@ ofInterpolateHermite(float y1, float y2, float pct);
 -- this isnt wrapped correctly, so set it here
 of.CLOSE = true
 
+-- handle typedefs which swig doesnt wrap
+of.Point = of.Vec3f
+
 -- class.lua
 -- Compatible with Lua 5.1 (not 5.0).
 function class(base, __init)
@@ -872,13 +975,21 @@ end
 
 #endif
 
+////////////////////////////////////////////////////////////////////////////////
+// ----- Python ----------------------------------------------------------------
+
 #ifdef OF_LANG_python
 #ifndef OF_SWIG_RENAME
 
 %pythoncode %{
-# Renaming log -> ofLog
+
+# handle typedefs which swig doesnt wrap
+ofPoint = ofVec3f
+
+# renaming log -> ofLog
 ofLog = log
 del log
+
 %}
 
 #endif
