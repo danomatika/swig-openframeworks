@@ -14,43 +14,69 @@
 
 	2014 Dan Wilcox <danomatika@gmail.com>
 */
-#ifdef OF_LANG_python
-//workaround when compiling Python in MinGW
+
+// workaround when compiling Python in MinGW
+#ifdef SWIGPYTHON
 %begin %{
-#if defined( __WIN32__ ) || defined( _WIN32 )
-#include <cmath>
-#endif
+	#if defined( __WIN32__ ) || defined( _WIN32 )
+		#include <cmath>
+	#endif
 %}
 #endif
 
 %module MODULE_NAME
 %{
-#include "ofMain.h"
-#undef check
+	#include "ofMain.h"
+	#undef check
 %}
 
 %include <attribute.i>
 %include <typemaps.i>
 
-// STL types
+// ----- C++ -----
+
+// SWIG doesn't understand C++ streams
+%ignore operator <<;
+%ignore operator >>;
+
+// ----- STL types -----
+
 %include <stl.i>
 %include <std_string.i>
 %include <std_vector.i>
+
+// needed for functions and return types
+namespace std {
+	%template(IntVector) std::vector<int>;
+	%template(FloatVector) std::vector<float>;
+	%template(StringVector) std::vector<std::string>;
+};
 
 // ----- Renaming -----
 
 #ifdef OF_SWIG_RENAME
 
-// strip "of" prefix from classes
-%rename("%(strip:[of])s", %$isclass) "";
+	// strip "of" prefix from classes
+	%rename("%(strip:[of])s", %$isclass) "";
 
-// strip "of" prefix from global functions & make first char lowercase
-%rename("%(regex:/of(.*)/\\l\\1/)s", %$isfunction) "";
+	// strip "of" prefix from global functions & make first char lowercase
+	%rename("%(regex:/of(.*)/\\l\\1/)s", %$isfunction) "";
 
-// strip "OF_" from constants & enums
-%rename("%(strip:[OF_])s", %$isconstant) "";
-%rename("%(strip:[OF_])s", %$isenumitem) "";
+	// strip "OF_" from constants & enums
+	%rename("%(strip:[OF_])s", %$isconstant) "";
+	%rename("%(strip:[OF_])s", %$isenumitem) "";
 
+#endif
+
+// ----- Python -----
+
+// overloading operators
+#ifdef SWIGPYTHON
+	%rename(__getitem__) *::operator[];
+	%rename(__mul__) *::operator*;
+	%rename(__div__) *::operator/;
+	%rename(__add__) *::operator+;
+	%rename(__sub__) *::operator-;
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -89,39 +115,19 @@
 // This forward delcaration is then overridden by the actual implentation after
 // %include "SomeClass.h" later on.
 
-#ifdef OF_LANG_python
-// Overloading operators
-%rename(__getitem__) *::operator[];
-%rename(__mul__) *::operator*;
-%rename(__div__) *::operator/;
-%rename(__add__) *::operator+;
-%rename(__sub__) *::operator-;
-#endif
-
-// SWIG doesn't understand C++ streams
-%ignore operator <<;
-%ignore operator >>;
-
-// needed for functions and return types
-namespace std {
-	%template(IntVector) std::vector<int>;
-	%template(FloatVector) std::vector<float>;
-	%template(StringVector) std::vector<std::string>;
-};
+// ----- ofConstants.h -----
 
 // GL types used as OF arguments, etc so swig needs to know about them
 typedef int GLint;
 typedef float GLfloat;
 
-
-// ofIndexType not fully defined in ofConstants.h
+// ofIndexType only defined in ofConstants.h as a TESSIndex,
+// so we do it unambiguously here
 #if TARGET_OS_IPHONE || ANDROID || __ARMEL__
-typedef unsigned short ofIndexType;
+	typedef unsigned short ofIndexType;
 #else
-typedef unsigned int ofIndexType;
+	typedef unsigned int ofIndexType;
 #endif
-
-// ----- ofConstants.h -----
 
 %include "utils/ofConstants.h"
 
@@ -140,10 +146,10 @@ class ofBaseHasPixels {};
 // TODO: ofFbo.h: SWIG Warning 325 due to Settings nested struct
 %ignore ofFbo::Settings; // doesn't seem to silence warning
 
-#ifdef OF_LANG_lua
 // DIFF: (Lua) ofFbo.h: beginFbo() & endFbo() since "end" is a Lua keyword
-%rename(beginFbo) ofFbo::begin;
-%rename(endFbo) ofFbo::end;
+#ifdef SWIGLUA
+	%rename(beginFbo) ofFbo::begin;
+	%rename(endFbo) ofFbo::end;
 #endif
 
 %include "gl/ofFbo.h"
@@ -171,13 +177,13 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofBaseFloatImage;
 %ignore ofBaseShortImage;
 #ifdef OF_SWIG_RENAME
-%template(BaseImage) ofBaseImage_<unsigned char>;
-%template(BaseFloatImage) ofBaseImage_<float>;
-%template(BaseShortImage) ofBaseImage_<unsigned short>;
+	%template(BaseImage) ofBaseImage_<unsigned char>;
+	%template(BaseFloatImage) ofBaseImage_<float>;
+	%template(BaseShortImage) ofBaseImage_<unsigned short>;
 #else
-%template(ofBaseImage) ofBaseImage_<unsigned char>;
-%template(ofBaseFloatImage) ofBaseImage_<float>;
-%template(ofBaseShortImage) ofBaseImage_<unsigned short>;
+	%template(ofBaseImage) ofBaseImage_<unsigned char>;
+	%template(ofBaseFloatImage) ofBaseImage_<float>;
+	%template(ofBaseShortImage) ofBaseImage_<unsigned short>;
 #endif
 // DIFF: ofImage.h: ignore global helper functions
 %ignore ofLoadImage;
@@ -189,13 +195,13 @@ template<typename T> class ofBaseImage_ {};
 
 // handle template implementations
 #ifdef OF_SWIG_RENAME
-%template(Image) ofImage_<unsigned char>;
-%template(FloatImage) ofImage_<float>;
-%template(ShortImage) ofImage_<unsigned short>;
+	%template(Image) ofImage_<unsigned char>;
+	%template(FloatImage) ofImage_<float>;
+	%template(ShortImage) ofImage_<unsigned short>;
 #else
-%template(ofImage) ofImage_<unsigned char>;
-%template(ofFloatImage) ofImage_<float>;
-%template(ofShortImage) ofImage_<unsigned short>;
+	%template(ofImage) ofImage_<unsigned char>;
+	%template(ofFloatImage) ofImage_<float>;
+	%template(ofShortImage) ofImage_<unsigned short>;
 #endif
 
 // DIFF: defined GLint texture types for convenience: OF_TEXTURE_LUMINENCE, etc
@@ -288,13 +294,13 @@ class ofBaseSoundPlayer {};
 
 // tell SWIG about template classes
 #ifdef OF_SWIG_RENAME
-%template(Color) ofColor_<unsigned char>;
-%template(FloatColor) ofColor_<float>;
-%template(ShortColor) ofColor_<unsigned short>;
+	%template(Color) ofColor_<unsigned char>;
+	%template(FloatColor) ofColor_<float>;
+	%template(ShortColor) ofColor_<unsigned short>;
 #else
-%template(ofColor) ofColor_<unsigned char>;
-%template(ofFloatColor) ofColor_<float>;
-%template(ofShortColor) ofColor_<unsigned short>;
+	%template(ofColor) ofColor_<unsigned char>;
+	%template(ofFloatColor) ofColor_<float>;
+	%template(ofShortColor) ofColor_<unsigned short>;
 #endif
 
 // ----- ofBaseTypes.h -----
@@ -461,10 +467,10 @@ class fstream {};
 
 // ----- ofCamera.h -----
 
-#ifdef OF_LANG_lua
 // DIFF: (Lua) ofCamera.h: beginCamera() & endCamera() since "end" is a Lua keyword
-%rename(beginCamera) ofCamera::begin;
-%rename(endCamera) ofCamera::end;
+#ifdef SWIGLUA
+	%rename(beginCamera) ofCamera::begin;
+	%rename(endCamera) ofCamera::end;
 #endif
 
 %include "3d/ofCamera.h"
@@ -538,20 +544,21 @@ class fstream {};
 %include "gl/ofLight.h"
 
 // ----- ofMaterial.h -----
-#ifdef OF_LANG_lua
+
 // DIFF: (Lua) ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
-%rename(beginMaterial) ofMaterial::begin;
-%rename(endMaterial) ofMaterial::end;
+#ifdef SWIGLUA
+	%rename(beginMaterial) ofMaterial::begin;
+	%rename(endMaterial) ofMaterial::end;
 #endif
 
 %include "gl/ofMaterial.h"
 
 // ----- ofShader.h -----
 
-#ifdef OF_LANG_lua
 // DIFF: (Lua) ofShader.h: beginShader() & endShader() since "end" is a Lua keyword
-%rename(beginShader) ofShader::begin;
-%rename(endShader) ofShader::end;
+#ifdef SWIGLUA
+	%rename(beginShader) ofShader::begin;
+	%rename(endShader) ofShader::end;
 #endif
 
 %include "gl/ofShader.h"
@@ -586,13 +593,13 @@ class fstream {};
 
 // tell SWIG about template classes
 #ifdef OF_SWIG_RENAME
-%template(Pixels) ofPixels_<unsigned char>;
-%template(FloatPixels) ofPixels_<float>;
-%template(ShortPixels) ofPixels_<unsigned short>;
+	%template(Pixels) ofPixels_<unsigned char>;
+	%template(FloatPixels) ofPixels_<float>;
+	%template(ShortPixels) ofPixels_<unsigned short>;
 #else
-%template(ofPixels) ofPixels_<unsigned char>;
-%template(ofFloatPixels) ofPixels_<float>;
-%template(ofShortPixels) ofPixels_<unsigned short>;
+	%template(ofPixels) ofPixels_<unsigned char>;
+	%template(ofFloatPixels) ofPixels_<float>;
+	%template(ofShortPixels) ofPixels_<unsigned short>;
 #endif
 
 // ----- ofPath.h -----
@@ -716,7 +723,7 @@ public:
 // ----- ofMatrix3x3.h -----
 
 #ifdef OF_SWIG_RENAME
-%rename(Matrix3x3) ofMatrix3x3;
+	%rename(Matrix3x3) ofMatrix3x3;
 #endif
 
 %include "math/ofMatrix3x3.h"
@@ -815,15 +822,15 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // tell SWIG about template functions
 #ifdef OF_SWIG_RENAME
-%template(interpolateCosine) ofInterpolateCosine<float>;
-%template(interpolateCubic) ofInterpolateCubic<float>;
-%template(interpolateCatmullRom) ofInterpolateCatmullRom<float>;
-%template(interpolateHermite) ofInterpolateHermite<float>;
+	%template(interpolateCosine) ofInterpolateCosine<float>;
+	%template(interpolateCubic) ofInterpolateCubic<float>;
+	%template(interpolateCatmullRom) ofInterpolateCatmullRom<float>;
+	%template(interpolateHermite) ofInterpolateHermite<float>;
 #else
-%template(ofInterpolateCosine) ofInterpolateCosine<float>;
-%template(ofInterpolateCubic) ofInterpolateCubic<float>;
-%template(ofInterpolateCatmullRom) ofInterpolateCatmullRom<float>;
-%template(ofInterpolateHermite) ofInterpolateHermite<float>;
+	%template(ofInterpolateCosine) ofInterpolateCosine<float>;
+	%template(ofInterpolateCubic) ofInterpolateCubic<float>;
+	%template(ofInterpolateCatmullRom) ofInterpolateCatmullRom<float>;
+	%template(ofInterpolateHermite) ofInterpolateHermite<float>;
 #endif
 
 // ----- UTILS -----------------------------------------------------------------
@@ -892,8 +899,6 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 %include "events/ofEvents.h"
 
-#ifdef OF_LANG_lua
-
 ////////////////////////////////////////////////////////////////////////////////
 // ----- LUA -------------------------------------------------------------------
 
@@ -917,7 +922,9 @@ ofInterpolateHermite(float y1, float y2, float pct);
 // myclass = MyClass(10, 10)
 // myclass.x = 100
 
-%luacode {
+#ifdef SWIGLUA
+
+%luacode %{
 
 -- this isnt wrapped correctly, so set it here
 of.CLOSE = true
@@ -971,14 +978,14 @@ function class(base, __init)
    return c
 end
 
-}
+%}
 
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // ----- Python ----------------------------------------------------------------
 
-#ifdef OF_LANG_python
+#ifdef SWIGPYTHON
 #ifndef OF_SWIG_RENAME
 
 %pythoncode %{

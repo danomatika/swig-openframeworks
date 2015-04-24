@@ -57,37 +57,36 @@ else
 	RENAME_CFLAGS = 
 endif
 
-# C & C++ flags
-CFLAGS = -I$(OF_HEADERS) -DOF_LANG_$(LANG) -DMODULE_NAME=$(MODULE_NAME) $(RENAME_CFLAGS)
-CXXFLAGS = $(CFLAGS)
+CFLAGS = -I$(OF_HEADERS) -DMODULE_NAME=$(MODULE_NAME) $(RENAME_CFLAGS) -DTARGET_OSX
 
 .PHONY: all debug clean desktop ios linuxarm
 
 # generates bindings
 bindings:
 
-	@echo Generating for: desktop
+	@echo Generating for: $(TARGET)
 	@echo LANG = $(LANG)
-	@echo CXXFLAGS = $(CXXFLAGS)
+	@echo CFLAGS = $(CFLAGS)
 	@echo NAME = $(NAME)
 	@echo DEST_DIR = $(DEST_DIR)
 	
-	$(SWIG) -c++ -$(LANG) -fcompact -fvirtual $(CXXFLAGS) -outdir $(DEST_LANG_DIR) openFrameworks.i
+	$(SWIG) -c++ -$(LANG) -fcompact -fvirtual $(CFLAGS) -outdir $(DEST_LANG_DIR) openFrameworks.i
 	mv openFrameworks_wrap.cxx $(NAME).cpp
 
 	$(SWIG) -c++ -$(LANG) -external-runtime $(NAME).h
 
 # move generated files to DEST_DIR
 move:
-
 	mkdir -p $(DEST_DIR)/$(TARGET)
 	mv *.h $(DEST_DIR)
 	mv *.cpp $(DEST_DIR)/$(TARGET)
 
 # outputs debug symbols
 debug:
-	$(SWIG) -c++ -$(LANG) -debug-lsymbols $(CXXFLAGS) openFrameworks.i > debug.txt
+	@echo Debugging
+	$(SWIG) -c++ -$(LANG) -debug-lsymbols $(CFLAGS) openFrameworks.i > debug.txt
 	rm -f *.cxx
+	if [ $(LANG) == "python" ]; then rm -f *.py; fi 
 
 clean:
 	rm -f $(DEST_DIR)/$(FILENAME).h
@@ -98,20 +97,20 @@ clean:
 # desktop OS generation
 desktop-prepare:
 	$(eval TARGET := desktop)
-	$(eval CXXFLAGS := $(CFLAGS))
+	$(eval CFLAGS := $(CFLAGS))
 
 desktop: desktop-prepare bindings move
 
 # iOS specific generation
 ios-prepare:
 	$(eval TARGET := ios)
-	$(eval CXXFLAGS := $(CXXFLAGS) -DTARGET_OPENGLES -DTARGET_IOS)
+	$(eval CFLAGS := $(CFLAGS) -DTARGET_OPENGLES -DTARGET_IOS)
 
 ios: ios-prepare bindings move
 
 # embedded linux specific generation
 linuxarm-prepare:
 	$(eval TARGET := linuxarm)
-	$(eval CXXFLAGS := $(CXXFLAGS) -DTARGET_OPENGLES)
+	$(eval CFLAGS := $(CFLAGS) -DTARGET_OPENGLES)
 
 linuxarm: linuxarm-prepare bindings move
