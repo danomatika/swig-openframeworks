@@ -3,10 +3,10 @@
 
 	(Lua) Creates an "of" module and renames functions, classes, constants, & enums
 
-	    * function: ofBackground -> of.background
-	    * class: ofColor -> of.Color
-	    * constant: OF_LOG_VERBOSE -> of.LOG_VERBOSE
-	    * enum: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
+		* function: ofBackground -> of.background
+		* class: ofColor -> of.Color
+		* constant: OF_LOG_VERBOSE -> of.LOG_VERBOSE
+		* enum: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
 
 	(Python) Creates an "openframeworks" module
 	
@@ -32,6 +32,15 @@
 
 %include <attribute.i>
 %include <typemaps.i>
+
+// custom attribute wrapper for nested union var access
+%define %attributeVar(Class, AttributeType, AttributeName, GetVar, SetVar...)
+	#if #SetVar != ""
+		%attribute_custom(%arg(Class), %arg(AttributeType), AttributeName, GetVar, SetVar, self_->GetVar, self_->SetVar = val_)
+	#else
+		%attribute_readonly(%arg(Class), %arg(AttributeType), AttributeName, GetVar, self_->GetVar)
+	#endif
+%enddef
 
 // ----- C++ -----
 
@@ -240,15 +249,6 @@ class ofBaseSoundPlayer {};
 // ----- TYPES -----------------------------------------------------------------
 
 // ----- ofColor.h -----
-
-// custom attribute wrapper for nested union var access
-%define %attributeVar(Class, AttributeType, AttributeName, GetVar, SetVar...)
-  #if #SetVar != ""
-    %attribute_custom(%arg(Class), %arg(AttributeType), AttributeName, GetVar, SetVar, self_->GetVar, self_->SetVar = val_)
-  #else
-    %attribute_readonly(%arg(Class), %arg(AttributeType), AttributeName, GetVar, self_->GetVar)
-  #endif
-%enddef
 
 %include "types/ofColor.h"
 
