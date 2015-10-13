@@ -173,6 +173,8 @@ class ofBaseHasPixels {};
 %ignore ofGetUsingCustomMinMagFilters;
 %ignore ofRestoreMinMagFilters;
 
+%ignore ofTexture::getMeshForSubsection(float, float, float, float, float, float, float, float, float) const;
+
 %include "gl/ofTexture.h"
 
 // ----- ofImage.h -----
@@ -366,6 +368,7 @@ class ofBaseSoundPlayer {};
 
 // ----- ofFileUtils.h -----
 
+/*
 // forward declare fstream for ofBuffer
 %ignore fstream;
 class fstream {};
@@ -378,6 +381,7 @@ class fstream {};
 
 // TODO: SWIG Warning 503: due to operator ofBuffer::operator string
 %include "utils/ofFileUtils.h"
+*/
 
 // ----- ofLog.h -----
 
@@ -589,6 +593,33 @@ class fstream {};
 %rename(allocateImageType) ofPixels_<unsigned short>::allocate(int,int,ofImageType);
 %rename(setFromPixelsImageType) ofPixels_<unsigned short>::setFromPixels(unsigned short const *,int,int,ofImageType);
 
+%ignore ofPixels_<unsigned short>::getLine(int line);
+%ignore ofPixels_<unsigned short>::getLines();
+%ignore ofPixels_<unsigned short>::getLines(int first, int numLines);
+%ignore ofPixels_<unsigned short>::getPixelsIter();
+%ignore ofPixels_<unsigned short>::getConstLine(int line) const;
+%ignore ofPixels_<unsigned short>::getConstLines() const;
+%ignore ofPixels_<unsigned short>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<unsigned short>::getConstPixelsIter() const;
+
+%ignore ofPixels_<unsigned char>::getLine(int line);
+%ignore ofPixels_<unsigned char>::getLines();
+%ignore ofPixels_<unsigned char>::getLines(int first, int numLines);
+%ignore ofPixels_<unsigned char>::getPixelsIter();
+%ignore ofPixels_<unsigned char>::getConstLine(int line) const;
+%ignore ofPixels_<unsigned char>::getConstLines() const;
+%ignore ofPixels_<unsigned char>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<unsigned char>::getConstPixelsIter() const;
+
+%ignore ofPixels_<float>::getLine(int line);
+%ignore ofPixels_<float>::getLines();
+%ignore ofPixels_<float>::getLines(int first, int numLines);
+%ignore ofPixels_<float>::getPixelsIter();
+%ignore ofPixels_<float>::getConstLine(int line) const;
+%ignore ofPixels_<float>::getConstLines() const;
+%ignore ofPixels_<float>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<float>::getConstPixelsIter() const;
+
 %include "graphics/ofPixels.h"
 
 // tell SWIG about template classes
@@ -670,47 +701,62 @@ class fstream {};
 class ofTrueTypeFont{
 
 public:
-
 	ofTrueTypeFont();
 	virtual ~ofTrueTypeFont();
-
+	bool load(const std::string& filename,
+                  int fontsize,
+                  bool _bAntiAliased=true,
+                  bool _bFullCharacterSet=true,
+                  bool makeContours=false,
+                  float simplifyAmt=0.3f,
+                  int dpi=0);
+	
+	bool isLoaded() const;
 	static void setGlobalDpi(int newDpi);
+	
+	bool isAntiAliased() const;
 
-	bool loadFont(string filename, int fontsize, bool _bAntiAliased=true,
-		bool _bFullCharacterSet=false, bool makeContours=false,
-		float simplifyAmt=0.3, int dpi=0);
+	bool hasFullCharacterSet() const;
+	
+	int	getNumCharacters() const;
 
-	bool isLoaded();
-	bool isAntiAliased();
-	bool hasFullCharacterSet();
 
-	int getSize();
-	float getLineHeight();
+	int getSize() const;
+	
+	float getLineHeight() const;
+
 	void setLineHeight(float height);
-	float getLetterSpacing();
+
+	float getAscenderHeight() const;
+
+	float getDescenderHeight() const;
+
+    const ofRectangle & getGlyphBBox() const;
+
+	float getLetterSpacing() const;
+
 	void setLetterSpacing(float spacing);
-	float getSpaceSize();
+
+	float getSpaceSize() const;
+
 	void setSpaceSize(float size);
-	float stringWidth(string s);
-	float stringHeight(string s);
 
-	ofRectangle getStringBoundingBox(string s, float x, float y);
+	float stringWidth(const std::string& s) const;
 
-	void drawString(string s, float x, float y);
-	void drawStringAsShapes(string s, float x, float y);
+	float stringHeight(const std::string& s) const;
 
-	int getNumCharacters();
+	ofRectangle getStringBoundingBox(const std::string& s, float x, float y, bool vflip=true) const;
 
-	ofTTFCharacter getCharacterAsPoints(int character, bool vflip=ofIsVFlipped());
-	vector<ofTTFCharacter> getStringAsPoints(string str, bool vflip=ofIsVFlipped());
-	ofMesh & getStringMesh(string s, float x, float y);
-	ofTexture & getFontTexture();
 
-	void bind();
-	void unbind();
+	void drawString(const std::string& s, float x, float y) const;
 
-	ofTextEncoding getEncoding() const;
-	void setEncoding(ofTextEncoding encoding);
+	void drawStringAsShapes(const std::string& s, float x, float y) const;
+
+	ofTTFCharacter getCharacterAsPoints(int character, bool vflip=true, bool filled=true) const;
+	vector<ofTTFCharacter> getStringAsPoints(const std::string& str, bool vflip=true, bool filled=true) const;
+	const ofMesh & getStringMesh(const std::string& s, float x, float y, bool vflip=true) const;
+	const ofTexture & getFontTexture() const;
+
 };
 
 // DIFF: ofTrueTypeFont.h: added attributes: lineHeight, letterSpacing, & spaceSize
@@ -773,6 +819,7 @@ public:
 
 // TODO: ofVec4f.h: ignoring ofVec4f::set(f), defined but not implemented in OF 0.8.4
 %ignore ofVec4f::set(float);
+%ignore ofVec2f::getLimited;
 
 %include "math/ofVec2f.h"
 
