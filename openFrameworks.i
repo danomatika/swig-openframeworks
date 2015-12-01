@@ -126,17 +126,9 @@ namespace std {
 
 // ----- ofConstants.h -----
 
-// GL types used as OF arguments, etc so swig needs to know about them
+// GL types used as OF arguments, etc so SWIG needs to know about them
 typedef int GLint;
 typedef float GLfloat;
-
-// ofIndexType only defined in ofConstants.h as a TESSIndex,
-// so we do it unambiguously here
-#if TARGET_OS_IPHONE || ANDROID || __ARMEL__
-	typedef unsigned short ofIndexType;
-#else
-	typedef unsigned int ofIndexType;
-#endif
 
 %include "utils/ofConstants.h"
 
@@ -194,10 +186,14 @@ template<typename T> class ofBaseImage_ {};
 	%template(ofBaseFloatImage) ofBaseImage_<float>;
 	%template(ofBaseShortImage) ofBaseImage_<unsigned short>;
 #endif
+
 // DIFF: ofImage.h: ignore global helper functions
 %ignore ofLoadImage;
 %ignore ofSaveImage;
 %ignore ofCloseFreeImage;
+
+// DIFF: ofImage.h: ignoring ofPixels operator
+%ignore ofImage_::operator ofPixels_<PixelType>&();
 
 // TODO: ofImage.h: SWIG Warning 503: due to operator ofImage_::operator pixels
 %include "graphics/ofImage.h"
@@ -230,6 +226,10 @@ template<typename T> class ofBaseImage_ {};
 
 // ----- ofSoundStream.h -----
 
+// ignore overloaded functions
+%ignore ofSoundStream::setInput(ofBaseSoundInput &soundInput);
+%ignore ofSoundStream::setOutput(ofBaseSoundOutput &soundOutput);
+
 %include "sound/ofSoundStream.h"
 
 // ----- ofSoundPlayer.h -----
@@ -239,10 +239,10 @@ class ofBaseSoundPlayer {};
 
 // DIFF: ofSoundPlayer.h: warnings say "FIX THIS SHIT", so leaving out fmod global functions
 %ignore ofSoundStopAll;
+%ignore ofSoundShutdown;
 %ignore ofSoundSetVolume;
 %ignore ofSoundUpdate;
 %ignore ofSoundGetSpectrum;
-%ignore ofSoundShutdown;
 
 %include "sound/ofSoundPlayer.h"
 
@@ -305,11 +305,12 @@ class ofBaseSoundPlayer {};
 
 // ----- ofBaseTypes.h -----
 
-// DIFF: ofBaseTypes.h: ignore all abstract amd base types
+// DIFF: ofBaseTypes.h: ignore all abstract and base types
 %ignore ofAbstractParameter;
 %ignore ofBaseDraws;
 %ignore ofBaseUpdates;
 %ignore ofBaseHasTexture;
+%ignore ofBaseHasTexturePlanes;
 
 %ignore ofAbstractHasPixels;
 %ignore ofBaseHasPixels_;
@@ -333,24 +334,35 @@ class ofBaseSoundPlayer {};
 
 %ignore ofBaseRenderer;
 %ignore ofBaseGLRenderer;
+#ifdef SWIGLUA // ignore these to silence Warning 314
+	%ignore ofBaseGLRenderer::begin;
+	%ignore ofBaseGLRenderer::end;
+#endif
+
 %ignore ofBaseSerializer;
 %ignore ofBaseFileSerializer;
+%ignore ofBaseURLFileLoader;
+%ignore ofBaseMaterial;
+#ifdef SWIGLUA // ignore these to silence Warning 314
+	%ignore ofBaseMaterial::begin;
+	%ignore ofBaseMaterial::end;
+#endif
 
 // still include header for derived classes
 %include "types/ofBaseTypes.h"
 
 // ----- ofTypes.h -----
 
-// TODO: ofTypes.h: not sure if video format and vidoe device classes are needed
+// DIFF: ofTypes.h: ignoring video format and video device classes
 %ignore ofVideoFormat;
 %ignore ofVideoDevice;
 
-// DIFF: ofTypes.h: mutex, scoped lock, ptr are probably too low level
+// DIFF: ofTypes.h: mutex, scoped lock, & ptr are probably too low level
+// TODO: ofTypes.h: SWIG Warning 342 due to ofPtr using keyword 
 %ignore ofMutex;
 %ignore ofScopedLock;
 %ignore ofPtr;
 
-// TODO: ofTypes.h: SWIG Warning 315 due to std::tr1::shared_ptr, etc
 %include "types/ofTypes.h"
 
 // ----- ofUtils.h -----
@@ -362,6 +374,12 @@ class ofBaseSoundPlayer {};
 // see http://www.swig.org/Doc2.0/Varargs.html
 %ignore ofVAArgsToString;
 
+// DIFF: ofUtils.h: ignoring ofUTF8Iterator
+%ignore ofUTF8Iterator;
+#ifdef SWIGLUA // ignore these to silence Warning 314
+	%ignore ofUTF8Iterator::end;
+#endif
+
 %include "utils/ofUtils.h"
 
 // ----- ofFileUtils.h -----
@@ -370,13 +388,22 @@ class ofBaseSoundPlayer {};
 %ignore fstream;
 class fstream {};
 
-// TODO: ofFileUtils.h: ignoring ofDirectory::canRead(), ofDirectory::canWrite(), and
-// TODO:                ofDirectory::canExecute(), defined but not implemented in OF 0.8.4
-%ignore ofDirectory::canRead() const;
-%ignore ofDirectory::canWrite() const;
-%ignore ofDirectory::canExecute() const;
+// DIFF: ofFileUtils.h: ignoring iterators
+%ignore ofBuffer::begin;
+%ignore ofBuffer::end;
+%ignore ofBuffer::rbegin;
+%ignore ofBuffer::rend;
+%ignore ofDirectory::begin;
+%ignore ofDirectory::end;
+%ignore ofDirectory::rbegin;
+%ignore ofDirectory::rend;
 
-// TODO: SWIG Warning 503: due to operator ofBuffer::operator string
+// SWIG needs to know about boost::filesystem, but use #include as we do not
+// want to generate wrappers
+%{
+#include <boost/filesystem.hpp>
+}%
+
 %include "utils/ofFileUtils.h"
 
 // ----- ofLog.h -----
@@ -416,12 +443,14 @@ class fstream {};
 
 // ----- ofURLFileLoader.h -----
 
-// TODO: ofURLFileLoader.h: SWIG Warning 503: due to operator ofURLFileLoader::buffer&
+// DIFF: ofURLFileLoader.h:ignoring ofHttpResponse ofBuffer operator
+%ignore ofHttpResponse::operator ofBuffer&();
+
 %include "utils/ofURLFileLoader.h"
 
 // ----- ofPoint.h -----
 
-// this file is just a typedef which swig cannot wrap, so the types need to be 
+// NOTE: ofPoint is just a typedef which swig cannot wrap, so the types need to be 
 // handled in the scripting language, see the Lua, Python, etc code at the end
 %include "types/ofPoint.h"
 
@@ -481,7 +510,7 @@ class fstream {};
 
 // ----- ofMesh.h -----
 
-// TODO: ofMesh.h: ignoring getFace(i), defined but not implemented in OF 0.8.4
+// TODO: ofMesh.h: ignoring getFace(i), defined but not implemented in OF 0.9.0
 %ignore ofMesh::getFace(int);
 
 %include "3d/ofMesh.h"
@@ -505,7 +534,7 @@ class fstream {};
 %ignore ofSetupOpenGL(ofAppBaseWindow *, int, int, int);
 %ignore ofRunApp(ofBaseApp *);
 
-// TODO: ofAppRunner.h: is ofSetAppPtr applicable in a target language?
+// DIFF: ofAppRunner.h: ofSetAppPtr not applicable in a target language
 %ignore ofSetAppPtr;
 
 // DIFF: ofAppRunner.h: ignoring api-specific window objects: display, window, context, surface
@@ -519,6 +548,10 @@ class fstream {};
 %ignore ofGetCocoaWindow;
 %ignore ofGetWGLContext;
 %ignore ofGetWin32Window;
+
+// DIFF: ofAppRunner.h: get/set current renderer not applicable to target language
+%ignore ofSetCurrentRenderer;
+%ignore ofGetCurrentRenderer;
 
 %include "app/ofAppRunner.h"
 
@@ -541,6 +574,7 @@ class fstream {};
 
 // ----- ofLight.h -----
 
+// TODO: ofLight.h: SWIG Warning 325 due to nested Data class
 %include "gl/ofLight.h"
 
 // ----- ofMaterial.h -----
@@ -589,6 +623,48 @@ class fstream {};
 %rename(allocateImageType) ofPixels_<unsigned short>::allocate(int,int,ofImageType);
 %rename(setFromPixelsImageType) ofPixels_<unsigned short>::setFromPixels(unsigned short const *,int,int,ofImageType);
 
+// DIFF: ofPixels.h: ignore overloaded setFromPixels, setFromExternalPixels, & setFromAlignedPixels
+//                   w/ channels argument, use ofPixelType overloaded functions instead
+%ignore ofPixels_<unsigned char>::setFromPixels(unsigned char const *,int,int,int);
+%ignore ofPixels_<float>::setFromPixels(float const *,int,int,int);
+%ignore ofPixels_<unsigned short>::setFromPixels(unsigned short const *,int,int,int);
+
+%ignore ofPixels_<unsigned char>::setFromExternalPixels(unsigned char *,int,int,int);
+%ignore ofPixels_<float>::setFromExternalPixels(float *,int,int,int);
+%ignore ofPixels_<unsigned short>::setFromExternalPixels(unsigned short *,int,int,int);
+
+%ignore ofPixels_<unsigned char>::setFromAlignedPixels(unsigned char const *,int,int,int,int);
+%ignore ofPixels_<float>::setFromAlignedPixels(float const *,int,int,int,int);
+%ignore ofPixels_<unsigned short>::setFromAlignedPixels(unsigned short const *,int,int,int,int);
+
+// DIFF: ofPixels.h: ignoring iterators
+// TODO: ofPixels.h: (Lua) SWIG Warning 314 due to end iterator
+%ignore ofPixels_::begin;
+%ignore ofPixels_::end;
+%ignore ofPixels_::rbegin;
+%ignore ofPixels_::rend;
+%ignore ofPixels_::begin const;
+%ignore ofPixels_::end const;
+%ignore ofPixels_::rbegin const;
+%ignore ofPixels_::rend const;
+
+// ignore end keywords, even though they are within nested classes which are
+// effectively ignored by SWIG but still issue a Warning 314 (Lua)
+#ifdef SWIGLUA
+	%ignore ofPixels_::Pixels::end;
+	%ignore ofPixels_::Line::end;
+	%ignore ofPixels_::Lines::end;
+	%ignore ofPixels_::ConstPixels::end;
+	%ignore ofPixels_::ConstLine::end;
+	%ignore ofPixels_::ConstLines::end;
+#endif
+
+// deprecated
+%ignore ofPixels_::operator PixelType*();
+%ignore ofPixels_::operator const PixelType*();
+
+// TODO: ofPixels.h: SWIG Warning 325 due to nested Pixel, Pixels, Line, Lines,
+// TODO: ConstPixel, ConstPixels, ConstLine, & ConstLines classes
 %include "graphics/ofPixels.h"
 
 // tell SWIG about template classes
@@ -608,9 +684,6 @@ class fstream {};
 %ignore ofPath::getArcResolution;
 %ignore ofPath::setArcResolution;
 
-// TODO: ofPath.h: ignoring getCurveResolution(), defined but not implemented in OF 0.8.4
-%ignore ofPath::getCurveResolution() const;
-
 // TODO: ofPath.h: SWIG Warning 325 due to ofPath::Command nested struct
 %include "graphics/ofPath.h"
 
@@ -619,6 +692,12 @@ class fstream {};
 // ignored due to default variable overload
 %ignore ofPolyline::arc(float,float,float,float,float,float,float);
 %ignore ofPolyline::arcNegative(float,float,float,float,float,float,float);
+
+// DIFF: ofPolyline.h: ignoring iterators
+%ignore ofPolyline::begin;
+%ignore ofPolyline::end;
+%ignore ofPolyline::rbegin;
+%ignore ofPolyline::rend;
 
 %include "graphics/ofPolyline.h"
 
@@ -629,10 +708,6 @@ class fstream {};
 	%ignore ofBeginSaveScreenAsPDF;
 	%ignore ofEndSaveScreenAsPDF();
 #endif
-
-// DIFF: ofGraphics.h: get/set current renderer not applicable to target language
-%ignore ofSetCurrentRenderer;
-%ignore ofGetCurrentRenderer;
 
 // deprecated (all overloaded funcs too ...)
 %ignore ofSetupScreenPerspective(float, float, ofOrientation);
@@ -645,12 +720,14 @@ class fstream {};
 %ignore ofSetupScreenOrtho(float, float, ofOrientation, bool, float);
 %ignore ofSetupScreenOrtho(float, float, ofOrientation, bool, float, float);
 
-// TODO: ofGraphics.h: ignoring ofBgColorPtr &ofbClearBg, needed in target language?
-%ignore ofBgColorPtr;
+// deprecated
 %ignore ofbClearBg;
 
-// TODO: ofGraphics.h: ignoring ofRectRounded(f,f,f,f,f,f), defined but not implemented in OF 0.8.4
-%ignore ofRectRounded(float, float, float, float, float, float);
+// DIFF: ofGraphics.h: ignoring foDrawBitmapString template functions in favor of string versions
+// target languages can handle the string conversions
+%ignore ofDrawBitmapString(const T &, const ofPoint&);
+%ignore ofDrawBitmapString(const T &, float, float);
+%ignore ofDrawBitmapString(const T &, float, float, float);
 
 %include "graphics/ofGraphics.h"
 
@@ -665,53 +742,10 @@ class fstream {};
 
 // ----- ofTrueTypeFont.h -----
 
-// TODO: ofTrueTypeFont.h: SWIGS fails on the static strings when including ofTrueTypeFont.h,
-// TODO:                   so define the class to be wrapped here for now
-class ofTrueTypeFont{
+// ignore internal font struct
+%ignore charProps;
 
-public:
-
-	ofTrueTypeFont();
-	virtual ~ofTrueTypeFont();
-
-	static void setGlobalDpi(int newDpi);
-
-	bool loadFont(string filename, int fontsize, bool _bAntiAliased=true,
-		bool _bFullCharacterSet=false, bool makeContours=false,
-		float simplifyAmt=0.3, int dpi=0);
-
-	bool isLoaded();
-	bool isAntiAliased();
-	bool hasFullCharacterSet();
-
-	int getSize();
-	float getLineHeight();
-	void setLineHeight(float height);
-	float getLetterSpacing();
-	void setLetterSpacing(float spacing);
-	float getSpaceSize();
-	void setSpaceSize(float size);
-	float stringWidth(string s);
-	float stringHeight(string s);
-
-	ofRectangle getStringBoundingBox(string s, float x, float y);
-
-	void drawString(string s, float x, float y);
-	void drawStringAsShapes(string s, float x, float y);
-
-	int getNumCharacters();
-
-	ofTTFCharacter getCharacterAsPoints(int character, bool vflip=ofIsVFlipped());
-	vector<ofTTFCharacter> getStringAsPoints(string str, bool vflip=ofIsVFlipped());
-	ofMesh & getStringMesh(string s, float x, float y);
-	ofTexture & getFontTexture();
-
-	void bind();
-	void unbind();
-
-	ofTextEncoding getEncoding() const;
-	void setEncoding(ofTextEncoding encoding);
-};
+%include "graphics/ofTrueTypeFont.h"
 
 // DIFF: ofTrueTypeFont.h: added attributes: lineHeight, letterSpacing, & spaceSize
 %attribute(ofTrueTypeFont, float, lineHeight, getLineHeight, setLineHeight);
@@ -721,10 +755,6 @@ public:
 // ----- MATH ------------------------------------------------------------------
 
 // ----- ofMatrix3x3.h -----
-
-#ifdef OF_SWIG_RENAME
-	%rename(Matrix3x3) ofMatrix3x3;
-#endif
 
 %include "math/ofMatrix3x3.h"
 
@@ -738,7 +768,8 @@ public:
 
 // ----- ofMatrix4x4.h -----
 
-%ignore ofMatrix4x4::operator()(int,int) const;
+// DIFF: ofMatrix4x4.h: ignoring operator(size_t,size_t) const overload
+%ignore ofMatrix4x4::operator()(std::size_t,std::size_t) const;
 
 %include "math/ofMatrix4x4.h"
 
@@ -770,9 +801,6 @@ public:
 };
 
 // ----- ofVecs -----
-
-// TODO: ofVec4f.h: ignoring ofVec4f::set(f), defined but not implemented in OF 0.8.4
-%ignore ofVec4f::set(float);
 
 %include "math/ofVec2f.h"
 
@@ -836,6 +864,10 @@ ofInterpolateHermite(float y1, float y2, float pct);
 // ----- UTILS -----------------------------------------------------------------
 
 // ----- ofXml.h -----
+
+// DIFF: ofXml.h: ignoring PocoDocument & PocoElement getters
+%ignore ofXml::getPocoDocument;
+%ignore ofXml::getPocoElement;
 
 %include "utils/ofXml.h"
 
