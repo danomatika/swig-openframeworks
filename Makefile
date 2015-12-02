@@ -25,6 +25,9 @@ MODULE_NAME = of
 # strip "of" from function, class, & define/enum names?
 RENAME = true
 
+# allow deprecated functions? otherwise, ignore
+DEPRECATED = false
+
 # default platform target, available targets are:
 #   * desktop: win, linux, & mac osx
 #   * ios: apple iOS using OpenGL ES
@@ -40,8 +43,8 @@ DEST_DIR = ../src/bindings
 # where to copy the generated specific language files
 DEST_LANG_DIR = .
 
-# path to OF headers
-OF_HEADERS = ../../../libs/openFrameworks
+# OF header includes
+OF_HEADERS = -I../../../libs/openFrameworks
 
 # Python specific preferences
 # typically, long names are used in Python,
@@ -51,13 +54,20 @@ ifeq ($(LANG), python)
 	RENAME = false
 endif
 
+# populate CFLAGS
 ifeq ($(RENAME), true)
 	RENAME_CFLAGS = -DOF_SWIG_RENAME
 else
 	RENAME_CFLAGS = 
 endif
 
-CFLAGS = -I$(OF_HEADERS) -DMODULE_NAME=$(MODULE_NAME) $(RENAME_CFLAGS) -DTARGET_OSX
+ifeq ($(DEPRECATED), true)
+	DEPRECATED_CFLAGS = -DOF_SWIG_DEPRECATED
+else
+	DEPRECATED_CFLAGS =
+endif
+
+CFLAGS = $(OF_HEADERS) -DMODULE_NAME=$(MODULE_NAME) $(RENAME_CFLAGS) $(DEPRECATED_CFLAGS)
 
 .PHONY: all debug clean desktop ios linuxarm
 

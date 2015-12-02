@@ -143,6 +143,12 @@ By default, functions, classes, enums, & defines are reamed to strip the "of" pr
 
     make RENAME=false
 
+### Deprecated Functions & Classes
+
+By default, functions & classes marked as deprecated in the OF api are ignored when generating bindings. If you want to allow deprecations, set the DEPRECATED makefile variable to true:
+
+    make DEPRECATED=true
+
 ### Scripting
 
 Generating bindings for all platform targets can be done easily using a script which calls the Makefile. See [generate_bindings.sh](https://github.com/danomatika/ofxLua/blob/swig/scripts/generate_bindings.sh) in ofxLua for an example.

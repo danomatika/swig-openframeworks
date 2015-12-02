@@ -77,6 +77,11 @@ namespace std {
 
 #endif
 
+// ----- Deprecated ------
+#ifndef OF_SWIG_DEPRECATED
+	%include "interfaces/deprecated.i"
+#endif
+
 // ----- Python -----
 
 // overloading operators
@@ -128,6 +133,7 @@ namespace std {
 
 // GL types used as OF arguments, etc so SWIG needs to know about them
 typedef int GLint;
+typedef unsigned int GLuint;
 typedef float GLfloat;
 
 %include "utils/ofConstants.h"
@@ -144,6 +150,10 @@ class ofBaseHasTexture {};
 %ignore ofBaseHasPixels;
 class ofBaseHasPixels {};
 
+// TODO: ofFbo.h: setUseTexture & isUsingtexture are irrelevant, so ignoring
+%ignore ofFbo::setUseTexture;
+%ignore ofFbo::isUsingTexture;
+
 // TODO: ofFbo.h: SWIG Warning 325 due to Settings nested struct
 %ignore ofFbo::Settings; // doesn't seem to silence warning
 
@@ -156,14 +166,6 @@ class ofBaseHasPixels {};
 %include "gl/ofFbo.h"
 
 // ----- ofTexture.h -----
-
-// TODO: ofTexture.h: ignore GL specific global functions, need to wrap the GL enums?
-%ignore ofSetTextureWrap;
-%ignore ofGetUsingCustomTextureWrap;
-%ignore ofRestoreTextureWrap;
-%ignore ofSetMinMagFilters;
-%ignore ofGetUsingCustomMinMagFilters;
-%ignore ofRestoreMinMagFilters;
 
 %include "gl/ofTexture.h"
 
@@ -222,87 +224,6 @@ template<typename T> class ofBaseImage_ {};
 #define OF_MIRRORED_REPEAT = GL_MIRRORED_REPEAT
 #define OF_REPEAT = GL_REPEAT
 
-// ----- SOUND -----------------------------------------------------------------
-
-// ----- ofSoundStream.h -----
-
-// ignore overloaded functions
-%ignore ofSoundStream::setInput(ofBaseSoundInput &soundInput);
-%ignore ofSoundStream::setOutput(ofBaseSoundOutput &soundOutput);
-
-%include "sound/ofSoundStream.h"
-
-// ----- ofSoundPlayer.h -----
-
-%ignore ofBaseSoundPlayer;
-class ofBaseSoundPlayer {};
-
-// DIFF: ofSoundPlayer.h: warnings say "FIX THIS SHIT", so leaving out fmod global functions
-%ignore ofSoundStopAll;
-%ignore ofSoundShutdown;
-%ignore ofSoundSetVolume;
-%ignore ofSoundUpdate;
-%ignore ofSoundGetSpectrum;
-
-%include "sound/ofSoundPlayer.h"
-
-// ----- TYPES -----------------------------------------------------------------
-
-// ----- ofColor.h -----
-
-%include "types/ofColor.h"
-
-// TODO: ofColor.h: SWIG Warning 312 ignores nested union that provides r, g, b, & a access
-// DIFF: ofColor.h: added ofColor_ pixel channel getters getR(), getG(), getB(), getA()
-// DIFF:            added ofColor_ pixel channel setters setR(), setG(), setB(), setA()
-// DIFF: ofColor.h: added target language tostring wrapper for ofColor_::operator <<
-%extend ofColor_ {
-
-	// pixel channel getters
-	PixelType getR() {return $self->r;}
-	PixelType getG() {return $self->g;}
-	PixelType getB() {return $self->b;}
-	PixelType getA() {return $self->a;}
-
-	// pixel channel setters
-	void setR(PixelType r) {$self->r = r;}
-	void setG(PixelType g) {$self->g = g;}
-	void setB(PixelType b) {$self->b = b;}
-	void setA(PixelType a) {$self->a = a;}
-
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
-};
-
-%attributeVar(ofColor_<unsigned char>, unsigned char, r, r, r);
-%attributeVar(ofColor_<unsigned char>, unsigned char, g, g, g);
-%attributeVar(ofColor_<unsigned char>, unsigned char, b, b, b);
-%attributeVar(ofColor_<unsigned char>, unsigned char, a, a, a);
-
-%attributeVar(ofColor_<float>, float, r, r, r);
-%attributeVar(ofColor_<float>, float, g, g, g);
-%attributeVar(ofColor_<float>, float, b, b, b);
-%attributeVar(ofColor_<float>, float, a, a, a);
-
-%attributeVar(ofColor_<unsigned short>, unsigned short, r, r, r);
-%attributeVar(ofColor_<unsigned short>, unsigned short, g, g, g);
-%attributeVar(ofColor_<unsigned short>, unsigned short, b, b, b);
-%attributeVar(ofColor_<unsigned short>, unsigned short, a, a, a);
-
-// tell SWIG about template classes
-#ifdef OF_SWIG_RENAME
-	%template(Color) ofColor_<unsigned char>;
-	%template(FloatColor) ofColor_<float>;
-	%template(ShortColor) ofColor_<unsigned short>;
-#else
-	%template(ofColor) ofColor_<unsigned char>;
-	%template(ofFloatColor) ofColor_<float>;
-	%template(ofShortColor) ofColor_<unsigned short>;
-#endif
-
 // ----- ofBaseTypes.h -----
 
 // DIFF: ofBaseTypes.h: ignore all abstract and base types
@@ -351,138 +272,6 @@ class ofBaseSoundPlayer {};
 // still include header for derived classes
 %include "types/ofBaseTypes.h"
 
-// ----- ofTypes.h -----
-
-// DIFF: ofTypes.h: ignoring video format and video device classes
-%ignore ofVideoFormat;
-%ignore ofVideoDevice;
-
-// DIFF: ofTypes.h: mutex, scoped lock, & ptr are probably too low level
-// TODO: ofTypes.h: SWIG Warning 342 due to ofPtr using keyword 
-%ignore ofMutex;
-%ignore ofScopedLock;
-%ignore ofPtr;
-
-%include "types/ofTypes.h"
-
-// ----- ofUtils.h -----
-
-// DIFF: ofUtils.h: ignoring ofFromString as templating results in too much overloading
-%ignore ofFromString;
-
-// DIFF: ofUtils.h: variable argument support is painful, safer to ignore
-// see http://www.swig.org/Doc2.0/Varargs.html
-%ignore ofVAArgsToString;
-
-// DIFF: ofUtils.h: ignoring ofUTF8Iterator
-%ignore ofUTF8Iterator;
-#ifdef SWIGLUA // ignore these to silence Warning 314
-	%ignore ofUTF8Iterator::end;
-#endif
-
-%include "utils/ofUtils.h"
-
-// ----- ofFileUtils.h -----
-
-// forward declare fstream for ofBuffer
-%ignore fstream;
-class fstream {};
-
-// DIFF: ofFileUtils.h: ignoring iterators
-%ignore ofBuffer::begin;
-%ignore ofBuffer::end;
-%ignore ofBuffer::rbegin;
-%ignore ofBuffer::rend;
-%ignore ofDirectory::begin;
-%ignore ofDirectory::end;
-%ignore ofDirectory::rbegin;
-%ignore ofDirectory::rend;
-
-// SWIG needs to know about boost::filesystem, but use #include as we do not
-// want to generate wrappers
-%{
-#include <boost/filesystem.hpp>
-}%
-
-%include "utils/ofFileUtils.h"
-
-// ----- ofLog.h -----
-
-// function wrapper for ofLog class
-%inline %{
-	void log(ofLogLevel level, const string & message) {
-		ofLog(level, message);
-	}
-%}
-
-// DIFF: ofLog.h: ignore stream based log classes since target languages won't support it
-%ignore ofLog;
-%ignore ofLogVerbose;
-%ignore ofLogNotice;
-%ignore ofLogWarning;
-%ignore ofLogError;
-%ignore ofLogFatalError;
-
-// DIFF: ofLog.h: ignore logger channel classes
-%ignore ofBaseLoggerChannel;
-%ignore ofSetLoggerChannel;
-%ignore ofConsoleLoggerChannel;
-%ignore ofFileLoggerChannel;
-
-%include "utils/ofLog.h"
-
-// ----- ofSystemUtils.h -----
-
-%include "utils/ofSystemUtils.h"
-
-// ----- ofThread.h -----
-
-// DIFF: ofThread.h: ignore ofThread, not useful if you can't inherit it in the target language
-%ignore ofThread;
-%include "utils/ofThread.h"
-
-// ----- ofURLFileLoader.h -----
-
-// DIFF: ofURLFileLoader.h:ignoring ofHttpResponse ofBuffer operator
-%ignore ofHttpResponse::operator ofBuffer&();
-
-%include "utils/ofURLFileLoader.h"
-
-// ----- ofPoint.h -----
-
-// NOTE: ofPoint is just a typedef which swig cannot wrap, so the types need to be 
-// handled in the scripting language, see the Lua, Python, etc code at the end
-%include "types/ofPoint.h"
-
-// ----- ofRectangle.h -----
-
-// DIFF: ofRectangle.h: renamed functions due to ambiguous overloading:
-// DIFF:                scaleToScaleMode() & scaleToAspectRatio()
-%rename(scaleToScaleMode) ofRectangle::scaleTo(ofRectangle const &, ofScaleMode);
-%rename(scaleToAspectRatio) ofRectangle::scaleTo(ofRectangle const &, ofAspectRatioMode);
-
-// TODO: ofRectangle.h: SWIG Warning 302: due to manual override of x & y attributes
-%extend ofRectangle {
-
-	// override these since they are float references in the orig file and we
-	// want to access them as floats
-	float x;
-	float y;
-
-	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
-	}
-};
-
-%include "types/ofRectangle.h"
-
-// SWIG converts the x & y float& types into pointers,
-// so specify x & y as attributes using the get & set functions
-%attribute(ofRectangle, float, x, getX, setX);
-%attribute(ofRectangle, float, y, getY, setY);
-
 // ----- 3D --------------------------------------------------------------------
 
 // ----- ofNode.h -----
@@ -522,17 +311,9 @@ class fstream {};
 
 %include "3d/of3dPrimitives.h"
 
-// ----- ofConstants.h -----
-
-%include "3d/of3dUtils.h"
-
 // ----- APP -------------------------------------------------------------------
 
 // ----- ofAppRunner.h -----
-
-// deprecated
-%ignore ofSetupOpenGL(ofAppBaseWindow *, int, int, int);
-%ignore ofRunApp(ofBaseApp *);
 
 // DIFF: ofAppRunner.h: ofSetAppPtr not applicable in a target language
 %ignore ofSetAppPtr;
@@ -555,6 +336,11 @@ class fstream {};
 
 %include "app/ofAppRunner.h"
 
+// ----- not needed -----
+
+// ofWindowSettings.h, ofMainLoop.h, ofAppNoWindow.h, ofAppGlutWindow.h,
+// ofAppGLFWWindow.h, ofAppBaseWindow.h, ofBaseApp.h
+
 // ----- COMMUNICATION ---------------------------------------------------------
 
 // conditional compilation for iOS and Android
@@ -571,6 +357,11 @@ class fstream {};
 #endif
 
 // ----- GL --------------------------------------------------------------------
+
+// ----- ofBufferObject.h -----
+
+// TODO: ofBufferObject.h: SWIG Warning 325 due to nested Data class
+%include "gl/ofBufferObject.h"
 
 // ----- ofLight.h -----
 
@@ -605,52 +396,98 @@ class fstream {};
 
 %include "gl/ofVboMesh.h"
 
+// ----- not needed -----
+
+// ofGLProgrammableRenderer.h, ofGLRenderer.h, ofGLUtils.h
+
 // ----- GRAPHICS --------------------------------------------------------------
 
 // ----- ofPixels.h -----
 
 // DIFF: ofPixels.h: fixed ambiguous ofPixels function overloads since enums = int in SWIG
 // DIFF:             by renaming to allocatePixelFormat, allocateimageType, & setFromPixelsImageType
-%rename(allocatePixelFormat) ofPixels_<unsigned char>::allocate(int,int,ofPixelFormat);
-%rename(allocateImageType) ofPixels_<unsigned char>::allocate(int,int,ofImageType);
-%rename(setFromPixelsImageType) ofPixels_<unsigned char>::setFromPixels(unsigned char const *,int,int,ofImageType);
+%rename(allocatePixelFormat) ofPixels_<unsigned char>::allocate(int, int, ofPixelFormat);
+%rename(allocateImageType) ofPixels_<unsigned char>::allocate(int, int, ofImageType);
+%rename(setFromPixelsImageType) ofPixels_<unsigned char>::setFromPixels(unsigned char const *, int, int, ofImageType);
 
-%rename(allocatePixelFormat) ofPixels_<float>::allocate(int,int,ofPixelFormat);
-%rename(allocateImageType) ofPixels_<float>::allocate(int,int,ofImageType);
-%rename(setFromPixelsImageType) ofPixels_<float>::setFromPixels(float const *,int,int,ofImageType);
+%rename(allocatePixelFormat) ofPixels_<float>::allocate(int, int, ofPixelFormat);
+%rename(allocateImageType) ofPixels_<float>::allocate(int, int, ofImageType);
+%rename(setFromPixelsImageType) ofPixels_<float>::setFromPixels(float const *, int, int, ofImageType);
 
-%rename(allocatePixelFormat) ofPixels_<unsigned short>::allocate(int,int,ofPixelFormat);
-%rename(allocateImageType) ofPixels_<unsigned short>::allocate(int,int,ofImageType);
-%rename(setFromPixelsImageType) ofPixels_<unsigned short>::setFromPixels(unsigned short const *,int,int,ofImageType);
+%rename(allocatePixelFormat) ofPixels_<unsigned short>::allocate(int, int, ofPixelFormat);
+%rename(allocateImageType) ofPixels_<unsigned short>::allocate(int, int, ofImageType);
+%rename(setFromPixelsImageType) ofPixels_<unsigned short>::setFromPixels(unsigned short const *, int, int, ofImageType);
 
 // DIFF: ofPixels.h: ignore overloaded setFromPixels, setFromExternalPixels, & setFromAlignedPixels
 //                   w/ channels argument, use ofPixelType overloaded functions instead
-%ignore ofPixels_<unsigned char>::setFromPixels(unsigned char const *,int,int,int);
-%ignore ofPixels_<float>::setFromPixels(float const *,int,int,int);
-%ignore ofPixels_<unsigned short>::setFromPixels(unsigned short const *,int,int,int);
+%ignore ofPixels_<unsigned char>::setFromPixels(unsigned char const *, int, int, int);
+%ignore ofPixels_<float>::setFromPixels(float const *, int, int, int);
+%ignore ofPixels_<unsigned short>::setFromPixels(unsigned short const *, int, int, int);
 
-%ignore ofPixels_<unsigned char>::setFromExternalPixels(unsigned char *,int,int,int);
-%ignore ofPixels_<float>::setFromExternalPixels(float *,int,int,int);
-%ignore ofPixels_<unsigned short>::setFromExternalPixels(unsigned short *,int,int,int);
+%ignore ofPixels_<unsigned char>::setFromExternalPixels(unsigned char *, int, int, int);
+%ignore ofPixels_<float>::setFromExternalPixels(float *, int, int, int);
+%ignore ofPixels_<unsigned short>::setFromExternalPixels(unsigned short *, int, int, int);
 
-%ignore ofPixels_<unsigned char>::setFromAlignedPixels(unsigned char const *,int,int,int,int);
-%ignore ofPixels_<float>::setFromAlignedPixels(float const *,int,int,int,int);
-%ignore ofPixels_<unsigned short>::setFromAlignedPixels(unsigned short const *,int,int,int,int);
+%ignore ofPixels_<unsigned char>::setFromAlignedPixels(unsigned char const *, int, int, int, int);
+%ignore ofPixels_<float>::setFromAlignedPixels(float const *, int, int, int, int);
+%ignore ofPixels_<unsigned short>::setFromAlignedPixels(unsigned short const * ,int, int, int, int);
 
 // DIFF: ofPixels.h: ignoring iterators
-// TODO: ofPixels.h: (Lua) SWIG Warning 314 due to end iterator
-%ignore ofPixels_::begin;
-%ignore ofPixels_::end;
-%ignore ofPixels_::rbegin;
-%ignore ofPixels_::rend;
-%ignore ofPixels_::begin const;
-%ignore ofPixels_::end const;
-%ignore ofPixels_::rbegin const;
-%ignore ofPixels_::rend const;
+%ignore ofPixels_<unsigned char>::begin;
+%ignore ofPixels_<unsigned char>::end;
+%ignore ofPixels_<unsigned char>::rbegin;
+%ignore ofPixels_<unsigned char>::rend;
+%ignore ofPixels_<unsigned char>::begin const;
+%ignore ofPixels_<unsigned char>::end const;
+%ignore ofPixels_<unsigned char>::rbegin const;
+%ignore ofPixels_<unsigned char>::rend const;
+%ignore ofPixels_<unsigned char>::getLine(int line);
+%ignore ofPixels_<unsigned char>::getLines();
+%ignore ofPixels_<unsigned char>::getLines(int first, int numLines);
+%ignore ofPixels_<unsigned char>::getPixelsIter();
+%ignore ofPixels_<unsigned char>::getConstLine(int line) const;
+%ignore ofPixels_<unsigned char>::getConstLines() const;
+%ignore ofPixels_<unsigned char>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<unsigned char>::getConstPixelsIter() const;
+
+%ignore ofPixels_<unsigned short>::begin;
+%ignore ofPixels_<unsigned short>::end;
+%ignore ofPixels_<unsigned short>::rbegin;
+%ignore ofPixels_<unsigned short>::rend;
+%ignore ofPixels_<unsigned short>::begin const;
+%ignore ofPixels_<unsigned short>::end const;
+%ignore ofPixels_<unsigned short>::rbegin const;
+%ignore ofPixels_<unsigned short>::rend const;
+%ignore ofPixels_<unsigned short>::getLine(int line);
+%ignore ofPixels_<unsigned short>::getLines();
+%ignore ofPixels_<unsigned short>::getLines(int first, int numLines);
+%ignore ofPixels_<unsigned short>::getPixelsIter();
+%ignore ofPixels_<unsigned short>::getConstLine(int line) const;
+%ignore ofPixels_<unsigned short>::getConstLines() const;
+%ignore ofPixels_<unsigned short>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<unsigned short>::getConstPixelsIter() const;
+
+%ignore ofPixels_<float>::begin;
+%ignore ofPixels_<float>::end;
+%ignore ofPixels_<float>::rbegin;
+%ignore ofPixels_<float>::rend;
+%ignore ofPixels_<float>::begin const;
+%ignore ofPixels_<float>::end const;
+%ignore ofPixels_<float>::rbegin const;
+%ignore ofPixels_<float>::rend const;
+%ignore ofPixels_<float>::getLine(int line);
+%ignore ofPixels_<float>::getLines();
+%ignore ofPixels_<float>::getLines(int first, int numLines);
+%ignore ofPixels_<float>::getPixelsIter();
+%ignore ofPixels_<float>::getConstLine(int line) const;
+%ignore ofPixels_<float>::getConstLines() const;
+%ignore ofPixels_<float>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<float>::getConstPixelsIter() const;
 
 // ignore end keywords, even though they are within nested classes which are
 // effectively ignored by SWIG but still issue a Warning 314 (Lua)
 #ifdef SWIGLUA
+	%ignore ofPixels_::end;
 	%ignore ofPixels_::Pixels::end;
 	%ignore ofPixels_::Line::end;
 	%ignore ofPixels_::Lines::end;
@@ -658,10 +495,6 @@ class fstream {};
 	%ignore ofPixels_::ConstLine::end;
 	%ignore ofPixels_::ConstLines::end;
 #endif
-
-// deprecated
-%ignore ofPixels_::operator PixelType*();
-%ignore ofPixels_::operator const PixelType*();
 
 // TODO: ofPixels.h: SWIG Warning 325 due to nested Pixel, Pixels, Line, Lines,
 // TODO: ConstPixel, ConstPixels, ConstLine, & ConstLines classes
@@ -680,18 +513,14 @@ class fstream {};
 
 // ----- ofPath.h -----
 
-// deprecated
-%ignore ofPath::getArcResolution;
-%ignore ofPath::setArcResolution;
-
 // TODO: ofPath.h: SWIG Warning 325 due to ofPath::Command nested struct
 %include "graphics/ofPath.h"
 
 // ----- ofPolyline.h -----
 
 // ignored due to default variable overload
-%ignore ofPolyline::arc(float,float,float,float,float,float,float);
-%ignore ofPolyline::arcNegative(float,float,float,float,float,float,float);
+%ignore ofPolyline::arc(float, float, float, float, float, float, float);
+%ignore ofPolyline::arcNegative(float, float, float, float, float, float, float);
 
 // DIFF: ofPolyline.h: ignoring iterators
 %ignore ofPolyline::begin;
@@ -703,40 +532,28 @@ class fstream {};
 
 // ----- ofGraphics.h -----
 
-// no PDF export support on mobile
+// no PDF or SVG export support on mobile
 #if defined(TARGET_IOS) || defined(TARGET_ANDROID)
 	%ignore ofBeginSaveScreenAsPDF;
 	%ignore ofEndSaveScreenAsPDF();
+	%ignore ofBeginSaveScreenAsSVG;
+	%ignore ofEndSaveScreenAsSVG();
 #endif
 
-// deprecated (all overloaded funcs too ...)
-%ignore ofSetupScreenPerspective(float, float, ofOrientation);
-%ignore ofSetupScreenPerspective(float, float, ofOrientation, bool);
-%ignore ofSetupScreenPerspective(float, float, ofOrientation, bool, float);
-%ignore ofSetupScreenPerspective(float, float, ofOrientation, bool, float, float);
-%ignore ofSetupScreenPerspective(float, float, ofOrientation, bool, float, float, float);
-%ignore ofSetupScreenOrtho(float, float, ofOrientation);
-%ignore ofSetupScreenOrtho(float, float, ofOrientation, bool);
-%ignore ofSetupScreenOrtho(float, float, ofOrientation, bool, float);
-%ignore ofSetupScreenOrtho(float, float, ofOrientation, bool, float, float);
-
-// deprecated
-%ignore ofbClearBg;
-
-// DIFF: ofGraphics.h: ignoring foDrawBitmapString template functions in favor of string versions
-// target languages can handle the string conversions
+// DIFF: ofGraphics.h: ignoring foDrawBitmapString template functions in favor
+// of string versions target languages can handle the string conversions
 %ignore ofDrawBitmapString(const T &, const ofPoint&);
 %ignore ofDrawBitmapString(const T &, float, float);
 %ignore ofDrawBitmapString(const T &, float, float, float);
 
+// manually define string functions here otherwise they get redefined by SWIG & then ignored
+void ofDrawBitmapString(const string & textString, float x, float y);
+void ofDrawBitmapString(const string & textString, const ofPoint & p);
+void ofDrawBitmapString(const string & textString, float x, float y, float z);
+
 %include "graphics/ofGraphics.h"
 
 // ----- of3dGraphics.h -----
-
-// deprecated
-%ignore ofSphere;
-%ignore ofCone;
-%ignore ofBox;
 
 %include "graphics/of3dGraphics.h"
 
@@ -745,12 +562,44 @@ class fstream {};
 // ignore internal font struct
 %ignore charProps;
 
+// DIFF: ofTrueTypeFont.h: ignoring ofTrueTypeShutdown() & ofExitCallback() friend
+%ignore ofTrueTypeShutdown;
+%ignore ofExitCallback();
+
 %include "graphics/ofTrueTypeFont.h"
 
-// DIFF: ofTrueTypeFont.h: added attributes: lineHeight, letterSpacing, & spaceSize
-%attribute(ofTrueTypeFont, float, lineHeight, getLineHeight, setLineHeight);
-%attribute(ofTrueTypeFont, float, letterSpacing, getLetterSpacing, setLetterSpacing);
-%attribute(ofTrueTypeFont, float, spaceSize, getSpaceSize, setSpaceSize);
+// ----- not needed -----
+
+// ofRendererCollection.h, ofCairoRenderer.h, ofBitmapFont.h, ofTessellator.h
+
+// ----- SOUND -----------------------------------------------------------------
+
+// ----- ofSoundStream.h -----
+
+// ignore overloaded functions
+%ignore ofSoundStream::setInput(ofBaseSoundInput &soundInput);
+%ignore ofSoundStream::setOutput(ofBaseSoundOutput &soundOutput);
+
+%include "sound/ofSoundStream.h"
+
+// ----- ofSoundPlayer.h -----
+
+%ignore ofBaseSoundPlayer;
+class ofBaseSoundPlayer {};
+
+// DIFF: ofSoundPlayer.h: warnings say "FIX THIS SHIT", so leaving out fmod global functions
+%ignore ofSoundStopAll;
+%ignore ofSoundShutdown;
+%ignore ofSoundSetVolume;
+%ignore ofSoundUpdate;
+%ignore ofSoundGetSpectrum;
+
+%include "sound/ofSoundPlayer.h"
+
+// ----- not needed -----
+
+// ofBaseSoundPlayer.h, ofBaseSoundStream.h, ofFmodSoundPlayer.h,
+// ofOpenALSoundPlayer.h, ofRtAudioSoundStream.h, ofSoundBuffer.h, ofSoundUtils.h
 
 // ----- MATH ------------------------------------------------------------------
 
@@ -769,7 +618,7 @@ class fstream {};
 // ----- ofMatrix4x4.h -----
 
 // DIFF: ofMatrix4x4.h: ignoring operator(size_t,size_t) const overload
-%ignore ofMatrix4x4::operator()(std::size_t,std::size_t) const;
+%ignore ofMatrix4x4::operator()(std::size_t, std::size_t) const;
 
 %include "math/ofMatrix4x4.h"
 
@@ -861,29 +710,9 @@ ofInterpolateHermite(float y1, float y2, float pct);
 	%template(ofInterpolateHermite) ofInterpolateHermite<float>;
 #endif
 
-// ----- UTILS -----------------------------------------------------------------
+// ----- not needed -----
 
-// ----- ofXml.h -----
-
-// DIFF: ofXml.h: ignoring PocoDocument & PocoElement getters
-%ignore ofXml::getPocoDocument;
-%ignore ofXml::getPocoElement;
-
-%include "utils/ofXml.h"
-
-// ----- ofMatrixStack.h -----
-
-%include "utils/ofMatrixStack.h"
-
-// ----- VIDEO -----------------------------------------------------------------
-
-// ----- ofVideoGrabber.h -----
-
-%include "video/ofVideoGrabber.h"
-
-// ----- ofVideoPlayer.h -----
-
-%include "video/ofVideoPlayer.h"
+// ofVectorMath.h
 
 // ----- EVENTS ----------------------------------------------------------------
 
@@ -931,105 +760,253 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 %include "events/ofEvents.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// ----- LUA -------------------------------------------------------------------
+// ----- not needed -----
 
-// support for simple classes from http://lua-users.org/wiki/SimpleLuaClasses
-//
-// example usage:
-//
-// -- class declaration
-// MyClass = class()
-//
-// -- constructor & attributes
-// function MyClass:__init(x, y)
-//     self.x = x
-//     self.y = y
-//     self.bBeingDragged = false
-//     self.bOver = false
-//     self.radius = 4
-// end
-//
-// -- create instance & access attribute
-// myclass = MyClass(10, 10)
-// myclass.x = 100
+// ofEventUtils.h
 
-#ifdef SWIGLUA
+// ----- TYPES -----------------------------------------------------------------
 
-%luacode %{
+// ----- ofColor.h -----
 
--- this isnt wrapped correctly, so set it here
-of.CLOSE = true
+%include "types/ofColor.h"
 
--- handle typedefs which swig doesnt wrap
-of.Point = of.Vec3f
+// TODO: ofColor.h: SWIG Warning 312 ignores nested union that provides r, g, b, & a access
+// DIFF: ofColor.h: added ofColor_ pixel channel getters getR(), getG(), getB(), getA()
+// DIFF:            added ofColor_ pixel channel setters setR(), setG(), setB(), setA()
+// DIFF: ofColor.h: added target language tostring wrapper for ofColor_::operator <<
+%extend ofColor_ {
 
--- class.lua
--- Compatible with Lua 5.1 (not 5.0).
-function class(base, __init)
-   local c = {}    -- a new class instance
-   if not __init and type(base) == 'function' then
-	  __init = base
-	  base = nil
-   elseif type(base) == 'table' then
-	-- our new class is a shallow copy of the base class!
-	  for i,v in pairs(base) do
-		 c[i] = v
-	  end
-	  c._base = base
-   end
-   -- the class will be the metatable for all its objects,
-   -- and they will look up their methods in it.
-   c.__index = c
+	// pixel channel getters
+	PixelType getR() {return $self->r;}
+	PixelType getG() {return $self->g;}
+	PixelType getB() {return $self->b;}
+	PixelType getA() {return $self->a;}
 
-   -- expose a constructor which can be called by <classname>(<args>)
-   local mt = {}
-   mt.__call = function(class_tbl, ...)
-   local obj = {}
-   setmetatable(obj,c)
-   if class_tbl.__init then
-	  class_tbl.__init(obj,...)
-   else
-	  -- make sure that any stuff from the base class is initialized!
-	  if base and base.__init then
-	  base.__init(obj, ...)
-	  end
-   end
-   return obj
-   end
-   c.__init = __init
-   c.is_a = function(self, klass)
-	  local m = getmetatable(self)
-	  while m do
-		 if m == klass then return true end
-		 m = m._base
-	  end
-	  return false
-   end
-   setmetatable(c, mt)
-   return c
-end
+	// pixel channel setters
+	void setR(PixelType r) {$self->r = r;}
+	void setG(PixelType g) {$self->g = g;}
+	void setB(PixelType b) {$self->b = b;}
+	void setA(PixelType a) {$self->a = a;}
 
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
+
+%attributeVar(ofColor_<unsigned char>, unsigned char, r, r, r);
+%attributeVar(ofColor_<unsigned char>, unsigned char, g, g, g);
+%attributeVar(ofColor_<unsigned char>, unsigned char, b, b, b);
+%attributeVar(ofColor_<unsigned char>, unsigned char, a, a, a);
+
+%attributeVar(ofColor_<float>, float, r, r, r);
+%attributeVar(ofColor_<float>, float, g, g, g);
+%attributeVar(ofColor_<float>, float, b, b, b);
+%attributeVar(ofColor_<float>, float, a, a, a);
+
+%attributeVar(ofColor_<unsigned short>, unsigned short, r, r, r);
+%attributeVar(ofColor_<unsigned short>, unsigned short, g, g, g);
+%attributeVar(ofColor_<unsigned short>, unsigned short, b, b, b);
+%attributeVar(ofColor_<unsigned short>, unsigned short, a, a, a);
+
+// tell SWIG about template classes
+#ifdef OF_SWIG_RENAME
+	%template(Color) ofColor_<unsigned char>;
+	%template(FloatColor) ofColor_<float>;
+	%template(ShortColor) ofColor_<unsigned short>;
+#else
+	%template(ofColor) ofColor_<unsigned char>;
+	%template(ofFloatColor) ofColor_<float>;
+	%template(ofShortColor) ofColor_<unsigned short>;
+#endif
+
+// ----- ofTypes.h -----
+
+// DIFF: ofTypes.h: ignoring video format and video device classes
+%ignore ofVideoFormat;
+%ignore ofVideoDevice;
+
+// DIFF: ofTypes.h: mutex, scoped lock, & ptr are probably too low level
+// TODO: ofTypes.h: SWIG Warning 342 due to ofPtr using keyword 
+%ignore ofMutex;
+%ignore ofScopedLock;
+%ignore ofPtr;
+
+%include "types/ofTypes.h"
+
+// ----- ofPoint.h -----
+
+// NOTE: ofPoint is just a typedef which swig cannot wrap, so the types need to be 
+// handled in the scripting language, see the Lua, Python, etc code at the end
+%include "types/ofPoint.h"
+
+// ----- ofRectangle.h -----
+
+// DIFF: ofRectangle.h: renamed functions due to ambiguous overloading:
+// DIFF:                scaleToScaleMode() & scaleToAspectRatio()
+%rename(scaleToScaleMode) ofRectangle::scaleTo(ofRectangle const &, ofScaleMode);
+%rename(scaleToAspectRatio) ofRectangle::scaleTo(ofRectangle const &, ofAspectRatioMode);
+
+// TODO: ofRectangle.h: SWIG Warning 302 due to manual override of x & y attributes
+%extend ofRectangle {
+
+	// override these since they are float references in the orig file and we
+	// want to access them as floats
+	float x;
+	float y;
+
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
+
+%include "types/ofRectangle.h"
+
+// SWIG converts the x & y float& types into pointers,
+// so specify x & y as attributes using the get & set functions
+%attribute(ofRectangle, float, x, getX, setX);
+%attribute(ofRectangle, float, y, getY, setY);
+
+// ----- not needed -----
+
+// ofParameter.h, ofParameterGroup.h 
+
+// ----- UTILS -----------------------------------------------------------------
+
+// ----- ofFpsCounter.h -----
+
+%include "utils/ofFpsCounter.h"
+
+// ----- ofMatrixStack.h -----
+
+%include "utils/ofMatrixStack.h"
+
+// ----- ofXml.h -----
+
+// DIFF: ofXml.h: ignoring PocoDocument & PocoElement getters
+%ignore ofXml::getPocoDocument;
+%ignore ofXml::getPocoElement;
+
+%include "utils/ofXml.h"
+
+// ----- ofMatrixStack.h -----
+
+%include "utils/ofMatrixStack.h"
+
+// ----- ofFileUtils.h -----
+
+// DIFF: ofFileUtils.h: ignoring file as SWIG throws Error: Unknown namespace 'boost::filesystem'
+// DIFF: ofFileUtils.h: probably best to use scripting language file library
+/*
+// forward declare fstream for ofBuffer
+%ignore fstream;
+class fstream {};
+
+// DIFF: ofFileUtils.h: ignoring iterators
+%ignore ofBuffer::begin;
+%ignore ofBuffer::end;
+%ignore ofBuffer::rbegin;
+%ignore ofBuffer::rend;
+%ignore ofDirectory::begin;
+%ignore ofDirectory::end;
+%ignore ofDirectory::rbegin;
+%ignore ofDirectory::rend;
+
+// SWIG needs to know about boost::filesystem, but use #include as we do not
+// want to generate wrappers: http://comments.gmane.org/gmane.comp.programming.swig/18549
+%{
+#include <boost/filesystem.hpp> 
 %}
 
-#endif
+// DIFF: ofPixels.h: ignoring filesystem::path operators
+%ignore ofBuffer::operator string() const;
+%ignore ofFile::operator std::filesystem::path();
+%ignore ofFile::operator const std::filesystem::path() const;
+%ignore ofDirectory::operator std::filesystem::path();
+%ignore ofDirectory::operator const std::filesystem::path() const;
 
-////////////////////////////////////////////////////////////////////////////////
-// ----- Python ----------------------------------------------------------------
+// TODO: ofFileUtils.h: SWIG Warning 325 due to nested Line & Lines structs
+// TODO: ofFileUtils.h: (Lua) SWIG Warning 314 due to end iterator
+%include "utils/ofFileUtils.h"
+*/
 
-#ifdef SWIGPYTHON
-#ifndef OF_SWIG_RENAME
+// ----- ofLog.h -----
 
-%pythoncode %{
-
-# handle typedefs which swig doesnt wrap
-ofPoint = ofVec3f
-
-# renaming log -> ofLog
-ofLog = log
-del log
-
+// function wrapper for ofLog class
+%inline %{
+	void log(ofLogLevel level, const string & message) {
+		ofLog(level, message);
+	}
 %}
 
+// DIFF: ofLog.h: ignore stream based log classes since target languages won't support it
+%ignore ofLog;
+%ignore ofLogVerbose;
+%ignore ofLogNotice;
+%ignore ofLogWarning;
+%ignore ofLogError;
+%ignore ofLogFatalError;
+
+// DIFF: ofLog.h: ignore logger channel classes
+%ignore ofBaseLoggerChannel;
+%ignore ofSetLoggerChannel;
+%ignore ofConsoleLoggerChannel;
+%ignore ofFileLoggerChannel;
+
+%include "utils/ofLog.h"
+
+// ----- ofSystemUtils.h -----
+
+%include "utils/ofSystemUtils.h"
+
+// ----- ofURLFileLoader.h -----
+
+// DIFF: ofURLFileLoader.h:ignoring ofHttpResponse ofBuffer operator
+%ignore ofHttpResponse::operator ofBuffer&();
+
+%include "utils/ofURLFileLoader.h"
+
+// ----- ofUtils.h -----
+
+// DIFF: ofUtils.h: ignoring ofFromString as templating results in too much overloading
+%ignore ofFromString;
+
+// DIFF: ofUtils.h: variable argument support is painful, safer to ignore
+// see http://www.swig.org/Doc2.0/Varargs.html
+%ignore ofVAArgsToString;
+
+// DIFF: ofUtils.h: ignoring ofUTF8Iterator
+%ignore ofUTF8Iterator;
+#ifdef SWIGLUA // ignore these to silence Warning 314
+	%ignore ofUTF8Iterator::end;
 #endif
-#endif
+
+%include "utils/ofUtils.h"
+
+// ----- not needed -----
+
+// ofTimer.h, ofNoise.h, ofThread.h 
+
+// ----- VIDEO -----------------------------------------------------------------
+
+// ----- ofVideoGrabber.h -----
+
+%include "video/ofVideoGrabber.h"
+
+// ----- ofVideoPlayer.h -----
+
+%include "video/ofVideoPlayer.h"
+
+// ----- not needed -----
+
+// ofQuickTimGrabber.h, ofQuickTimePlayer.h, ofQTUtils.h, ofQTKitGrabber.h,
+// ofQTKitPlayer.h, ofQTKitMovieRenderer.h, ofAVFoundationVideoPlayer,
+// ofAVFoundationPlayer.h
+
+////////////////////////////////////////////////////////////////////////////////
+// ----- LANG ------------------------------------------------------------------
+
+%include "interfaces/lang.i"
