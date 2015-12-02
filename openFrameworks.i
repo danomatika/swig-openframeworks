@@ -48,6 +48,11 @@
 %ignore operator <<;
 %ignore operator >>;
 
+// expanded primitives
+%typedef unsigned int size_t;
+%typedef long long int64_t;
+%typedef unsigned long long uint64_t;
+
 // ----- STL types -----
 
 %include <stl.i>
