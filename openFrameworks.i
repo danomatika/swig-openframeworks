@@ -159,6 +159,9 @@ class ofBaseHasTexture {};
 %ignore ofBaseHasPixels;
 class ofBaseHasPixels {};
 
+// DIFF: ofFbo.h: ignoring const & copy constructor in favor of && constructor
+%ignore ofFbo::ofFbo(ofFbo const &);
+
 // TODO: ofFbo.h: setUseTexture & isUsingtexture are irrelevant, so ignoring
 %ignore ofFbo::setUseTexture;
 %ignore ofFbo::isUsingTexture;
@@ -175,6 +178,9 @@ class ofBaseHasPixels {};
 %include "gl/ofFbo.h"
 
 // ----- ofTexture.h -----
+
+// DIFF: ofTexture.h: ignoring const & copy constructor in favor of && constructor
+%ignore ofTexture::ofTexture(ofTexture const &);
 
 %include "gl/ofTexture.h"
 
@@ -205,6 +211,9 @@ template<typename T> class ofBaseImage_ {};
 
 // DIFF: ofImage.h: ignoring ofPixels operator
 %ignore ofImage_::operator ofPixels_<PixelType>&();
+
+// DIFF: ofImage.h: ignoring const & copy constructor in favor of && constructor
+%ignore ofImage_(const ofImage_<PixelType>&);
 
 // TODO: ofImage.h: SWIG Warning 503: due to operator ofImage_::operator pixels
 %include "graphics/ofImage.h"
@@ -284,6 +293,9 @@ template<typename T> class ofBaseImage_ {};
 // ----- 3D --------------------------------------------------------------------
 
 // ----- ofNode.h -----
+
+// DIFF: ofNode.h: ignoring const & copy constructor in favor of && constructor
+%ignore ofNode::ofNode(ofNode const &);
 
 // process ofNode first since it's a base class
 %include "3d/ofNode.h"
@@ -389,6 +401,9 @@ template<typename T> class ofBaseImage_ {};
 
 // ----- ofShader.h -----
 
+// DIFF: ofShader.h: ignoring const & copy constructor in favor of && constructor
+%ignore ofShader::ofShader(ofShader const &);
+
 // DIFF: (Lua) ofShader.h: beginShader() & endShader() since "end" is a Lua keyword
 #ifdef SWIGLUA
 	%rename(beginShader) ofShader::begin;
@@ -412,6 +427,9 @@ template<typename T> class ofBaseImage_ {};
 // ----- GRAPHICS --------------------------------------------------------------
 
 // ----- ofPixels.h -----
+
+// DIFF: ofImage.h: ignoring const & copy constructor in favor of && constructor
+%ignore ofPixels_(const ofPixels_<PixelType> &);
 
 // DIFF: ofPixels.h: fixed ambiguous ofPixels function overloads since enums = int in SWIG
 // DIFF:             by renaming to allocatePixelFormat, allocateimageType, & setFromPixelsImageType
@@ -574,6 +592,9 @@ void ofDrawBitmapString(const string & textString, float x, float y, float z);
 // DIFF: ofTrueTypeFont.h: ignoring ofTrueTypeShutdown() & ofExitCallback() friend
 %ignore ofTrueTypeShutdown;
 %ignore ofExitCallback();
+
+// DIFF: ofTrueTypeFont.h: ignoring const & copy constructor in favor of && constructor
+%ignore ofTrueTypeFont::ofTrueTypeFont(ofTrueTypeFont const &);
 
 %include "graphics/ofTrueTypeFont.h"
 
