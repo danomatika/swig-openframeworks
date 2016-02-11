@@ -83,6 +83,7 @@ namespace std {
 #endif
 
 // ----- Deprecated ------
+
 #ifndef OF_SWIG_DEPRECATED
 	%include "interfaces/deprecated.i"
 #endif
@@ -133,6 +134,9 @@ namespace std {
 //
 // This forward delcaration is then overridden by the actual implentation after
 // %include "SomeClass.h" later on.
+
+// ignore everything in the private namespace
+%ignore of::priv;
 
 // ----- ofConstants.h -----
 
