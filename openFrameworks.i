@@ -229,10 +229,10 @@ template<typename T> class ofBaseImage_ {};
 	%template(ofShortImage) ofImage_<unsigned short>;
 #endif
 
-// DIFF: defined GLint texture types for convenience: OF_TEXTURE_LUMINENCE, etc
-#define OF_TEXTURE_LUMINENCE = GL_LUMINENCE
-#define OF_TEXTURE_RGB = GL_RGB
-#define OF_TEXTURE_RGBA = GL_RGBA
+// DIFF: defined GLint texture types for convenience: OF_TEXTURE_LUMINANCE, etc
+%constant GLint OF_TEXTURE_LUMINANCE = GL_LUMINANCE;
+%constant GLint OF_TEXTURE_RGB = GL_RGB;
+%constant GLint OF_TEXTURE_RGBA = GL_RGBA;
 
 // DIFF: defined GLfloat texture wrap defines for convenience: OF_TEXTURE_REPEAT, etc
 #define OF_CLAMP_TO_EDGE GL_CLAMP_TO_EDGE
