@@ -229,18 +229,21 @@ template<typename T> class ofBaseImage_ {};
 	%template(ofShortImage) ofImage_<unsigned short>;
 #endif
 
-// DIFF: defined GLint texture types for convenience: OF_TEXTURE_LUMINENCE, etc
-#define OF_TEXTURE_LUMINENCE = GL_LUMINENCE
-#define OF_TEXTURE_RGB = GL_RGB
-#define OF_TEXTURE_RGBA = GL_RGBA
+// the following GL define values are pulled from glew.h & converted to base 10:
 
-// DIFF: defined GLfloat texture wrap defines for convenience: OF_TEXTURE_REPEAT, etc
-#define OF_CLAMP_TO_EDGE GL_CLAMP_TO_EDGE
+// DIFF: defined GLint texture types: OF_TEXTURE_LUMINANCE, OF_TEXTURE_RGB, & OF_TEXTURE_RGBA
+#define OF_TEXTURE_LUMINANCE 6409    // 0x1909
+#define OF_TEXTURE_RGB 6407          // 0x1907
+#define OF_TEXTURE_RGBA 6408         // 0x1908
+
+// DIFF: defined GLfloat texture wrap defines: OF_CLAMP_TO_EDGE, OF_CLAMP_TO_BORDER, OF_REPEAT, OF_MIRRORED_REPEAT
+// DIFF:
+#define OF_CLAMP_TO_EDGE 33071       // 0x812F
 #ifndef TARGET_OPENGLES
-	#define OF_CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER
+	#define OF_CLAMP_TO_BORDER 33069 // 0x812D
 #endif
-#define OF_MIRRORED_REPEAT = GL_MIRRORED_REPEAT
-#define OF_REPEAT = GL_REPEAT
+#define OF_REPEAT 10497              // 0x2901
+#define OF_MIRRORED_REPEAT 33648     // 0x8370
 
 // ----- ofBaseTypes.h -----
 
