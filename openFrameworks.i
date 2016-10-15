@@ -339,8 +339,29 @@ template<typename T> class ofBaseImage_ {};
 
 // ----- ofAppRunner.h -----
 
+// DIFF: ofAppRunner.h: ofInit, ofSetupOpenGL, & ofCreateWindow not applicable in target language
+%ignore ofInit;
+%ignore ofSetupOpenGL;
+%ignore ofCreateWindow;
+
+// DIFF: ofAppRunner.h: get/set main loop not applicable to target language
+%ignore ofGetMainLoop;
+%ignore ofSetMainLoop;
+
+// DIFF: ofAppRunner.h: run app & main loop not applicable to target language
+%ignore noopDeleter;
+%ignore ofRunApp;
+%ignore ofRunMainLoop;
+
 // DIFF: ofAppRunner.h: ofSetAppPtr not applicable in a target language
 %ignore ofSetAppPtr;
+
+// DIFF: ofAppRunner.h: ofGetWindowPtr not applicable in a target language
+%ignore ofGetWindowPtr;
+
+// DIFF: ofAppRunner.h: get/set current renderer not applicable to target language
+%ignore ofSetCurrentRenderer;
+%ignore ofGetCurrentRenderer;
 
 // DIFF: ofAppRunner.h: ignoring api-specific window objects: display, window, context, surface
 %ignore ofGetX11Display;
@@ -353,10 +374,6 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofGetCocoaWindow;
 %ignore ofGetWGLContext;
 %ignore ofGetWin32Window;
-
-// DIFF: ofAppRunner.h: get/set current renderer not applicable to target language
-%ignore ofSetCurrentRenderer;
-%ignore ofGetCurrentRenderer;
 
 %include "app/ofAppRunner.h"
 
