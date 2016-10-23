@@ -453,31 +453,40 @@ template<typename T> class ofBaseImage_ {};
 
 // DIFF: ofPixels.h: fixed ambiguous ofPixels function overloads since enums = int in SWIG
 // DIFF:             by renaming to allocatePixelFormat, allocateimageType, & setFromPixelsImageType
-%rename(allocatePixelFormat) ofPixels_<unsigned char>::allocate(int, int, ofPixelFormat);
-%rename(allocateImageType) ofPixels_<unsigned char>::allocate(int, int, ofImageType);
-%rename(setFromPixelsImageType) ofPixels_<unsigned char>::setFromPixels(unsigned char const *, int, int, ofImageType);
+%rename(allocatePixelFormat) ofPixels_<unsigned char>::allocate(size_t, size_t, ofPixelFormat);
+%rename(allocateImageType) ofPixels_<unsigned char>::allocate(size_t, size_t, ofImageType);
+%rename(setFromPixelsImageType) ofPixels_<unsigned char>::setFromPixels(unsigned char const *, size_t, size_t, ofImageType);
 
-%rename(allocatePixelFormat) ofPixels_<float>::allocate(int, int, ofPixelFormat);
-%rename(allocateImageType) ofPixels_<float>::allocate(int, int, ofImageType);
-%rename(setFromPixelsImageType) ofPixels_<float>::setFromPixels(float const *, int, int, ofImageType);
+%rename(allocatePixelFormat) ofPixels_<float>::allocate(size_t, size_t, ofPixelFormat);
+%rename(allocateImageType) ofPixels_<float>::allocate(size_t, size_t, ofImageType);
+%rename(setFromPixelsImageType) ofPixels_<float>::setFromPixels(float const *, size_t, size_t, ofImageType);
 
-%rename(allocatePixelFormat) ofPixels_<unsigned short>::allocate(int, int, ofPixelFormat);
-%rename(allocateImageType) ofPixels_<unsigned short>::allocate(int, int, ofImageType);
-%rename(setFromPixelsImageType) ofPixels_<unsigned short>::setFromPixels(unsigned short const *, int, int, ofImageType);
+%rename(allocatePixelFormat) ofPixels_<unsigned short>::allocate(size_t, size_t, ofPixelFormat);
+%rename(allocateImageType) ofPixels_<unsigned short>::allocate(size_t, size_t, ofImageType);
+%rename(setFromPixelsImageType) ofPixels_<unsigned short>::setFromPixels(unsigned short const *, size_t, size_t, ofImageType);
 
 // DIFF: ofPixels.h: ignore overloaded setFromPixels, setFromExternalPixels, & setFromAlignedPixels
 //                   w/ channels argument, use ofPixelType overloaded functions instead
-%ignore ofPixels_<unsigned char>::setFromPixels(unsigned char const *, int, int, int);
-%ignore ofPixels_<float>::setFromPixels(float const *, int, int, int);
-%ignore ofPixels_<unsigned short>::setFromPixels(unsigned short const *, int, int, int);
+%ignore ofPixels_<unsigned char>::setFromPixels(unsigned char const *, size_t, size_t, size_t);
+%ignore ofPixels_<float>::setFromPixels(float const *, size_t, size_t, size_t);
+%ignore ofPixels_<unsigned short>::setFromPixels(unsigned short const *, size_t, size_t, size_t);
 
-%ignore ofPixels_<unsigned char>::setFromExternalPixels(unsigned char *, int, int, int);
-%ignore ofPixels_<float>::setFromExternalPixels(float *, int, int, int);
-%ignore ofPixels_<unsigned short>::setFromExternalPixels(unsigned short *, int, int, int);
+%ignore ofPixels_<unsigned char>::setFromExternalPixels(unsigned char *, size_t, size_t, size_t);
+%ignore ofPixels_<float>::setFromExternalPixels(float *, size_t, size_t, size_t);
+%ignore ofPixels_<unsigned short>::setFromExternalPixels(unsigned short *, size_t, size_t, size_t);
 
-%ignore ofPixels_<unsigned char>::setFromAlignedPixels(unsigned char const *, int, int, int, int);
-%ignore ofPixels_<float>::setFromAlignedPixels(float const *, int, int, int, int);
-%ignore ofPixels_<unsigned short>::setFromAlignedPixels(unsigned short const * ,int, int, int, int);
+%ignore ofPixels_<unsigned char>::setFromAlignedPixels(unsigned char const *, size_t, size_t, size_t, size_t);
+%ignore ofPixels_<float>::setFromAlignedPixels(float const *, size_t, size_t, size_t, size_t);
+%ignore ofPixels_<unsigned short>::setFromAlignedPixels(unsigned short const *, size_t, size_t, size_t, size_t);
+
+// DIFF: ofPixels.h: ignore setFromAlignedPixels with vector arguments
+%ignore ofPixels_<unsigned char>::setFromAlignedPixels(const unsigned char *, size_t, size_t, ofPixelFormat, std::vector<size_t>);
+%ignore ofPixels_<float>::setFromAlignedPixels(const float *, size_t, size_t, ofPixelFormat, std::vector<size_t>);
+%ignore ofPixels_<unsigned short>::setFromAlignedPixels(const unsigned short *, size_t, size_t, ofPixelFormat, std::vector<size_t>);
+
+%ignore ofPixels_<unsigned char>::setFromAlignedPixels(const unsigned char *, size_t, size_t, ofPixelFormat, std::vector<int>);
+%ignore ofPixels_<float>::setFromAlignedPixels(const float *, size_t, size_t, ofPixelFormat, std::vector<int>);
+%ignore ofPixels_<unsigned short>::setFromAlignedPixels(const unsigned short *, size_t, size_t, ofPixelFormat, std::vector<int>);
 
 // DIFF: ofPixels.h: ignoring iterators
 %ignore ofPixels_<unsigned char>::begin;
@@ -488,13 +497,13 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofPixels_<unsigned char>::end const;
 %ignore ofPixels_<unsigned char>::rbegin const;
 %ignore ofPixels_<unsigned char>::rend const;
-%ignore ofPixels_<unsigned char>::getLine(int line);
+%ignore ofPixels_<unsigned char>::getLine(size_t line);
 %ignore ofPixels_<unsigned char>::getLines();
-%ignore ofPixels_<unsigned char>::getLines(int first, int numLines);
+%ignore ofPixels_<unsigned char>::getLines(size_t first, size_t numLines);
 %ignore ofPixels_<unsigned char>::getPixelsIter();
-%ignore ofPixels_<unsigned char>::getConstLine(int line) const;
+%ignore ofPixels_<unsigned char>::getConstLine(size_t line) const;
 %ignore ofPixels_<unsigned char>::getConstLines() const;
-%ignore ofPixels_<unsigned char>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<unsigned char>::getConstLines(size_t first, size_t numLines) const;
 %ignore ofPixels_<unsigned char>::getConstPixelsIter() const;
 
 %ignore ofPixels_<unsigned short>::begin;
@@ -505,13 +514,13 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofPixels_<unsigned short>::end const;
 %ignore ofPixels_<unsigned short>::rbegin const;
 %ignore ofPixels_<unsigned short>::rend const;
-%ignore ofPixels_<unsigned short>::getLine(int line);
+%ignore ofPixels_<unsigned short>::getLine(size_t line);
 %ignore ofPixels_<unsigned short>::getLines();
-%ignore ofPixels_<unsigned short>::getLines(int first, int numLines);
+%ignore ofPixels_<unsigned short>::getLines(size_t first, size_t numLines);
 %ignore ofPixels_<unsigned short>::getPixelsIter();
-%ignore ofPixels_<unsigned short>::getConstLine(int line) const;
+%ignore ofPixels_<unsigned short>::getConstLine(size_t line) const;
 %ignore ofPixels_<unsigned short>::getConstLines() const;
-%ignore ofPixels_<unsigned short>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<unsigned short>::getConstLines(size_t first, size_t numLines) const;
 %ignore ofPixels_<unsigned short>::getConstPixelsIter() const;
 
 %ignore ofPixels_<float>::begin;
@@ -522,13 +531,13 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofPixels_<float>::end const;
 %ignore ofPixels_<float>::rbegin const;
 %ignore ofPixels_<float>::rend const;
-%ignore ofPixels_<float>::getLine(int line);
+%ignore ofPixels_<float>::getLine(size_t line);
 %ignore ofPixels_<float>::getLines();
-%ignore ofPixels_<float>::getLines(int first, int numLines);
+%ignore ofPixels_<float>::getLines(size_t first, size_t numLines);
 %ignore ofPixels_<float>::getPixelsIter();
-%ignore ofPixels_<float>::getConstLine(int line) const;
+%ignore ofPixels_<float>::getConstLine(size_t line) const;
 %ignore ofPixels_<float>::getConstLines() const;
-%ignore ofPixels_<float>::getConstLines(int first, int numLines) const;
+%ignore ofPixels_<float>::getConstLines(size_t first, size_t numLines) const;
 %ignore ofPixels_<float>::getConstPixelsIter() const;
 
 // ignore end keywords, even though they are within nested classes which are
@@ -971,7 +980,7 @@ class fstream {};
 #include <boost/filesystem.hpp> 
 %}
 
-// DIFF: ofPixels.h: ignoring filesystem::path operators
+// DIFF: ofFileUtils.h: ignoring filesystem::path operators
 %ignore ofBuffer::operator string() const;
 %ignore ofFile::operator std::filesystem::path();
 %ignore ofFile::operator const std::filesystem::path() const;
