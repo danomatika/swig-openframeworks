@@ -166,8 +166,11 @@ class ofBaseHasPixels {};
 %ignore ofFbo::setUseTexture;
 %ignore ofFbo::isUsingTexture;
 
-// TODO: ofFbo.h: SWIG Warning 325 due to Settings nested struct
-%ignore ofFbo::Settings; // doesn't seem to silence warning
+// DIFF: ofFbo.h: ignoring setActiveDrawBufers() due to std::vector
+%ignore setActiveDrawBuffers(const vector<int>& i);
+
+// DIFF: ofFbo.h: ignoring nested structs, not supported by SWIG
+%ignore ofFbo::Settings;
 
 // DIFF: (Lua) ofFbo.h: beginFbo() & endFbo() since "end" is a Lua keyword
 #ifdef SWIGLUA
@@ -406,10 +409,15 @@ template<typename T> class ofBaseImage_ {};
 
 // ----- ofLight.h -----
 
-// TODO: ofLight.h: SWIG Warning 325 due to nested Data class
+// DIFF: ofLight.h: ignoring nested struct, not supported by SWIG
+%ignore ofLight::Data;
+
 %include "gl/ofLight.h"
 
 // ----- ofMaterial.h -----
+
+// DIFF: ofMaterial.h: ignoring nested struct, not supported by SWIG
+%ignore ofMaterial::Data;
 
 // DIFF: (Lua) ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
 #ifdef SWIGLUA
@@ -475,9 +483,9 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofPixels_<float>::setFromExternalPixels(float *, size_t, size_t, size_t);
 %ignore ofPixels_<unsigned short>::setFromExternalPixels(unsigned short *, size_t, size_t, size_t);
 
-%ignore ofPixels_<unsigned char>::setFromAlignedPixels(unsigned char const *, size_t, size_t, size_t, size_t);
-%ignore ofPixels_<float>::setFromAlignedPixels(float const *, size_t, size_t, size_t, size_t);
-%ignore ofPixels_<unsigned short>::setFromAlignedPixels(unsigned short const *, size_t, size_t, size_t, size_t);
+%ignore ofPixels_<unsigned char>::setFromAlignedPixels(const unsigned char *, size_t, size_t, size_t, size_t);
+%ignore ofPixels_<float>::setFromAlignedPixels(const float *, size_t, size_t, size_t, size_t);
+%ignore ofPixels_<unsigned short>::setFromAlignedPixels(const unsigned short *, size_t, size_t, size_t, size_t);
 
 // DIFF: ofPixels.h: ignore setFromAlignedPixels with vector arguments
 %ignore ofPixels_<unsigned char>::setFromAlignedPixels(const unsigned char *, size_t, size_t, ofPixelFormat, std::vector<size_t>);
@@ -488,72 +496,51 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofPixels_<float>::setFromAlignedPixels(const float *, size_t, size_t, ofPixelFormat, std::vector<int>);
 %ignore ofPixels_<unsigned short>::setFromAlignedPixels(const unsigned short *, size_t, size_t, ofPixelFormat, std::vector<int>);
 
+// DIFF: ofPixels.h: ignoring static functions
+%ignore ofPixels_::pixelBitsFromPixelFormat(ofPixelFormat);
+%ignore ofPixels_::bytesFromPixelFormat(size_t, size_t, ofPixelFormat);
+
+// DIFF: ofPixels.h: ignoring nested structs, not supported by SWIG
+%ignore ofPixels_::ConstPixel;
+%ignore ofPixels_::Pixel;
+%ignore ofPixels_::Pixels;
+%ignore ofPixels_::Line;
+%ignore ofPixels_::Lines;
+%ignore ofPixels_::ConstPixels;
+%ignore ofPixels_::ConstLine;
+%ignore ofPixels_::ConstLines;
+
 // DIFF: ofPixels.h: ignoring iterators
-%ignore ofPixels_<unsigned char>::begin;
+%ignore ofPixels_::begin;
 %ignore ofPixels_<unsigned char>::end;
-%ignore ofPixels_<unsigned char>::rbegin;
-%ignore ofPixels_<unsigned char>::rend;
-%ignore ofPixels_<unsigned char>::begin const;
-%ignore ofPixels_<unsigned char>::end const;
-%ignore ofPixels_<unsigned char>::rbegin const;
-%ignore ofPixels_<unsigned char>::rend const;
-%ignore ofPixels_<unsigned char>::getLine(size_t line);
-%ignore ofPixels_<unsigned char>::getLines();
-%ignore ofPixels_<unsigned char>::getLines(size_t first, size_t numLines);
-%ignore ofPixels_<unsigned char>::getPixelsIter();
-%ignore ofPixels_<unsigned char>::getConstLine(size_t line) const;
-%ignore ofPixels_<unsigned char>::getConstLines() const;
-%ignore ofPixels_<unsigned char>::getConstLines(size_t first, size_t numLines) const;
-%ignore ofPixels_<unsigned char>::getConstPixelsIter() const;
-
-%ignore ofPixels_<unsigned short>::begin;
-%ignore ofPixels_<unsigned short>::end;
-%ignore ofPixels_<unsigned short>::rbegin;
-%ignore ofPixels_<unsigned short>::rend;
-%ignore ofPixels_<unsigned short>::begin const;
-%ignore ofPixels_<unsigned short>::end const;
-%ignore ofPixels_<unsigned short>::rbegin const;
-%ignore ofPixels_<unsigned short>::rend const;
-%ignore ofPixels_<unsigned short>::getLine(size_t line);
-%ignore ofPixels_<unsigned short>::getLines();
-%ignore ofPixels_<unsigned short>::getLines(size_t first, size_t numLines);
-%ignore ofPixels_<unsigned short>::getPixelsIter();
-%ignore ofPixels_<unsigned short>::getConstLine(size_t line) const;
-%ignore ofPixels_<unsigned short>::getConstLines() const;
-%ignore ofPixels_<unsigned short>::getConstLines(size_t first, size_t numLines) const;
-%ignore ofPixels_<unsigned short>::getConstPixelsIter() const;
-
-%ignore ofPixels_<float>::begin;
 %ignore ofPixels_<float>::end;
-%ignore ofPixels_<float>::rbegin;
-%ignore ofPixels_<float>::rend;
-%ignore ofPixels_<float>::begin const;
-%ignore ofPixels_<float>::end const;
-%ignore ofPixels_<float>::rbegin const;
-%ignore ofPixels_<float>::rend const;
-%ignore ofPixels_<float>::getLine(size_t line);
-%ignore ofPixels_<float>::getLines();
-%ignore ofPixels_<float>::getLines(size_t first, size_t numLines);
-%ignore ofPixels_<float>::getPixelsIter();
-%ignore ofPixels_<float>::getConstLine(size_t line) const;
-%ignore ofPixels_<float>::getConstLines() const;
-%ignore ofPixels_<float>::getConstLines(size_t first, size_t numLines) const;
-%ignore ofPixels_<float>::getConstPixelsIter() const;
+%ignore ofPixels_<unsigned short>::end;
+%ignore ofPixels_::rbegin;
+%ignore ofPixels_::rend;
+%ignore ofPixels_::begin const;
+%ignore ofPixels_::end const;
+%ignore ofPixels_::rbegin const;
+%ignore ofPixels_::rend const;
+%ignore ofPixels_::getLine(size_t);
+%ignore ofPixels_::getLines();
+%ignore ofPixels_::getLines(size_t, size_t);
+%ignore ofPixels_::getPixelsIter();
+%ignore ofPixels_::getConstLine(size_t) const;
+%ignore ofPixels_::getConstLines() const;
+%ignore ofPixels_::getConstLines(size_t, size_t) const;
+%ignore ofPixels_::getConstPixelsIter() const;
 
 // ignore end keywords, even though they are within nested classes which are
 // effectively ignored by SWIG but still issue a Warning 314 (Lua)
 #ifdef SWIGLUA
-	%ignore ofPixels_::end;
-	%ignore ofPixels_::Pixels::end;
 	%ignore ofPixels_::Line::end;
 	%ignore ofPixels_::Lines::end;
 	%ignore ofPixels_::ConstPixels::end;
 	%ignore ofPixels_::ConstLine::end;
 	%ignore ofPixels_::ConstLines::end;
+	%ignore ofPixels_::Pixels::end;
 #endif
 
-// TODO: ofPixels.h: SWIG Warning 325 due to nested Pixel, Pixels, Line, Lines,
-// TODO: ConstPixel, ConstPixels, ConstLine, & ConstLines classes
 %include "graphics/ofPixels.h"
 
 // tell SWIG about template classes
@@ -569,7 +556,9 @@ template<typename T> class ofBaseImage_ {};
 
 // ----- ofPath.h -----
 
-// TODO: ofPath.h: SWIG Warning 325 due to ofPath::Command nested struct
+// DIFF: ofPath.h: ignoring nested struct, not supported by SWIG
+%ignore ofPath::Command;
+
 %include "graphics/ofPath.h"
 
 // ----- ofPolyline.h -----
