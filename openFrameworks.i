@@ -127,12 +127,12 @@ namespace std {
 //    %include "SomeClass.h"
 //    %include "AnotherClas.h"
 //
-// or make a forward declaration before %inluding SomeClass.h:
+// or make a forward declaration before %including SomeClass.h:
 //
 //    class SomeClass {};
 //    %include AnotherClass.h
 //
-// This forward delcaration is then overridden by the actual implentation after
+// This forward declaration is then overridden by the actual implementation after
 // %include "SomeClass.h" later on.
 
 // ignore everything in the private namespace
