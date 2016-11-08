@@ -57,7 +57,7 @@ Currently supported (aka tested) scripting languages are:
 * Lua
 * Python
 
-Other language bindgins supported by swig can be generated. Feel free to create a PR adding required updates to the Makefile and interface file.
+Other language bindings supported by swig can be generated. Feel free to create a PR adding required updates to the Makefile and interface file.
 
 ### Lua
 
@@ -93,7 +93,7 @@ which generates Lua bindings for desktop OSs and places them in `../src/bindings
 
 ### Languages
 
-Available scripting languages are listed by the SWIG help: `swig -h`. The langauge can be set by the LANG makefile variable and is `lua` by default.
+Available scripting languages are listed by the SWIG help: `swig -h`. The language can be set by the LANG makefile variable and is `lua` by default.
 
 Example: To generate python bindings for desktop:
 
@@ -133,7 +133,7 @@ Example: To generate python bindings for desktop with the name "ofxPythonBinding
 
 The scripting language bindings use the "of" module by default. In the case of Lua, this refers to the parent "of" table that contains all warped functions, classes, and defines. This may not be desirable for particular scripting languages (ie. Python), so the module name can be set using the MODULE_NAME makefile variable.
 
-Example: To egenrate python bindings with the module name "openframeworks":
+Example: To generate python bindings with the module name "openframeworks":
 
     make LANG=python MODULE_NAME=openframeworks
 

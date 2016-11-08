@@ -34,7 +34,7 @@
 -- this isnt wrapped correctly, so set it here
 of.CLOSE = true
 
--- handle typedefs which swig doesnt wrap
+-- handle typedefs which swig doesn't wrap
 of.Point = of.Vec3f
 
 -- class.lua
@@ -94,7 +94,7 @@ end
 
 %pythoncode %{
 
-# handle typedefs which swig doesnt wrap
+# handle typedefs which swig doesn't wrap
 ofPoint = ofVec3f
 
 # renaming log -> ofLog

@@ -6,9 +6,8 @@
 # running `make` generates desktop os lua bindings and puts them in ../src,
 # running `make ios` generates ios lua bindings, etc
 #
-# override any of the following variables using make,
-# i.e. to generate Python bindings with a different
-# filename and dest location:
+# override any of the following variables using make, i.e. to generate Python 
+# bindings with a different filename and dest location:
 #
 #     make LANG=python NAME=ofxPythonBindings DEST_DIR=../src/bindings
 #

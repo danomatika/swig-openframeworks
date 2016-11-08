@@ -125,7 +125,7 @@ namespace std {
 // What needs to be done is either %include SomeClass.h before AnotherClass.h
 //
 //    %include "SomeClass.h"
-//    %include "AnotherClas.h"
+//    %include "AnotherClass.h"
 //
 // or make a forward declaration before %including SomeClass.h:
 //
