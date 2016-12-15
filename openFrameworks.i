@@ -142,6 +142,7 @@ namespace std {
 
 // GL types used as OF arguments, etc so SWIG needs to know about them
 typedef int GLint;
+typedef unsigned int GLenum;
 typedef unsigned int GLuint;
 typedef float GLfloat;
 
@@ -238,6 +239,10 @@ template<typename T> class ofBaseImage_ {};
 #define OF_TEXTURE_LUMINANCE 6409    // 0x1909
 #define OF_TEXTURE_RGB 6407          // 0x1907
 #define OF_TEXTURE_RGBA 6408         // 0x1908
+
+// DIFF: defined GLenum shader types: OF_FRAGMENT_SHADER, OF_VERTEX_SHADER
+#define OF_FRAGMENT_SHADER 35632     // 0x8B30
+#define OF_VERTEX_SHADER 35633       // 0x8B31
 
 // DIFF: defined GLfloat texture wrap defines: OF_CLAMP_TO_EDGE, OF_CLAMP_TO_BORDER, OF_REPEAT, OF_MIRRORED_REPEAT
 // DIFF:
