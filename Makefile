@@ -45,12 +45,17 @@ DEST_LANG_DIR = .
 # OF header includes
 OF_HEADERS = -I../../../libs/openFrameworks
 
+# Extra SWIG flags depending on language
+
+EXTRA_LANG =
+
 # Python specific preferences
 # typically, long names are used in Python,
 # and function names remain unaltered (see pyOpenGL for instance)
 ifeq ($(LANG), python)
 	MODULE_NAME = openframeworks
 	RENAME = false
+	EXTRA_LANG = -modern
 endif
 
 # populate CFLAGS
@@ -79,7 +84,7 @@ bindings:
 	@echo NAME = $(NAME)
 	@echo DEST_DIR = $(DEST_DIR)
 	
-	$(SWIG) -c++ -$(LANG) -fcompact -fvirtual $(CFLAGS) -outdir $(DEST_LANG_DIR) openFrameworks.i
+	$(SWIG) -c++ -$(LANG) $(EXTRA_LANG) -fcompact -fvirtual $(CFLAGS) -outdir $(DEST_LANG_DIR) openFrameworks.i
 	mv openFrameworks_wrap.cxx $(NAME).cpp
 
 	$(SWIG) -c++ -$(LANG) -external-runtime $(NAME).h
