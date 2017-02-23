@@ -771,10 +771,10 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %ignore ofEntryEventArgs;
 %ignore ofKeyEventArgs;
 %ignore ofMouseEventArgs;
-// need ofTouchEventArgs
+// need ofTouchEventArgs for touch callbacks
 %ignore ofAudioEventArgs;
 %ignore ofResizeEventArgs;
-%ignore ofMessage;
+// need ofMessage for message callbacks
 
 %ignore ofCoreEvents;
 %ignore ofEvents;
