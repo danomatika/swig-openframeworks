@@ -149,6 +149,10 @@ By default, functions & classes marked as deprecated in the OF api are ignored w
 
     make DEPRECATED=true
 
+### SWIG Flags
+
+SWIG has a large number of flags for customizing bindings generation, many of which are specific to each generated language. The Makefile uses the SWIG_FLAGS makefile variable for these extra options, for instance generating Python bindings uses the `-modern` option to focus on newer versions of Python.
+
 ### Scripting
 
 Generating bindings for all platform targets can be done easily using a script which calls the Makefile. See [generate_bindings.sh](https://github.com/danomatika/ofxLua/blob/swig/scripts/generate_bindings.sh) in ofxLua for an example.
