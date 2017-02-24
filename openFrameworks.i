@@ -779,7 +779,10 @@ ofInterpolateHermite(float y1, float y2, float pct);
 // need ofTouchEventArgs for touch callbacks
 %ignore ofAudioEventArgs;
 %ignore ofResizeEventArgs;
-// need ofMessage for message callbacks
+%ignore ofMessage;
+
+// DIFF: ofEvents.h: ignore ofSendMessage() with ofMessage in favor of std::string
+%ignore ofSendMessage(ofMessage msg);
 
 %ignore ofCoreEvents;
 %ignore ofEvents;
