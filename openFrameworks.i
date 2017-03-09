@@ -954,10 +954,12 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofFileUtils.h -----
 
-// DIFF: ofFileUtils.h: ignoring file as SWIG throws Error: Unknown namespace 'boost::filesystem'
-// DIFF: ofFileUtils.h: probably best to use scripting language file library
-/*
-// forward declare fstream for ofBuffer
+// SWIG needs to know about boost::filesystem or it throws an error
+namespace boost {
+	namespace filesystem {}
+}
+
+// forward declare fstream for ofFile
 %ignore fstream;
 class fstream {};
 
@@ -971,23 +973,59 @@ class fstream {};
 %ignore ofDirectory::rbegin;
 %ignore ofDirectory::rend;
 
-// SWIG needs to know about boost::filesystem, but use #include as we do not
-// want to generate wrappers: http://comments.gmane.org/gmane.comp.programming.swig/18549
-%{
-#include <boost/filesystem.hpp> 
-%}
+// TODO: not working yet, fails with Warning 453: No typemaps are defined.
+// pass binary data & byte length as a single argument for ofBuffer,
+// this enables setting binary data via strings from the target language
+//%apply(const char *STRING, std::size_t LENGTH) {(const char * _buffer, std::size_t size)};
+//%apply(const char *STRING, std::size_t LENGTH) {(const char * _buffer, std::size_t _size)};
 
-// DIFF: ofFileUtils.h: ignoring filesystem::path operators
+// DIFF: ofFileUtils.h: ignoring ofBuffer istream & ostream functions
+%ignore ofBuffer::ofBuffer(istream &, size_t);
+%ignore ofBuffer::set(istream &, size_t);
+%ignore ofBuffer::writeTo(ostream &) const;
+
+// DIFF: ofFileUtils.h: ignoring nested ofBuffer Line & Lines structs
+%ignore ofBuffer::Line;
+%ignore ofBuffer::Lines;
+%ignore ofBuffer::getLines();
+%ignore ofBuffer::Lines::end();
+
+// DIFF: ofFileUtils.h: std::filesystem::path arguments replaced by string
+%ignore std::filesystem::path;
+
+// extend with std::string wrappers for std::filesystem::path
+%extend ofFile {
+	ofFile(const string &path) {
+		std::filesystem::path p = std::filesystem::path(path);
+		return new ofFile(path);
+	}
+	bool ofFile::open(const string &path) {
+		std::filesystem::path p = std::filesystem::path(path);
+		return $self->open(p);
+	}
+}
+
+// extend with std::string wrappers for std::filesystem::path
+%extend ofDirectory {
+	ofDirectory(const string &path) {
+		std::filesystem::path p = std::filesystem::path(path);
+		return new ofDirectory(path);
+	}
+	void ofDirectory::open(const string &path) {
+		std::filesystem::path p = std::filesystem::path(path);
+		return $self->open(p);
+	}
+}
+
+// DIFF: ofFileUtils.h: ignoring string, filebuf, & std::filesystem::path operators
 %ignore ofBuffer::operator string() const;
+%ignore ofFile::getFileBuffer() const;
 %ignore ofFile::operator std::filesystem::path();
 %ignore ofFile::operator const std::filesystem::path() const;
 %ignore ofDirectory::operator std::filesystem::path();
 %ignore ofDirectory::operator const std::filesystem::path() const;
 
-// TODO: ofFileUtils.h: SWIG Warning 325 due to nested Line & Lines structs
-// TODO: ofFileUtils.h: (Lua) SWIG Warning 314 due to end iterator
 %include "utils/ofFileUtils.h"
-*/
 
 // ----- ofLog.h -----
 

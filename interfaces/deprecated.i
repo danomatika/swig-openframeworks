@@ -121,6 +121,15 @@
 %ignore ofVec4f::interpolated;
 %ignore ofVec4f::middled;
 
+// ofFileUtils.h 
+%ignore ofBuffer::getBinaryBuffer();
+%ignore ofBuffer::getBinaryBuffer() const;
+%ignore ofBuffer::getNextLine();
+%ignore ofBuffer::getFirstLine();
+%ignore ofBuffer::isLastLine();
+%ignore ofBuffer::resetLineReader();
+%ignore ofDirectory::numFiles();
+
 // ofVideoGrabber.h
 %ignore ofVideoGrabber::initGrabber;
 %ignore ofVideoGrabber::getPixelsRef;

@@ -96,3 +96,14 @@
 %attribute(ofTrueTypeFont, float, lineHeight, getLineHeight, setLineHeight);
 %attribute(ofTrueTypeFont, float, letterSpacing, getLetterSpacing, setLetterSpacing);
 %attribute(ofTrueTypeFont, float, spaceSize, getSpaceSize, setSpaceSize);
+
+// ATTR: ofFileUtils.h: ofBuffer getter: size
+%attribute(ofBuffer, long, size, size);
+
+// ATTR: ofFileUtils.h: ofFile getter: exists, path
+%attribute(ofFile, bool, exists, exists);
+%attribute(ofFile, string, path, path);
+
+// ATTR: ofFileUtils.h: ofDirectory getter: exists, path
+%attribute(ofDirectory, bool, exists, exists);
+%attribute(ofDirectory, string, path, path);
