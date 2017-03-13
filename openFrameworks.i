@@ -239,9 +239,9 @@ template<typename T> class ofBaseImage_ {};
 #define OF_TEXTURE_RGB 6407          // 0x1907
 #define OF_TEXTURE_RGBA 6408         // 0x1908
 
-// DIFF: defined GLenum mipmap filter types: OF_FILTER_NEAREST, OF_FILTER_LINEAR
-#define OF_FILTER_NEAREST 9729       // 0x2601
-#define OF_FILTER_LINEAR 9728        // 0x2600
+// DIFF: defined GLenum mipmap filter types: OF_NEAREST, OF_LINEAR
+#define OF_NEAREST 9729       // 0x2601
+#define OF_LINEAR 9728        // 0x2600
 
 // DIFF: defined GLenum shader types: OF_FRAGMENT_SHADER, OF_VERTEX_SHADER
 #define OF_FRAGMENT_SHADER 35632     // 0x8B30
