@@ -24,7 +24,7 @@
 %attribute(ofTexture, bool, allocated, isAllocated);
 %attribute(ofTexture, float, width, getWidth);
 %attribute(ofTexture, float, height, getHeight);
-%attribute(ofTexture, ofMatrxi4x4 &, textureMatrix, getTextureMatrix, setTextureMatrix);
+%attribute(ofTexture, ofMatrix4x4 &, textureMatrix, getTextureMatrix, setTextureMatrix);
 %attribute(ofTexture, bool, usingTextureMatrix, isUsingTextureMatrix);
 %attribute(ofTexture, ofTextureData &, textureData, getTextureData);
 
@@ -75,7 +75,7 @@
 // ATTR: ofFpsCounter.h: getter: fps, numFrames, lastFrameNanos, lastFrameSecs
 %attribute(ofFpsCounter, double, fps, getFps);
 %attribute(ofFpsCounter, uint64_t, numFrames, getNumFrames);
-%attribute(ofFpsCounter, uint64_t, lastFrameNanos, getFrameNanos);
+%attribute(ofFpsCounter, uint64_t, lastFrameNanos, getLastFrameNanos);
 %attribute(ofFpsCounter, double, lastFrameSecs, getLastFrameSecs);
 
 // ATTR: ofBufferObject.h: getter: allocated, id
@@ -98,6 +98,6 @@
 %attribute(ofTrueTypeFont, float, spaceSize, getSpaceSize, setSpaceSize);
 
 // ATTR: ofFileUtils.h: ofBuffer getter: length, data, text
-%attribute(ofBuffer, long, length, getSize);
+%attribute(ofBuffer, long, length, size);
 %attribute(ofBuffer, char *, data, getData);
-%attribute(ofBuffer, string, text, getText);
+%attributestring(ofBuffer, string, text, getText);
