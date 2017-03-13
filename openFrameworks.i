@@ -826,9 +826,14 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofColor.h -----
 
+// TODO: ofColor.h: SWIG Warning 312 ignores nested union that provides r, g, b, & a access
+#pragma SWIG nowarn=312
+
 %include "types/ofColor.h"
 
-// TODO: ofColor.h: SWIG Warning 312 ignores nested union that provides r, g, b, & a access
+// reenable
+#pragma SWIG nowarn=312
+
 // DIFF: ofColor.h: added ofColor_ pixel channel getters getR(), getG(), getB(), getA()
 // DIFF:            added ofColor_ pixel channel setters setR(), setG(), setB(), setA()
 // DIFF: ofColor.h: added target language tostring wrapper for ofColor_::operator <<
@@ -906,6 +911,9 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %rename(scaleToAspectRatio) ofRectangle::scaleTo(ofRectangle const &, ofAspectRatioMode);
 
 // TODO: ofRectangle.h: SWIG Warning 302 due to manual override of x & y attributes
+%warnfilter(302) ofRectangle::x;
+%warnfilter(302) ofRectangle::y;
+
 %extend ofRectangle {
 
 	// override these since they are float references in the orig file and we
