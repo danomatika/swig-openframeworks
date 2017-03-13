@@ -163,7 +163,7 @@ class ofBaseHasPixels {};
 // DIFF: ofFbo.h: ignoring const & copy constructor in favor of && constructor
 %ignore ofFbo::ofFbo(ofFbo const &);
 
-// TODO: ofFbo.h: setUseTexture & isUsingtexture are irrelevant, so ignoring
+// DIFF: ofFbo.h: setUseTexture & isUsingTexture are "irrelevant", so ignoring
 %ignore ofFbo::setUseTexture;
 %ignore ofFbo::isUsingTexture;
 
@@ -219,7 +219,6 @@ template<typename T> class ofBaseImage_ {};
 // DIFF: ofImage.h: ignoring const & copy constructor in favor of && constructor
 %ignore ofImage_(const ofImage_<PixelType>&);
 
-// TODO: ofImage.h: SWIG Warning 503: due to operator ofImage_::operator pixels
 %include "graphics/ofImage.h"
 
 // handle template implementations
@@ -239,6 +238,10 @@ template<typename T> class ofBaseImage_ {};
 #define OF_TEXTURE_LUMINANCE 6409    // 0x1909
 #define OF_TEXTURE_RGB 6407          // 0x1907
 #define OF_TEXTURE_RGBA 6408         // 0x1908
+
+// DIFF: defined GLenum mipmap filter types: OF_FILTER_NEAREST, OF_FILTER_LINEAR
+#define OF_FILTER_NEAREST 9729       // 0x2601
+#define OF_FILTER_LINEAR 9728        // 0x2600
 
 // DIFF: defined GLenum shader types: OF_FRAGMENT_SHADER, OF_VERTEX_SHADER
 #define OF_FRAGMENT_SHADER 35632     // 0x8B30
@@ -331,8 +334,8 @@ template<typename T> class ofBaseImage_ {};
 
 // ----- ofMesh.h -----
 
-// TODO: ofMesh.h: ignoring getFace(i), defined but not implemented in OF 0.9.0
-%ignore ofMesh::getFace(int);
+// tesselator index
+%typedef unsigned int TESSindex;
 
 %include "3d/ofMesh.h"
 
@@ -409,7 +412,6 @@ template<typename T> class ofBaseImage_ {};
 
 // ----- ofBufferObject.h -----
 
-// TODO: ofBufferObject.h: SWIG Warning 325 due to nested Data class
 %include "gl/ofBufferObject.h"
 
 // ----- ofLight.h -----
@@ -536,7 +538,7 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofPixels_::getConstPixelsIter() const;
 
 // ignore end keywords, even though they are within nested classes which are
-// effectively ignored by SWIG but still issue a Warning 314 (Lua)
+// effectively ignored by SWIG
 #ifdef SWIGLUA
 	%ignore ofPixels_::Line::end;
 	%ignore ofPixels_::Lines::end;
@@ -884,7 +886,6 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %ignore ofVideoDevice;
 
 // DIFF: ofTypes.h: mutex, scoped lock, & ptr are probably too low level
-// TODO: ofTypes.h: SWIG Warning 342 due to ofPtr using keyword 
 %ignore ofMutex;
 %ignore ofScopedLock;
 %ignore ofPtr;
@@ -973,16 +974,42 @@ class fstream {};
 %ignore ofDirectory::rbegin;
 %ignore ofDirectory::rend;
 
-// TODO: not working yet, fails with Warning 453: No typemaps are defined.
-// pass binary data & byte length as a single argument for ofBuffer,
-// this enables setting binary data via strings from the target language
-//%apply(const char *STRING, std::size_t LENGTH) {(const char * _buffer, std::size_t size)};
-//%apply(const char *STRING, std::size_t LENGTH) {(const char * _buffer, std::size_t _size)};
-
 // DIFF: ofFileUtils.h: ignoring ofBuffer istream & ostream functions
+%ignore ofBuffer::ofBuffer(istream &);
 %ignore ofBuffer::ofBuffer(istream &, size_t);
+%ignore ofBuffer::set(istream &);
 %ignore ofBuffer::set(istream &, size_t);
 %ignore ofBuffer::writeTo(ostream &) const;
+
+%ignore ofBuffer::ofBuffer(const string &);
+%ignore ofBuffer::set(const string &);
+%ignore ofBuffer::append(const string&);
+
+// ignore char* getData() in preference to const char* getData() whose return
+// type is overriden below
+%ignore ofBuffer::getData();
+
+// DIFF: ofFileUtils.h: pass binary data to ofBuffer as full char strings
+// pass binary data & byte length as a single argument for ofBuffer
+#if defined(SWIGLUA)
+
+// args from lang in to C++ function
+%typemap(in) (char *STRING, size_t LENGTH) {
+	$2 = (size_t)lua_tonumber(L, $input+1);
+	$1 = (char *)lua_tolstring(L, $input, &$2);
+}
+
+// arg returned from C++ function out to lang
+%typemap(out) (const char *) {
+	lua_pushlstring(L, $1, arg1->size());
+	SWIG_arg++;
+}
+
+#endif
+
+// ofBuffer constructor uses "buffer" and "size" while set & append use "_buffer" and "_size"
+%apply(char *STRING, size_t LENGTH) {(const char * buffer, std::size_t size)};
+%apply(char *STRING, size_t LENGTH) {(const char * _buffer, std::size_t _size)};
 
 // DIFF: ofFileUtils.h: ignoring nested ofBuffer Line & Lines structs
 %ignore ofBuffer::Line;
@@ -1026,6 +1053,11 @@ class fstream {};
 %ignore ofDirectory::operator const std::filesystem::path() const;
 
 %include "utils/ofFileUtils.h"
+
+// clear typemaps
+%clear (const char *buffer, std::size_t size);
+%clear (const char *_buffer, std::size_t _size);
+%clear (const char *);
 
 // ----- ofLog.h -----
 
@@ -1099,6 +1131,13 @@ class fstream {};
 // ofQuickTimGrabber.h, ofQuickTimePlayer.h, ofQTUtils.h, ofQTKitGrabber.h,
 // ofQTKitPlayer.h, ofQTKitMovieRenderer.h, ofAVFoundationVideoPlayer,
 // ofAVFoundationPlayer.h
+
+////////////////////////////////////////////////////////////////////////////////
+// ----- ATTRIBUTES ------------------------------------------------------------
+
+#ifdef OF_SWIG_ATTRIBUTES
+	%include "interfaces/attributes.i"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // ----- LANG ------------------------------------------------------------------

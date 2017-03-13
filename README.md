@@ -149,6 +149,19 @@ By default, functions & classes marked as deprecated in the OF api are ignored w
 
     make DEPRECATED=true
 
+### Attributes
+
+Many target scripting languages support attributes using getters/setters, ie:
+
+    -- lua
+    image = of.Image("hello.png")
+    print("width: "..image:getWidth())
+    print("width: "..image.width) -- same as above using a getter attribute
+
+To enable attribute bindings, set the ATTRIBUTES makefile variable to true:
+
+    make ATTRIBUTES=true
+
 ### SWIG Flags
 
 SWIG has a large number of flags for customizing bindings generation, many of which are specific to each generated language. The Makefile uses the SWIG_FLAGS makefile variable for these extra options, for instance generating Python bindings uses the `-modern` option to focus on newer versions of Python.
