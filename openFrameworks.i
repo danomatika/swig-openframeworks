@@ -64,6 +64,7 @@ namespace std {
 	%template(IntVector) std::vector<int>;
 	%template(FloatVector) std::vector<float>;
 	%template(StringVector) std::vector<std::string>;
+	%template(UCharVector) std::vector<unsigned char>;
 };
 
 // ----- Renaming -----
@@ -398,15 +399,34 @@ template<typename T> class ofBaseImage_ {};
 // conditional compilation for iOS and Android
 #if !defined(TARGET_IOS) && !defined(TARGET_ANDROID)
 
-	// ----- ofArduino.h -----
+// ----- ofArduino.h -----
 
-	%include "communication/ofArduino.h"
+// DIFF: ofArduino.h: ignoring functions which return list points
+%ignore ofArduino::getDigitalHistory(int);
+%ignore ofArduino::getAnalogHistory(int);
+%ignore ofArduino::getSysExHistory();
+%ignore ofArduino::getStringHistory();
 
-	// ----- ofSerial.h -----
+%include "communication/ofArduino.h"
 
-	%include "communication/ofSerial.h"
+// ----- ofSerial.h -----
+
+// DIFF: ofSerial.h: pass binary data to ofSerial as full char strings
+// pass binary data & byte length as a single argument for ofBuffer
+#if defined(SWIGLUA)
+
+	// args from lang in to C++ function
+	%typemap(in) (unsigned char *STRING, int LENGTH) {
+		$2 = (int)lua_tonumber(L, $input+1);
+		$1 = (unsigned char *)lua_tolstring(L, $input, (size_t *)&$2);
+	}
 
 #endif
+%apply(unsigned char *STRING, int LENGTH) {(unsigned char * buffer, int length)};
+
+%include "communication/ofSerial.h"
+
+#endif // ! iOS and Android
 
 // ----- GL --------------------------------------------------------------------
 
