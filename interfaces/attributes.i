@@ -101,3 +101,40 @@
 %attribute(ofBuffer, long, length, size);
 %attribute(ofBuffer, char *, data, getData);
 %attributestring(ofBuffer, string, text, getText);
+
+// ATTR: ofVideoGrabber.h: getter: frameNew, pixelFormat, pixels,
+// ATTR: ofVideoGrabber.h:         texture, width, height, initialized
+// ATTR: ofVideoGrabber.h: getter/setter: usingTexture
+%attribute(ofVideoGrabber, bool, frameNew, isFrameNew);
+%attribute(ofVideoGrabber, ofPixelFormat, pixelFormat, getPixelFormat);
+%attribute(ofVideoGrabber, ofPixels &, pixels, getPixels);
+%attribute(ofVideoGrabber, ofTexture &, texture, getTexture);
+%attribute(ofVideoGrabber, bool, usingTexture, isUsingTexture, setUseTexture);
+%attribute(ofVideoGrabber, float, width, getWidth);
+%attribute(ofVideoGrabber, float, height, getHeight);
+%attribute(ofVideoGrabber, bool, initialized, isInitialized);
+
+// ATTR: ofVideoPlayer.h: getter: frameNew, , pixels, movieDone, texture, width,
+// ATTR: ofVideoPlayer.h:         height, duration, loaded, playing, initialized,
+// ATTR: ofVideoPlayer.h:         numFrames
+// ATTR: ofVideoPlayer.h: getter/setter: usingTexture, pixelFormat, position,
+// ATTR: ofVideoPlayer.h:                speed, loopState, paused, frame
+%attributestring(ofVideoPlayer, string, moviePath, getMoviePath);
+%attribute(ofVideoPlayer, ofPixelFormat, pixelFormat, getPixelFormat, setPixelFormat);
+%attribute(ofVideoPlayer, bool, frameNew, isFrameNew);
+%attribute(ofVideoPlayer, ofPixels &, pixels, getPixels);
+%attribute(ofVideoPlayer, float, position, getPosition, setPosition);
+%attribute(ofVideoPlayer, float, speed, getSpeed, setSpeed);
+%attribute(ofVideoPlayer, float, duration, getDuration);
+%attribute(ofVideoPlayer, ofLoopType, loopState, getLoopState, setLoopState);
+%attribute(ofVideoPlayer, bool, movieDone, getIsMovieDone);
+%attribute(ofVideoPlayer, bool, usingTexture, isUsingTexture, setUseTexture);
+%attribute(ofVideoPlayer, ofTexture &, texture, getTexture);
+%attribute(ofVideoPlayer, int, frame, getCurrentFrame, setFrame);
+%attribute(ofVideoPlayer, int, numFrames, getTotalNumFrames);
+%attribute(ofVideoPlayer, float, width, getWidth);
+%attribute(ofVideoPlayer, float, height, getHeight);
+%attribute(ofVideoPlayer, bool, paused, isPaused, setPaused);
+%attribute(ofVideoPlayer, bool, loaded, isLoaded);
+%attribute(ofVideoPlayer, bool, playing, isPlaying);
+%attribute(ofVideoPlayer, bool, initialized, isInitialized);

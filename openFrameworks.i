@@ -65,6 +65,8 @@ namespace std {
 	%template(FloatVector) std::vector<float>;
 	%template(StringVector) std::vector<std::string>;
 	%template(UCharVector) std::vector<unsigned char>;
+	%template(VideoDeviceVector) std::vector<ofVideoDevice>;
+	%template(TextureVector) std::vector<ofTexture>;
 };
 
 // ----- Renaming -----
@@ -1148,9 +1150,19 @@ class fstream {};
 
 // ----- ofVideoGrabber.h -----
 
+// DIFF: ofVideoGrabber.h: ignore getGrabber/setGrabber
+%ignore setGrabber(shared_ptr<ofBaseVideoPlayer>);
+%ignore getGrabber();
+%ignore getGrabber() const;
+
 %include "video/ofVideoGrabber.h"
 
 // ----- ofVideoPlayer.h -----
+
+// DIFF: ofVideoPlayer.h: ignore getPlayer/setPlayer
+%ignore setPlayer(shared_ptr<ofBaseVideoPlayer>);
+%ignore getPlayer();
+%ignore getPlayer() const;
 
 %include "video/ofVideoPlayer.h"
 
