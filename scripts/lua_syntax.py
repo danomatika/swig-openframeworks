@@ -15,7 +15,7 @@ if len(sys.argv) < 2:
 module = sys.argv[1]
 infile = sys.argv[2]
 sections = []
-sectionIgnores = [ 
+sectionIgnores = [
     "Vector",     # swig std::vector wrappers
     "  \n"        # weird empty line toward the beginning
 ]
@@ -30,6 +30,11 @@ lineIgnores = [
 for arg in sys.argv[3:]:
     sectionIgnores.append(arg)
 
+# append a section tothe sections array if the name passes muster
+def appendSection(section):
+    if len(section) > 0 and not any(x in section[0] for x in sectionIgnores):
+        sections.append(section)
+
 # parse swig output into sections
 file = open(infile)
 section = []
@@ -39,14 +44,14 @@ for line in file:
         continue
     # section headers are a series of = chars
     if line.startswith("="):
-        if len(section) > 0 and not any(x in section[0] for x in sectionIgnores):
-            sections.append(section)
+        appendSection(section)
         section = []
     # line within a section
     else:
         line = line.strip()
         if len(line) > 0:
             section.append(line)
+appendSection(section) # catch any left overs
 file.close()
 section = []
 
@@ -66,6 +71,8 @@ for section in sections:
     lines = section[1:]
     lines.sort()
     for line in lines:
-        if line != "of"+className and not any(x in line for x in lineIgnores):
+        if line == "string" or line.startswith("of") or line.startswith("ofx"):
+            continue
+        if not any(x in line for x in lineIgnores):
             file.write(prefix+"."+line+"\n")
 file.close()
