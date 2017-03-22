@@ -643,6 +643,11 @@ void ofDrawBitmapString(const string & textString, float x, float y, float z);
 // DIFF: ofTrueTypeFont.h: ignoring const & copy constructor in favor of && constructor
 %ignore ofTrueTypeFont::ofTrueTypeFont(ofTrueTypeFont const &);
 
+// string static const strings
+%rename(TTF_SANS) OF_TTF_SANS;
+%rename(TTF_SERIF) OF_TTF_SERIF;
+%rename(TTF_MONO) OF_TTF_MONO;
+
 %include "graphics/ofTrueTypeFont.h"
 
 // ----- not needed -----
