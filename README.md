@@ -172,11 +172,15 @@ Generating bindings for all platform targets can be done easily using a script w
 
 ### Debugging
 
-Debugging scripting language bindings can be a pain, so SWIG can output the languages debug symbols. The Makefile provides a target that creates a `debug.txt` so you can see which classes, functions, & enums are being wrapped and how.
+Debugging scripting language bindings can be a pain, so SWIG can output the languages debug symbols. The Makefile provides a target that creates a `of_LANG_symbols.txt` so you can see which classes, functions, & enums are being wrapped and how.
 
 Example: To debug python bindings:
 
-    make debug LANG=python
+    make symbols LANG=python
+
+generates a file called of_python_symbols.txt.
+
+This file can also be used as the basis for generating a list of keywords for autocompletion. For instance, the `scripts/lua_syntax.py` script parses the SWIG symbol output format into a simple list of all available symbols in the "of" lua module.
 
 Example
 -------

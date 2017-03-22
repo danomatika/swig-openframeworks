@@ -100,12 +100,11 @@ move:
 	mv *.h $(DEST_DIR)
 	mv *.cpp $(DEST_DIR)/$(TARGET)
 
-# outputs debug symbols
-debug:
-	@echo Debugging
-	$(SWIG) -c++ -$(LANG) -debug-lsymbols $(CFLAGS) openFrameworks.i > debug.txt
+# outputs swig language symbols
+symbols:
+	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -debug-lsymbols $(CFLAGS) openFrameworks.i > $(MODULE_NAME)_$(LANG)_symbols.txt
 	rm -f *.cxx
-	if [ $(LANG) == "python" ]; then rm -f *.py; fi 
+	if [ $(LANG) == "python" ]; then rm -f *.py; fi
 
 clean:
 	rm -f $(DEST_DIR)/$(FILENAME).h
