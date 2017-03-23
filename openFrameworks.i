@@ -629,6 +629,9 @@ void ofDrawBitmapString(const string & textString, float x, float y, float z);
 
 // ----- of3dGraphics.h -----
 
+// ignore base classes
+%ignore of3dGraphics;
+
 %include "graphics/of3dGraphics.h"
 
 // ----- ofTrueTypeFont.h -----
