@@ -338,14 +338,27 @@ template<typename T> class ofBaseImage_ {};
 // ----- ofMesh.h -----
 
 // tesselator index
-%typedef unsigned int TESSindex;
+#ifdef TARGET_OPENGLES
+	%typedef unsigned short TESSindex;
+#else
+	%typedef unsigned int TESSindex;
+#endif
+
+// add ofMesh virtual destructor
+%extend ofMesh {
+	virtual ~ofMesh() {
+		$self->clear();
+		delete $self;
+	}
+};
 
 %include "3d/ofMesh.h"
 
 // ----- of3dPrimitives.h -----
 
-// DIFF: of3dPrimitives.h: ignore of3DPrimitive base class
+// DIFF: of3dPrimitives.h: ignore of3dPrimitive base class
 %ignore of3dPrimitive;
+class of3dPrimitive {};
 
 %include "3d/of3dPrimitives.h"
 
