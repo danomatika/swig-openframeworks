@@ -222,6 +222,13 @@ template<typename T> class ofBaseImage_ {};
 // DIFF: ofImage.h: ignoring const & copy constructor in favor of && constructor
 %ignore ofImage_(const ofImage_<PixelType>&);
 
+%extend ofImage_ {
+        bool load(const string& fileName, const ofImageLoadSettings &settings = ofImageLoadSettings()) {
+                std::filesystem::path p = std::filesystem::path(fileName);
+                return $self->load(p, settings);
+        }
+}
+
 %include "graphics/ofImage.h"
 
 // handle template implementations
@@ -460,6 +467,7 @@ class of3dPrimitive {};
 
 // DIFF: ofMaterial.h: ignoring nested struct, not supported by SWIG
 %ignore ofMaterial::Data;
+%ignore ofMaterial::getData() const;
 
 // DIFF: (Lua) ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
 #ifdef SWIGLUA
@@ -603,6 +611,8 @@ class of3dPrimitive {};
 
 %include "graphics/ofPath.h"
 
+%template(PolylineVector) std::vector<ofPolyline>;
+
 // ----- ofPolyline.h -----
 
 // ignored due to default variable overload
@@ -616,6 +626,12 @@ class of3dPrimitive {};
 %ignore ofPolyline::rend;
 
 %include "graphics/ofPolyline.h"
+
+#ifdef OF_SWIG_RENAME
+        %template(Polyline) ofPolyline_<ofDefaultVertexType>;
+#else
+        %template(ofPolyline) ofPolyline_<ofDefaultVertexType>;
+#endif
 
 // ----- ofGraphics.h -----
 
@@ -663,6 +679,13 @@ void ofDrawBitmapString(const string & textString, float x, float y, float z);
 %rename(TTF_SANS) OF_TTF_SANS;
 %rename(TTF_SERIF) OF_TTF_SERIF;
 %rename(TTF_MONO) OF_TTF_MONO;
+
+%extend ofTrueTypeFont {
+        bool load(const string& filename, int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=true, bool makeContours=false, float simplifyAmt=0.3f, int dpi=0) {
+                std::filesystem::path p = std::filesystem::path(filename);
+                return $self->load(p, fontsize, _bAntiAliased, _bFullCharacterSet, makeContours, simplifyAmt, dpi);
+        }
+}
 
 %include "graphics/ofTrueTypeFont.h"
 
@@ -1062,11 +1085,15 @@ class fstream {};
 %apply(char *STRING, size_t LENGTH) {(const char * buffer, std::size_t size)};
 %apply(char *STRING, size_t LENGTH) {(const char * _buffer, std::size_t _size)};
 
-// DIFF: ofFileUtils.h: ignoring nested ofBuffer Line & Lines structs
+// DIFF: ofFileUtils.h: ignoring nested ofBuffer Line & Lines & RLine & RLines structs
 %ignore ofBuffer::Line;
 %ignore ofBuffer::Lines;
+%ignore ofBuffer::RLine;
+%ignore ofBuffer::RLines;
 %ignore ofBuffer::getLines();
+%ignore ofBuffer::getReverseLines();
 %ignore ofBuffer::Lines::end();
+%ignore ofBuffer::RLines::end();
 
 // DIFF: ofFileUtils.h: std::filesystem::path arguments replaced by string
 %ignore std::filesystem::path;
@@ -1102,6 +1129,51 @@ class fstream {};
 %ignore ofFile::operator const std::filesystem::path() const;
 %ignore ofDirectory::operator std::filesystem::path();
 %ignore ofDirectory::operator const std::filesystem::path() const;
+
+%extend ofFilePath {
+        static string getFileExt(const string& filename) {
+                return ofFilePath::getFileExt(filename);
+        }
+        static string removeExt(const string& filename) {
+                return ofFilePath::removeExt(filename);
+        }
+        static string addLeadingSlash(const string& path) {
+                return ofFilePath::addLeadingSlash(path);
+        }
+        static string addTrailingSlash(const string& path) {
+                return ofFilePath::addTrailingSlash(path);
+        }
+        static string removeTrailingSlash(const string& path) {
+                return ofFilePath::removeTrailingSlash(path);
+        }
+        static string getPathForDirectory(const string& path) {
+                return ofFilePath::getPathForDirectory(path);
+        }
+        static string getAbsolutePath(const string& path, bool bRelativeToData = true) {
+                return ofFilePath::getAbsolutePath(path, bRelativeToData);
+        }
+        static bool isAbsolute(const string& path) {
+                return ofFilePath::isAbsolute(path);
+        }
+        static string getFileName(const string& filePath, bool bRelativeToData = true) {
+                return ofFilePath::getFileName(filePath, bRelativeToData);
+        }
+        static string getBaseName(const string& filePath) {
+                return ofFilePath::getBaseName(filePath);
+        }
+        static string getEnclosingDirectory(const string& filePath, bool bRelativeToData = true) {
+                return ofFilePath::getEnclosingDirectory(filePath, bRelativeToData);
+        }
+        static bool createEnclosingDirectory(const string& filePath, bool bRelativeToData = true, bool bRecursive = true) {
+                return ofFilePath::createEnclosingDirectory(filePath, bRelativeToData, bRecursive);
+        }
+        static string join(const string& path1, const string& path2) {
+                return ofFilePath::join(path1, path2);
+        }
+        static string makeRelative(const string& from, const string& to) {
+                return ofFilePath::makeRelative(from, to);
+        }
+}
 
 %include "utils/ofFileUtils.h"
 
@@ -1143,6 +1215,8 @@ class fstream {};
 
 // DIFF: ofURLFileLoader.h:ignoring ofHttpResponse ofBuffer operator
 %ignore ofHttpResponse::operator ofBuffer&();
+%ignore ofSaveURLTo(const string& url, const std::filesystem::path& path);
+%ignore ofSaveURLAsync(const string& url, const std::filesystem::path& path);
 
 %include "utils/ofURLFileLoader.h"
 
