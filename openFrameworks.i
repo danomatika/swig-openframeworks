@@ -460,6 +460,8 @@ class of3dPrimitive {};
 
 // DIFF: ofMaterial.h: ignoring nested struct, not supported by SWIG
 %ignore ofMaterial::Data;
+%ignore getData() const;
+%ignore setData(const ofMaterial::Data&);
 
 // DIFF: (Lua) ofMaterial.h: beginMaterial() & endMaterial() since "end" is a Lua keyword
 #ifdef SWIGLUA
