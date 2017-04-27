@@ -98,8 +98,8 @@ template<typename T> class ofBaseImage_ {};
 // extend with std::string wrappers for std::filesystem::path
 %extend ofImage_ {
 	ofImage_(const string& fileName, const ofImageLoadSettings &settings = ofImageLoadSettings()) {
-		std::filesystem::path p = std::filesystem::path(path);
-		return new ofImage(fileName, settings);
+		std::filesystem::path p = std::filesystem::path(fileName);
+		return new ofImage_<PixelType>(p, settings);
 	}
 	bool load(const string& fileName, const ofImageLoadSettings &settings = ofImageLoadSettings()) {
         std::filesystem::path p = std::filesystem::path(fileName);
