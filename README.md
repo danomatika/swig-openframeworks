@@ -46,11 +46,15 @@ Currently the swig interface file covers *most* of the api while leaving out bas
 
 To see the main differences with the OF C++ API run the following:
 
-    grep DIFF swig/openFrameworks.i
+    find . -name "*.i" -exec grep "// DIFF" {} \;
      
 To see work to be done on the bindings run:
 
-    grep TODO swig/openFrameworks.i
+    find . -name "*.i" -exec grep "// TODO" {} \;
+
+To see attributes which can be added to various classes:
+
+    find . -name "*.i" -exec grep "// ATTR" {} \;
 
 Currently supported (aka tested) scripting languages are:
 

@@ -1,11 +1,7 @@
-/*
-	scripting language specific additions
+// scripting language specific additions
+// 2015 Dan Wilcox <danomatika@gmail.com>
 
-	2015 Dan Wilcox <danomatika@gmail.com>
-*/
-
-////////////////////////////////////////////////////////////////////////////////
-// ----- LUA -------------------------------------------------------------------
+// ----- Lua -----
 
 // support for simple classes from http://lua-users.org/wiki/SimpleLuaClasses
 //
@@ -87,10 +83,18 @@ end
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-// ----- Python ----------------------------------------------------------------
+// ----- Python -----
 
-#if defined(SWIGPYTHON) && !defined(OF_SWIG_RENAME)
+// overloading operators
+#ifdef SWIGPYTHON
+
+%rename(__getitem__) *::operator[];
+%rename(__mul__) *::operator*;
+%rename(__div__) *::operator/;
+%rename(__add__) *::operator+;
+%rename(__sub__) *::operator-;
+
+#if !defined(OF_SWIG_RENAME)
 
 %pythoncode %{
 
@@ -102,5 +106,7 @@ ofLog = log
 del log
 
 %}
+
+#endif
 
 #endif

@@ -1,12 +1,12 @@
-/*
-	scripting language attributes to add using getters/setters 
+// scripting language attributes to add using getters/setters 
+// 2015 Dan Wilcox <danomatika@gmail.com>
 
-	2015 Dan Wilcox <danomatika@gmail.com>
-*/
+// ----- ofFbo.h -----
 
-// ATTR: ofFbo.h: getter: allocated, texture, depthTexture, width, height,
-// ATTR: ofFbo.h:         numTextures, id, idDrawBuffer, depthBuffer, stencilBuffer
-// ATTR: ofFbo.h: getter/setter: defaultTexture
+// ATTR: ofFbo.h:
+// ATTR:   getter: allocated, texture, depthTexture, width, height,
+// ATTR:           numTextures, id, idDrawBuffer, depthBuffer, stencilBuffer
+// ATTR:   getter/setter: defaultTexture
 %attribute(ofFbo, bool, allocated, isAllocated);
 %attribute(ofFbo, int, defaultTexture, getDefaultTextureIndex, setDefaultTextureIndex);
 %attribute(ofFbo, ofTexture &, texture, getTexture);
@@ -19,8 +19,11 @@
 %attribute(ofFbo, unsigned int, depthBuffer, getDepthBuffer);
 %attribute(ofFbo, unsigned int, stencilBuffer, getStencilBuffer);
 
-// ATTR: ofTexture.h: getter: allocated, width, height, usingTextureMatrix, textureData
-// ATTR: ofTexture.h: getter/setter: textureMatrix
+// ----- ofTexture.h -----
+
+// ATTR: ofTexture.h:
+// ATTR:   getter: allocated, width, height, usingTextureMatrix, textureData
+// ATTR:   getter/setter: textureMatrix
 %attribute(ofTexture, bool, allocated, isAllocated);
 %attribute(ofTexture, float, width, getWidth);
 %attribute(ofTexture, float, height, getHeight);
@@ -28,8 +31,11 @@
 %attribute(ofTexture, bool, usingTextureMatrix, isUsingTextureMatrix);
 %attribute(ofTexture, ofTextureData &, textureData, getTextureData);
 
-// ATTR: ofImage.h: getter: allocated, texture, pixels, width, height, imageType
-// ATTR: ofImage.h: getter/setter: usingTexture
+// ----- ofImage.h -----
+
+// ATTR: ofImage.h:
+// ATTR:   getter: allocated, texture, pixels, width, height, imageType
+// ATTR:   getter/setter: usingTexture
 %attribute(ofImage_<unsigned char>, bool, allocated, isAllocated);
 %attribute(ofImage_<unsigned char>, bool, usingTexture, isUsingTexture, setUseTexture);
 %attribute(ofImage_<unsigned char>, ofTexture &, texture, getTexture);
@@ -54,16 +60,22 @@
 %attribute(ofImage_<unsigned short>, float, height, getHeight);
 %attribute(ofImage_<unsigned short>, ofImageType, imageType, getImageType, setImageType);
 
-// ATTR: ofSoundStream.h: getter: tickCount, numInputChannels, numOutputChannels,
-// ATTR: ofSoundStream.h:         sampleRate, bufferSize
+// ----- ofSoundStream.h -----
+
+// ATTR: ofSoundStream.h:
+// ATTR:   getter: tickCount, numInputChannels, numOutputChannels,
+// ATTR:           sampleRate, bufferSize
 %attribute(ofSoundStream, unsigned long, tickCount, getTickCount);
 %attribute(ofSoundStream, int, numInputChannels, getNumInputChannels);
 %attribute(ofSoundStream, int, numOutputChannels, getNumOutputChannels);
 %attribute(ofSoundStream, int, sampleRate, getSampleRate);
 %attribute(ofSoundStream, int, bufferSize, getBufferSize);
 
-// ATTR: ofSoundPlayer.h: getter: playing, loaded
-// ATTR: ofSoundPlayer.h: getter/setter: volume, pan, speed, position, positionMS
+// ----- ofSoundPlayer.h -----
+
+// ATTR: ofSoundPlayer.h:
+// ATTR:   getter: playing, loaded
+// ATTR:   getter/setter: volume, pan, speed, position, positionMS
 %attribute(ofSoundPlayer, float, volume, getVolume, setVolume);
 %attribute(ofSoundPlayer, float, pan, getPan, setPan);
 %attribute(ofSoundPlayer, float, speed, getSpeed, setSpeed);
@@ -72,15 +84,21 @@
 %attribute(ofSoundPlayer, bool, playing, isPlaying);
 %attribute(ofSoundPlayer, bool, loaded, isLoaded);
 
+// ----- ofFpsCounter.h -----
+
 // ATTR: ofFpsCounter.h: getter: fps, numFrames, lastFrameNanos, lastFrameSecs
 %attribute(ofFpsCounter, double, fps, getFps);
 %attribute(ofFpsCounter, uint64_t, numFrames, getNumFrames);
 %attribute(ofFpsCounter, uint64_t, lastFrameNanos, getLastFrameNanos);
 %attribute(ofFpsCounter, double, lastFrameSecs, getLastFrameSecs);
 
+// ----- ofBufferObject.h -----
+
 // ATTR: ofBufferObject.h: getter: allocated, id
 %attribute(ofBufferObject, bool, allocated, isAllocated);
 %attribute(ofBufferObject, unsigned int, id, getId);
+
+// ----- ofPixels.h -----
 
 // ATTR: ofPixels.h: getter: width & height
 %attribute(ofPixels_<unsigned char>, float, width, getWidth);
@@ -92,19 +110,26 @@
 %attribute(ofPixels_<unsigned short>, float, width, getWidth);
 %attribute(ofPixels_<unsigned short>, float, height, getHeight);
 
+// ----- ofTrueTypeFont.h -----
+
 // ATTR: ofTrueTypeFont.h: getter/setter: lineHeight, letterSpacing, & spaceSize
 %attribute(ofTrueTypeFont, float, lineHeight, getLineHeight, setLineHeight);
 %attribute(ofTrueTypeFont, float, letterSpacing, getLetterSpacing, setLetterSpacing);
 %attribute(ofTrueTypeFont, float, spaceSize, getSpaceSize, setSpaceSize);
+
+// ----- ofFileUtils.h -----
 
 // ATTR: ofFileUtils.h: ofBuffer getter: length, data, text
 %attribute(ofBuffer, long, length, size);
 %attribute(ofBuffer, char *, data, getData);
 %attributestring(ofBuffer, string, text, getText);
 
-// ATTR: ofVideoGrabber.h: getter: frameNew, pixelFormat, pixels,
-// ATTR: ofVideoGrabber.h:         texture, width, height, initialized
-// ATTR: ofVideoGrabber.h: getter/setter: usingTexture
+// ----- ofVideoGrabber.h -----
+
+// ATTR: ofVideoGrabber.h:
+// ATTR:   getter: frameNew, pixelFormat, pixels, texture,
+// ATTR:           width, height, initialized
+// ATTR:   getter/setter: usingTexture
 %attribute(ofVideoGrabber, bool, frameNew, isFrameNew);
 %attribute(ofVideoGrabber, ofPixelFormat, pixelFormat, getPixelFormat);
 %attribute(ofVideoGrabber, ofPixels &, pixels, getPixels);
@@ -114,11 +139,13 @@
 %attribute(ofVideoGrabber, float, height, getHeight);
 %attribute(ofVideoGrabber, bool, initialized, isInitialized);
 
-// ATTR: ofVideoPlayer.h: getter: frameNew, , pixels, movieDone, texture, width,
-// ATTR: ofVideoPlayer.h:         height, duration, loaded, playing, initialized,
-// ATTR: ofVideoPlayer.h:         numFrames
-// ATTR: ofVideoPlayer.h: getter/setter: usingTexture, pixelFormat, position,
-// ATTR: ofVideoPlayer.h:                speed, loopState, paused, frame
+// ----- ofVideoPlayer.h -----
+
+// ATTR: ofVideoPlayer.h:
+// ATTR:   getter: frameNew, pixels, movieDone, texture, width,
+// ATTR:           height, duration, loaded, playing, initialized, numFrames
+// ATTR:   getter/setter: usingTexture, pixelFormat, position,
+// ATTR:                  speed, loopState, paused, frame
 %attributestring(ofVideoPlayer, string, moviePath, getMoviePath);
 %attribute(ofVideoPlayer, ofPixelFormat, pixelFormat, getPixelFormat, setPixelFormat);
 %attribute(ofVideoPlayer, bool, frameNew, isFrameNew);
