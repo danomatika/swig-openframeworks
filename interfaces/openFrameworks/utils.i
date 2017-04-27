@@ -90,8 +90,13 @@ class fstream {};
 %ignore ofBuffer::getLines();
 %ignore ofBuffer::Lines::end();
 
-// DIFF:   std::filesystem::path arguments replaced by string
-%ignore std::filesystem::path;
+#if OF_VERSION_MINOR > 9
+// DIFF:   ignoring nested ofBuffer RLine & RLines structs
+%ignore ofBuffer::RLine;
+%ignore ofBuffer::RLines;
+%ignore ofBuffer::getReverseLines();
+%ignore ofBuffer::RLines::end();
+#endif
 
 // extend with std::string wrappers for std::filesystem::path
 %extend ofFile {
@@ -104,6 +109,54 @@ class fstream {};
 		return $self->open(p);
 	}
 }
+
+#if OF_VERSION_MINOR > 9
+// extend with std::string wrappers for std::filesystem::path
+%extend ofFilePath {
+	static string getFileExt(const string& filename) {
+		return ofFilePath::getFileExt(filename);
+	}
+	static string removeExt(const string& filename) {
+		return ofFilePath::removeExt(filename);
+	}
+	static string addLeadingSlash(const string& path) {
+		return ofFilePath::addLeadingSlash(path);
+	}
+	static string addTrailingSlash(const string& path) {
+		return ofFilePath::addTrailingSlash(path);
+	}
+	static string removeTrailingSlash(const string& path) {
+		return ofFilePath::removeTrailingSlash(path);
+	}
+	static string getPathForDirectory(const string& path) {
+		return ofFilePath::getPathForDirectory(path);
+	}
+	static string getAbsolutePath(const string& path, bool bRelativeToData = true) {
+		return ofFilePath::getAbsolutePath(path, bRelativeToData);
+	}
+	static bool isAbsolute(const string& path) {
+		return ofFilePath::isAbsolute(path);
+	}
+	static string getFileName(const string& filePath, bool bRelativeToData = true) {
+		return ofFilePath::getFileName(filePath, bRelativeToData);
+	}
+	static string getBaseName(const string& filePath) {
+		return ofFilePath::getBaseName(filePath);
+	}
+	static string getEnclosingDirectory(const string& filePath, bool bRelativeToData = true) {
+		return ofFilePath::getEnclosingDirectory(filePath, bRelativeToData);
+	}
+	static bool createEnclosingDirectory(const string& filePath, bool bRelativeToData = true, bool bRecursive = true) {
+		return ofFilePath::createEnclosingDirectory(filePath, bRelativeToData, bRecursive);
+	}
+	static string join(const string& path1, const string& path2) {
+		return ofFilePath::join(path1, path2);
+	}
+	static string makeRelative(const string& from, const string& to) {
+		return ofFilePath::makeRelative(from, to);
+	}
+}
+#endif
 
 // extend with std::string wrappers for std::filesystem::path
 %extend ofDirectory {
@@ -176,6 +229,20 @@ class fstream {};
 %ignore ofHttpResponse::operator ofBuffer&();
 
 %include "utils/ofURLFileLoader.h"
+
+#if OF_VERSION_MINOR > 9
+%inline %{
+
+ofHttpResponse ofSaveURLTo(const string& url, const string& path) {
+	return ofSaveURLTo(url, std::filesystem::path(path));
+}
+
+int ofSaveURLAsync(const string& url, const string& path) {
+	return ofSaveURLAsync(url, std::filesystem::path(path));
+}
+
+%}
+#endif
 
 // ----- ofUtils.h -----
 

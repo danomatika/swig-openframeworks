@@ -115,6 +115,10 @@
 
 %include "graphics/ofPath.h"
 
+#if OF_VERSION_MINOR > 9
+%template(PolylineVector) std::vector<ofPolyline>;
+#endif
+
 // ----- ofPolyline.h -----
 
 // ignored due to default variable overload
@@ -128,6 +132,14 @@
 %ignore ofPolyline::rend;
 
 %include "graphics/ofPolyline.h"
+
+#if OF_VERSION_MINOR > 9
+	#ifdef OF_SWIG_RENAME
+		%template(Polyline) ofPolyline_<ofDefaultVertexType>;
+	#else
+		%template(ofPolyline) ofPolyline_<ofDefaultVertexType>;
+	#endif
+#endif
 
 // ----- ofRendererCollection.h -----
 
@@ -197,5 +209,15 @@ void ofDrawBitmapString(const string & textString, float x, float y, float z);
 %rename(TTF_SANS) OF_TTF_SANS;
 %rename(TTF_SERIF) OF_TTF_SERIF;
 %rename(TTF_MONO) OF_TTF_MONO;
+
+#if OF_VERSION_MINOR > 9
+// extend with std::string wrappers for std::filesystem::path
+%extend ofTrueTypeFont {
+	bool load(const string& filename, int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=true, bool makeContours=false, float simplifyAmt=0.3f, int dpi=0) {
+		std::filesystem::path p = std::filesystem::path(filename);
+		return $self->load(p, fontsize, _bAntiAliased, _bFullCharacterSet, makeContours, simplifyAmt, dpi);
+	}
+}
+#endif
 
 %include "graphics/ofTrueTypeFont.h"
