@@ -82,7 +82,9 @@ class fstream {};
 %ignore ofBuffer::operator string() const;
 %ignore ofFile::getFileBuffer() const;
 %ignore ofFile::operator std::filesystem::path();
+%ignore ofFile::operator const std::filesystem::path() const;
 %ignore ofDirectory::operator std::filesystem::path();
+%ignore ofDirectory::operator const std::filesystem::path() const;
 
 %include "utils/ofFileUtils.h"
 
