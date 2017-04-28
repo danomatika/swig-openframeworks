@@ -59,7 +59,13 @@
 
 // ----- Lang specifics ------
 
-%include "interfaces/lang.i"
+#ifdef SWIGLUA
+%include "interfaces/lang/lua/lua.i"
+#endif
+
+#ifdef SWIGPYTHON
+%include "interfaces/lang/lua/python.i"
+#endif
 
 // ----- Deprecated ------
 

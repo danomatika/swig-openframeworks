@@ -54,53 +54,17 @@
 
 // ----- ofMaterial.h -----
 
-// DIFF: ofMaterial.h:
-// DIFF:   ignoring nested struct, not supported by SWIG
+// DIFF: ofMaterial.h: ignoring nested struct, not supported by SWIG
 %ignore ofMaterial::Data;
 %ignore ofMaterial::getData() const;
 %ignore ofMaterial::setData(const ofMaterial::Data &);
-
-// DIFF:   (Lua) beginMaterial() & endMaterial() since "end" is a Lua keyword
-#ifdef SWIGLUA
-	%rename(beginMaterial) ofMaterial::begin;
-	%rename(endMaterial) ofMaterial::end;
-#endif
 
 %include "gl/ofMaterial.h"
 
 // ----- ofShader.h -----
 
-// DIFF: ofShader.h:
-// DIFF:   ignoring const & copy constructor in favor of && constructor
+// DIFF: ofShader.h: ignoring const & copy constructor in favor of && constructor
 %ignore ofShader::ofShader(ofShader const &);
-
-// DIFF:   (Lua) beginShader() & endShader() since "end" is a Lua keyword
-#ifdef SWIGLUA
-	%rename(beginShader) ofShader::begin;
-	%rename(endShader) ofShader::end;
-#endif
-
-#if OF_VERSION_MINOR > 9
-// extend with std::string wrappers for std::filesystem::path
-%extend ofShader {
-	bool load(const string& shaderName) {
-		return load(std::filesystem::path(shaderName));
-	}
-	bool load(const string& vertName, const string& fragName, const string& geomName="") {
-		return load(std::filesystem::path(vertName),
-		            std::filesystem::path(fragName),
-		            std::filesystem::path(geomName));
-	}
-#if !defined(TARGET_OPENGLES) && defined(glDispatchCompute)
-	bool loadCompute(std::filesystem::path shaderName) {
-		return loadCompute(std::filesystem::path(shaderName));
-	}
-#endif
-	bool setupShaderFromFile(GLenum type, const string& filename) {
-		return setupShaderFromFile(type, std::filesystem::path(filename));
-	}
-};
-#endif
 
 %include "gl/ofShader.h"
 

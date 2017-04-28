@@ -14,7 +14,12 @@ namespace std {
 	%template(TextureVector) std::vector<ofTexture>;
 };
 
-// DIFF: std::filesystem::path arguments replaced by string
+// SWIG needs to know about boost::filesystem or it throws an error
+namespace boost {
+	namespace filesystem {}
+}
+
+// DIFF: std::filesystem::path is converted to string in the target language
 %ignore std::filesystem::path;
 
 // ----- ofConstants.h -----
@@ -53,12 +58,6 @@ class ofBaseHasPixels {};
 // DIFF:   ignoring nested structs, not supported by SWIG
 %ignore ofFbo::Settings;
 
-// DIFF:   (Lua) beginFbo() & endFbo() since "end" is a Lua keyword
-#ifdef SWIGLUA
-	%rename(beginFbo) ofFbo::begin;
-	%rename(endFbo) ofFbo::end;
-#endif
-
 %include "gl/ofFbo.h"
 
 // ----- ofTexture.h -----
@@ -93,24 +92,6 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofLoadImage;
 %ignore ofSaveImage;
 %ignore ofCloseFreeImage;
-
-#if OF_VERSION_MINOR > 9
-// extend with std::string wrappers for std::filesystem::path
-%extend ofImage_ {
-	ofImage_(const string& fileName, const ofImageLoadSettings &settings = ofImageLoadSettings()) {
-		std::filesystem::path p = std::filesystem::path(path);
-		return new ofImage(fileName, settings);
-	}
-	bool load(const string& fileName, const ofImageLoadSettings &settings = ofImageLoadSettings()) {
-        std::filesystem::path p = std::filesystem::path(fileName);
-        return $self->load(p, settings);
-	}
-	void save(const std::filesystem::path & fileName, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const {
-		std::filesystem::path p = std::filesystem::path(fileName);
-		return $self->save(p, compressionLevel);
-	}
-}
-#endif
 
 // DIFF:   ignoring ofPixels operator
 %ignore ofImage_::operator ofPixels_<PixelType>&();
@@ -162,19 +143,11 @@ template<typename T> class ofBaseImage_ {};
 
 %ignore ofBaseRenderer;
 %ignore ofBaseGLRenderer;
-#ifdef SWIGLUA // ignore these to silence Warning 314
-	%ignore ofBaseGLRenderer::begin;
-	%ignore ofBaseGLRenderer::end;
-#endif
 
 %ignore ofBaseSerializer;
 %ignore ofBaseFileSerializer;
 %ignore ofBaseURLFileLoader;
 %ignore ofBaseMaterial;
-#ifdef SWIGLUA // ignore these to silence Warning 314
-	%ignore ofBaseMaterial::begin;
-	%ignore ofBaseMaterial::end;
-#endif
 
 // still include header for derived classes
 %include "types/ofBaseTypes.h"

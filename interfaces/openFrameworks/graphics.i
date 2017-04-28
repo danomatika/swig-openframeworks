@@ -84,17 +84,6 @@
 %ignore ofPixels_::getConstLines(size_t, size_t) const;
 %ignore ofPixels_::getConstPixelsIter() const;
 
-// ignore end keywords, even though they are within nested classes which are
-// effectively ignored by SWIG
-#ifdef SWIGLUA
-	%ignore ofPixels_::Line::end;
-	%ignore ofPixels_::Lines::end;
-	%ignore ofPixels_::ConstPixels::end;
-	%ignore ofPixels_::ConstLine::end;
-	%ignore ofPixels_::ConstLines::end;
-	%ignore ofPixels_::Pixels::end;
-#endif
-
 %include "graphics/ofPixels.h"
 
 // tell SWIG about template classes
@@ -209,15 +198,5 @@ void ofDrawBitmapString(const string & textString, float x, float y, float z);
 %rename(TTF_SANS) OF_TTF_SANS;
 %rename(TTF_SERIF) OF_TTF_SERIF;
 %rename(TTF_MONO) OF_TTF_MONO;
-
-#if OF_VERSION_MINOR > 9
-// extend with std::string wrappers for std::filesystem::path
-%extend ofTrueTypeFont {
-	bool load(const string& filename, int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=true, bool makeContours=false, float simplifyAmt=0.3f, int dpi=0) {
-		std::filesystem::path p = std::filesystem::path(filename);
-		return $self->load(p, fontsize, _bAntiAliased, _bFullCharacterSet, makeContours, simplifyAmt, dpi);
-	}
-}
-#endif
 
 %include "graphics/ofTrueTypeFont.h"
