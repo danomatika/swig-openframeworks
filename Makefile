@@ -102,7 +102,7 @@ move:
 
 # outputs swig language symbols
 symbols:
-	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -debug-lsymbols $(CFLAGS) openFrameworks.i > $(MODULE_NAME)_$(LANG)_symbols.txt
+	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -fcompact -fvirtual -debug-lsymbols $(CFLAGS) openFrameworks.i > $(MODULE_NAME)_$(LANG)_symbols.txt
 	rm -f *.cxx
 	if [ $(LANG) == "python" ]; then rm -f *.py; fi
 

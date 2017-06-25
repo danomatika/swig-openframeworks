@@ -42,8 +42,4 @@
 
 // ----- of3dPrimitives.h -----
 
-// DIFF: of3dPrimitives.h: ignore of3dPrimitive base class
-%ignore of3dPrimitive;
-class of3dPrimitive {};
-
 %include "3d/of3dPrimitives.h"
