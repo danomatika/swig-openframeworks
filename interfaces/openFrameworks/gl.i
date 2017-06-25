@@ -43,7 +43,21 @@
 
 // ----- ofGLUtils.h -----
 
-// not needed
+// DIFF: ofGLUtils.h: ignoring ofGetGLRenderer()
+%ignore ofGetGLRenderer();
+
+// manually rename these otherwise the initial G in GL ends up lowercase
+#ifdef OF_SWIG_RENAME
+	%rename ofGLCheckExtension GLCheckExtension;
+	%rename ofGLSLVersionFromGL GLSLVersionFromGL;
+	%rename ofGLSupportedExtensions GLSupportedExtensions;
+	%rename ofGLSupportsNPOTTextures GLSupportsNPOTTextures;
+#endif
+
+// ignore extra GL defines
+%rename($ignore, regextarget=1) "GL_$";
+
+%include "gl/ofGLUtils.h"
 
 // ----- ofLight.h -----
 
