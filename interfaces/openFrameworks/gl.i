@@ -80,7 +80,21 @@
 // DIFF: ofShader.h: ignoring const & copy constructor in favor of && constructor
 %ignore ofShader::ofShader(ofShader const &);
 
+// ignore destructor
+%ignore ofShader::~ofShader;
+
 %include "gl/ofShader.h"
+
+// TODO: ofShader.h: remove custom destructor if bug fixed in future OF versions
+// DIFF: ofShader.h: custom destructor so shaders are unbound before deletion
+%rename("%s") ofShader::~ofShader; // unignore
+%extend ofShader {
+public:
+	~ofShader() {
+		$self->end();
+		delete $self;
+	}
+};
 
 // ----- ofTexture.h -----
 
