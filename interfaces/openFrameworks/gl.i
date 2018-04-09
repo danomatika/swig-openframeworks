@@ -25,6 +25,10 @@
 #define OF_REPEAT 10497              // 0x2901
 #define OF_MIRRORED_REPEAT 33648     // 0x8370
 
+// ----- ofGLBaseTypes.h -----
+
+// not needed
+
 // ----- ofBufferObject.h -----
 
 %include "gl/ofBufferObject.h"
@@ -44,7 +48,7 @@
 // ----- ofGLUtils.h -----
 
 // DIFF: ofGLUtils.h: ignoring ofGetGLRenderer()
-%ignore ofGetGLRenderer();
+%ignore ofGetGLRenderer;
 
 // manually rename these otherwise the initial G in GL ends up lowercase
 #ifdef OF_SWIG_RENAME
@@ -61,40 +65,64 @@
 
 // ----- ofLight.h -----
 
-// DIFF: ofLight.h: ignoring nested struct, not supported by SWIG
+// DIFF: ofLight.h: ignoring nested Data struct
 %ignore ofLight::Data;
+%ignore ofLightsData;
 
 %include "gl/ofLight.h"
 
 // ----- ofMaterial.h -----
 
-// DIFF: ofMaterial.h: ignoring nested struct, not supported by SWIG
+// forward declare
+%ignore ofBaseMaterial;
+class ofBaseMaterial {};
+
+// DIFF: ofMaterial.h: ignoring ofMaterialSettings
+%ignore ofMaterialSettings;
 %ignore ofMaterial::Data;
-%ignore ofMaterial::getData() const;
-%ignore ofMaterial::setData(const ofMaterial::Data &);
+%ignore setup(const ofMaterialSettings);
+%ignore getSettings();
 
 %include "gl/ofMaterial.h"
 
 // ----- ofShader.h -----
 
-// DIFF: ofShader.h: ignoring const & copy constructor in favor of && constructor
+// DIFF: ofShader.h:
+// DIFF:   ignoring const & copy constructor in favor of && constructor
 %ignore ofShader::ofShader(ofShader const &);
 
+// DIFF:   ignoring ofShaderSettings struct
+%ignore ofShaderSettings;
+%ignore ofShader::setup(const ofShaderSettings);
+
+// DIFF:   ignoring TransformFeedbackSettings structs
+%ignore ofShader::TransformFeedbackSettings;
+%ignore ofShader::setup(const ofShader::TransformFeedbackSettings);
+
+// DIFF:   ignoring TransformFeedback range and base structs
+%ignore ofShader::TransformFeedbackRangeBinding;
+%ignore ofShader::TransformFeedbackBaseBinding;
+%ignore ofShader::beginTransformFeedback;
+%ignore ofShader::endTransformFeedback;
+
+// DIFF:   ignore defaultAttributes enum
+%ignore ofShader::defaultAttributes;
+
 // ignore destructor
-%ignore ofShader::~ofShader;
+//%ignore ofShader::~ofShader;
 
 %include "gl/ofShader.h"
 
 // TODO: ofShader.h: remove custom destructor if bug fixed in future OF versions
 // DIFF: ofShader.h: custom destructor so shaders are unbound before deletion
-%rename("%s") ofShader::~ofShader; // unignore
-%extend ofShader {
-public:
-	~ofShader() {
-		$self->end();
-		delete $self;
-	}
-};
+//%rename("%s") ofShader::~ofShader; // unignore
+//%extend ofShader {
+//public:
+//	~ofShader() {
+//		$self->end();
+//		delete $self;
+//	}
+//};
 
 // ----- ofTexture.h -----
 

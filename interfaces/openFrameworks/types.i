@@ -15,15 +15,18 @@
 
 // ----- ofColor.h -----
 
+// DIFF: ofColor.h:
+// TODO:   find a way to release static named ofColor instances
+
 // ignore SWIG Warning 312 from nested union that provides r, g, b, & a access
-#pragma SWIG nowarn=312
+// ignore SWIG Warning 320 from extern template classes
+#pragma SWIG nowarn=312,320
 
 %include "types/ofColor.h"
 
 // reenable
-#pragma SWIG nowarn=312
+#pragma SWIG nowarn=
 
-// DIFF: ofColor.h:
 // DIFF:   added ofColor_ pixel channel getters getR(), getG(), getB(), getA()
 // DIFF:   added ofColor_ pixel channel setters setR(), setG(), setB(), setA()
 // DIFF:   added target language tostring wrapper for ofColor_::operator <<
@@ -76,8 +79,8 @@
 
 // ----- ofPoint.h -----
 
-// NOTE: ofPoint is just a typedef which swig cannot wrap, so the types need to be 
-// handled in the scripting language, see the Lua, Python, etc code in lang.i
+// NOTE: ofPoint is just a typedef which swig cannot wrap, so the types need to
+// be handled in the scripting language, see the Lua, Python, etc code in lang.i
 %include "types/ofPoint.h"
 
 // ----- ofRectangle.h -----
@@ -87,6 +90,8 @@
 // DIFF:   scaleToScaleMode() & scaleToAspectRatio()
 %rename(scaleToScaleMode) ofRectangle::scaleTo(ofRectangle const &, ofScaleMode);
 %rename(scaleToAspectRatio) ofRectangle::scaleTo(ofRectangle const &, ofAspectRatioMode);
+
+// TODO:   find a way to release returned ofRectangle instances
 
 // ignore SWIG Warning 302 due to manual override of x & y attributes
 %warnfilter(302) ofRectangle::x;

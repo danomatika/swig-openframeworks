@@ -2,11 +2,44 @@
 // these are functions wrapped by the OF_DEPRECATED_MSG macro
 // 2015 Dan Wilcox <danomatika@gmail.com>
 
+// ----- ofNode.h -----
+
+%ignore ofNode::getPitch;
+%ignore ofNode::getHeading;
+%ignore ofNode::getRoll;
+%ignore ofNode::getOrientationEuler;
+%ignore ofNode::tilt;
+%ignore ofNode::pan;
+%ignore ofNode::roll;
+%ignore ofNode::rotate;
+%ignore ofNode::rotateAround(float, const glm::vec3&, const glm::vec3&);
+%ignore ofNode::orbit;
+
+// ----- ofMaterial.h -----
+
+%ignore ofMaterial::getData;
+%ignore ofMaterial::setData;
+
+// ----- ofRectangle.h -----
+
+%ignore ofRectangle::getPositionRef;
+
 // ----- ofFbo.h -----
 
 %ignore ofFbo::destroy;
 %ignore ofFbo::getTextureReference;
+%ignore ofFbo::begin(bool) const;
 %ignore ofFbo::getFbo;
+%ignore ofFbo::Settings;
+
+// ----- ofGLUtils.h -----
+
+// deprecated in favor of ofGetGL*
+%ignore ofGetGlInternalFormat;
+%ignore ofGetGlInternalFormatName;
+%ignore ofGetGlTypeFromInternal;
+%ignore ofGetGlType;
+%ignore ofGetGlFormat;
 
 // ----- ofTexture.h -----
 
@@ -17,8 +50,6 @@
 %ignore ofGetUsingCustomMinMagFilters;
 %ignore ofRestoreMinMagFilters;
 %ignore ofTexture::bAllocated;
-%ignore ofTexture::getTextureReference;
-%ignore ofTexture::texData;
 
 // ----- ofImage.h -----
 
@@ -26,11 +57,19 @@
 %ignore ofImage_::loadImage;
 %ignore ofImage_::getTextureReference;
 %ignore ofImage_::getPixelsRef;
-%ignore ofImage_::getPixels;
 %ignore ofImage_::saveImage;
 
 // ----- ofSoundStream.h -----
 
+%ignore ofSoundStreamSetup(int, int);
+%ignore ofSoundStreamSetup(int, int, ofBaseApp *);
+%ignore ofSoundStreamSetup(int, int, int, int, int);
+%ignore ofSoundStreamSetup(int, int, ofBaseApp *, int, int, int);
+
+%ignore ofSoundStream::setDeviceID;
+%ignore ofSoundStream::setDevice;
+%ignore ofSoundStream::setup(ofBaseApp *, int, int, int, int, int);
+%ignore ofSoundStream::setup(int, int, int, int, int);
 %ignore ofSoundStream::listDevices;
 
 // ----- ofSoundPlayer.h -----
@@ -45,8 +84,8 @@
 
 // ----- ofAppRunner.h -----
 
-%ignore ofSetupOpenGL(ofAppBaseWindow *, int, int, int);
-%ignore ofRunApp(ofBaseApp *);
+//%ignore ofSetupOpenGL(ofAppBaseWindow *, int, int, int);
+//%ignore ofRunApp(ofBaseApp *);
 
 // ----- ofSerial.h -----
 
@@ -55,8 +94,11 @@
 // ----- ofPixels.h -----
 
 %ignore ofPixels_::getPixels;
-%ignore ofPixels_::operator PixelType*();
-%ignore ofPixels_::operator const PixelType*();
+
+// ----- ofPolyline.h -----
+
+%ignore ofPolyline_::getAngleAtIndex;
+%ignore ofPolyline_::getAngleAtIndexInterpolated;
 
 // ----- ofPath.h -----
 
@@ -65,7 +107,7 @@
 
 // ----- ofGraphics.h -----
 
-%ignore ofGetBackground();
+%ignore ofGetBackground;
 %ignore ofbClearBg;
 %ignore ofTriangle;
 %ignore ofCircle;
@@ -75,6 +117,10 @@
 %ignore ofRectRounded;
 %ignore ofCurve;
 %ignore ofBezier;
+%ignore ofRotate;
+%ignore ofRotateX;
+%ignore ofRotateY;
+%ignore ofRotateZ;
 %ignore ofSetupScreenPerspective(float, float, ofOrientation);
 %ignore ofSetupScreenPerspective(float, float, ofOrientation, bool);
 %ignore ofSetupScreenPerspective(float, float, ofOrientation, bool, float);
@@ -136,13 +182,20 @@
 
 // ----- ofFileUtils.h -----
 
-%ignore ofBuffer::getBinaryBuffer();
-%ignore ofBuffer::getBinaryBuffer() const;
-%ignore ofBuffer::getNextLine();
-%ignore ofBuffer::getFirstLine();
-%ignore ofBuffer::isLastLine();
-%ignore ofBuffer::resetLineReader();
-%ignore ofDirectory::numFiles();
+%ignore ofBuffer::getBinaryBuffer;
+%ignore ofBuffer::getBinaryBuffer const;
+%ignore ofBuffer::getNextLine;
+%ignore ofBuffer::getFirstLine;
+%ignore ofBuffer::isLastLine;
+%ignore ofBuffer::resetLineReader;
+%ignore ofFile::setReadOnly;
+%ignore ofDirectory::setReadOnly;
+%ignore ofDirectory::numFiles;
+
+// ----- ofUtils.h -----
+
+%ignore ofGetSystemTime;
+%ignore ofAppendUTF8;
 
 // ----- ofVideoGrabber.h -----
 
@@ -152,7 +205,6 @@
 
 // ----- ofVideoPlayer.h -----
 
-%ignore ofVideoPlayer::initGrabber;
 %ignore ofVideoPlayer::loadMovie;
 %ignore ofVideoPlayer::getPixelsRef;
 %ignore ofVideoPlayer::getTextureReference;

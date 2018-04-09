@@ -61,8 +61,24 @@
 %ignore ofPixels_::ConstLines::end;
 %ignore ofPixels_::Pixels::end;
 
-// ignore these to silence Warning 314
+%ignore ofUnicode::range::end;
+
+%ignore ofBuffer::Lines::end;
+%ignore ofBuffer::RLines::end;
+
 %ignore ofUTF8Iterator::end;
+
+// ----- other -----
+
+// DIFF: ofFbo: (Lua) ofFboBeginMode | operator renamed to of.FboModeOr(m1, m2)
+// DIFF: ofFbo: (Lua) ofFboBeginMode & operator renamed to of.FboModeAnd(m1, m2)
+%rename(FboModeOr) operator | (ofFboBeginMode, ofFboBeginMode);
+%rename(FboModeAnd) operator & (ofFboBeginMode, ofFboBeginMode);
+
+// DIFF: ofTrueTypeFont.h: (LUA) string static const strings
+%rename(TTF_SANS) OF_TTF_SANS;
+%rename(TTF_SERIF) OF_TTF_SERIF;
+%rename(TTF_MONO) OF_TTF_MONO;
 
 // ----- luacode -----
 

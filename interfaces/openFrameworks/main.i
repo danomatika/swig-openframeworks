@@ -4,6 +4,11 @@
 // ignore everything in the private namespace
 %ignore of::priv;
 
+// TODO: wrap nested structs and classes?
+//%feature ("flatnested");
+
+// TODO: make sure returned class instances are freed by using %newobject
+
 // needed for functions and return types
 namespace std {
 	%template(IntVector) std::vector<int>;
@@ -32,6 +37,40 @@ typedef float GLfloat;
 
 %include "utils/ofConstants.h"
 
+// ----- ofMathConstants.h -----
+
+// include early for glm::vec* declarations
+%include "math/ofMathConstants.h"
+
+// ----- ofUtils.h -----
+
+// DIFF: ofUtils.h:
+// DIFF:   ignoring ofFromString as templating results in too much overloading
+%ignore ofFromString;
+
+// DIFF:   variable argument support is painful, safer to ignore
+// see http://www.swig.org/Doc2.0/Varargs.html
+%ignore ofVAArgsToString;
+
+// DIFF:   ignoring ofUTF8Iterator
+%ignore ofUTF8Iterator;
+
+// manually rename these otherwise the initial U in UTF ends up lowercase
+#ifdef OF_SWIG_RENAME
+	%rename ofUTF8Append UTF8Append;
+	%rename ofUTF8Insert UTF8Insert;
+	%rename ofUTF8Erase UTF8Erase;
+	%rename ofUTF8Substring UTF8Substring;
+	%rename ofUTF8ToString UTF8ToString;
+	%rename ofUTF8Length UTF8Length;
+#endif
+
+// include early for ofToString template declaration
+%include "utils/ofUtils.h"
+
+// ignore further redefinitions
+%ignore ofToString(const T &);
+
 // ----- ofFbo.h -----
 
 // need to forward declare these for ofFbo
@@ -44,7 +83,6 @@ class ofBaseHasTexture {};
 %ignore ofBaseHasPixels;
 class ofBaseHasPixels {};
 
-// DIFF: ofFbo.h:
 // DIFF:   ignoring const & copy constructor in favor of && constructor
 %ignore ofFbo::ofFbo(ofFbo const &);
 
@@ -55,8 +93,10 @@ class ofBaseHasPixels {};
 // DIFF:   ignoring setActiveDrawBufers() due to std::vector
 %ignore setActiveDrawBuffers(const vector<int>& i);
 
-// DIFF:   ignoring nested structs, not supported by SWIG
+// DIFF:   ignoring ofFboSettings struct
+%ignore ofFboSettings;
 %ignore ofFbo::Settings;
+%ignore allocate(ofFboSettings);
 
 %include "gl/ofFbo.h"
 
@@ -99,6 +139,8 @@ template<typename T> class ofBaseImage_ {};
 // DIFF:   ignoring const & copy constructor in favor of && constructor
 %ignore ofImage_(const ofImage_<PixelType>&);
 
+// TODO:   find a way to release ofColor instances returned by getColor()
+
 %include "graphics/ofImage.h"
 
 // handle template implementations
@@ -112,9 +154,9 @@ template<typename T> class ofBaseImage_ {};
 	%template(ofShortImage) ofImage_<unsigned short>;
 #endif
 
-// ----- ofBaseTypes.h -----
+// ----- ofGraphicsBaseTypes.h -----
 
-// DIFF: ofBaseTypes.h: ignore all abstract and base types
+// DIFF: ofGraphicsBaseTypes.h: ignore all abstract and base types
 %ignore ofAbstractParameter;
 %ignore ofBaseDraws;
 %ignore ofBaseUpdates;
@@ -133,14 +175,6 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofBaseFloatImage;
 %ignore ofBaseShortImage;
 
-%ignore ofBaseSoundInput;
-%ignore ofBaseSoundOutput;
-
-%ignore ofBaseVideo;
-%ignore ofBaseVideoDraws;
-%ignore ofBaseVideoGrabber;
-%ignore ofBaseVideoPlayer;
-
 %ignore ofBaseRenderer;
 %ignore ofBaseGLRenderer;
 
@@ -149,5 +183,27 @@ template<typename T> class ofBaseImage_ {};
 %ignore ofBaseURLFileLoader;
 %ignore ofBaseMaterial;
 
-// still include header for derived classes
-%include "types/ofBaseTypes.h"
+// include header for derived classes
+%include "graphics/ofGraphicsBaseTypes.h"
+
+// ----- ofSoundBaseTypes.h -----
+
+// DIFF: ofSoundBaseTypes.h: ignore all abstract and base types
+
+%ignore ofBaseSoundInput;
+%ignore ofBaseSoundOutput;
+
+// include header for derived classes
+%include "sound/ofSoundBaseTypes.h"
+
+// ----- ofVideoBaseTypes.h -----
+
+// DIFF: ofVideoBaseTypes.h: ignore all abstract and base types
+
+%ignore ofBaseVideo;
+%ignore ofBaseVideoDraws;
+%ignore ofBaseVideoGrabber;
+%ignore ofBaseVideoPlayer;
+
+// include header for derived classes
+%include "video/ofVideoBaseTypes.h"

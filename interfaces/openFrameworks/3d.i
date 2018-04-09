@@ -19,26 +19,22 @@
 
 // ----- ofEasyCam.h -----
 
+// DIFF: ofEasyCam.h: ignoring hasInteraction(int, int) in favor of
+//                    hasInteraction(TransformType, int, int)
+%ignore ofEasyCam::hasInteraction(int, int);
+
 %include "3d/ofEasyCam.h"
 
 // ----- ofMesh.h -----
 
-// tesselator index
-#ifdef TARGET_OPENGLES
-	%typedef unsigned short TESSindex;
-#else
-	%typedef unsigned int TESSindex;
-#endif
-
-// add ofMesh virtual destructor
-%extend ofMesh {
-	virtual ~ofMesh() {
-		$self->clear();
-		delete $self;
-	}
-};
-
 %include "3d/ofMesh.h"
+
+// tell SWIG about template classes
+#ifdef OF_SWIG_RENAME
+	%template(Mesh) ofMesh_<ofDefaultVertexType, ofDefaultNormalType, ofDefaultColorType, ofDefaultTexCoordType>;
+#else
+	%template(ofMesh) ofMesh_<ofDefaultVertexType, ofDefaultNormalType, ofDefaultColorType, ofDefaultTexCoordType>;
+#endif
 
 // ----- of3dPrimitives.h -----
 

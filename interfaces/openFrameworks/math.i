@@ -30,7 +30,14 @@ ofInterpolateHermite(float y1, float y2, float pct);
 	%template(ofInterpolateHermite) ofInterpolateHermite<float>;
 #endif
 
+// ----- ofMathConstants.h -----
+
+// handled in main.i
+
 // ----- ofMatrix3x3.h -----
+
+// DIFF: ofMatrix3x3.h: ignoring glm::mat3 operator
+%ignore ofMatrix3x3::operator glm::mat3;
 
 %include "math/ofMatrix3x3.h"
 
@@ -44,8 +51,11 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofMatrix4x4.h -----
 
-// DIFF: ofMatrix4x4.h: ignoring operator(size_t,size_t) const overload
+// DIFF: ofMatrix4x4.h: ignoring operator(size_t, size_t) const overload
 %ignore ofMatrix4x4::operator()(std::size_t, std::size_t) const;
+
+// DIFF: ofMatrix4x4.h: ignoring glm::mat4 operator
+%ignore ofMatrix4x4::operator glm::mat4;
 
 %include "math/ofMatrix4x4.h"
 
@@ -58,6 +68,9 @@ ofInterpolateHermite(float y1, float y2, float pct);
 };
 
 // ----- ofQuaternion.h -----
+
+// DIFF: ofQuaternion.h: ignoring glm::quat operator
+%ignore ofQuaternion::operator glm::quat;
 
 // silence warning as SWIG ignores these anyway
 // since it uses the non-const versions
@@ -78,6 +91,9 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofVec2f.h -----
 
+// DIFF: ofVec2f.h: ignoring glm::vec2 operator
+%ignore ofVec2f::operator glm::vec2;
+
 %include "math/ofVec2f.h"
 
 %extend ofVec2f {
@@ -90,6 +106,9 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofVec3f.h -----
 
+// DIFF: ofVec3f.h: ignoring glm::vec3 operator
+%ignore ofVec3f::operator glm::vec3;
+
 %include "math/ofVec3f.h"
 
 %extend ofVec3f {
@@ -101,6 +120,9 @@ ofInterpolateHermite(float y1, float y2, float pct);
 };
 
 // ----- ofVec4f.h -----
+
+// DIFF: ofVec4f.h: ignoring glm::vec4 operator
+%ignore ofVec4f::operator glm::vec4;
 
 %include "math/ofVec4f.h"
 

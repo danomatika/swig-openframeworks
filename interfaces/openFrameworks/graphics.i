@@ -1,6 +1,14 @@
 // graphics folder bindings
 // 2017 Dan Wilcox <danomatika@gmail.com>
 
+// ----- ofGraphicsBaseTypes.h -----
+
+// handled in main.i
+
+// ----- ofGraphicsConstants.h -----
+
+%include "graphics/ofGraphicsConstants.h"
+
 // ----- ofPixels.h -----
 
 // include pixels first as it's used by most other classes
@@ -11,7 +19,7 @@
 
 // DIFF: ofPixels.h:
 // DIFF:   fixed ambiguous ofPixels function overloads since enums = int in SWIG
-// DIFF:   by renaming to allocatePixelFormat, allocateimageType, & setFromPixelsImageType
+// DIFF:   by renaming to allocatePixelFormat, allocateImageType, & setFromPixelsImageType
 %rename(allocatePixelFormat) ofPixels_<unsigned char>::allocate(size_t, size_t, ofPixelFormat);
 %rename(allocateImageType) ofPixels_<unsigned char>::allocate(size_t, size_t, ofImageType);
 %rename(setFromPixelsImageType) ofPixels_<unsigned char>::setFromPixels(unsigned char const *, size_t, size_t, ofImageType);
@@ -54,7 +62,7 @@
 %ignore ofPixels_::pixelBitsFromPixelFormat(ofPixelFormat);
 %ignore ofPixels_::bytesFromPixelFormat(size_t, size_t, ofPixelFormat);
 
-// DIFF:   ignoring nested structs, not supported by SWIG
+// DIFF:   ignoring nested structs: Pixel, Line, ConstPixel, & ConstLine
 %ignore ofPixels_::ConstPixel;
 %ignore ofPixels_::Pixel;
 %ignore ofPixels_::Pixels;
@@ -99,35 +107,33 @@
 
 // ----- ofPath.h -----
 
-// DIFF: ofPath.h: ignoring nested struct, not supported by SWIG
+// DIFF: ofPath.h: ignoring nested Command struct
 %ignore ofPath::Command;
 
 %include "graphics/ofPath.h"
 
-#if OF_VERSION_MINOR > 9
+// tell SWIG about template classes
 %template(PolylineVector) std::vector<ofPolyline>;
-#endif
 
 // ----- ofPolyline.h -----
 
 // ignored due to default variable overload
-%ignore ofPolyline::arc(float, float, float, float, float, float, float);
-%ignore ofPolyline::arcNegative(float, float, float, float, float, float, float);
+%ignore ofPolyline_::arc(float, float, float, float, float, float, float);
+%ignore ofPolyline_::arcNegative(float, float, float, float, float, float, float);
 
 // DIFF: ofPolyline.h: ignoring iterators
-%ignore ofPolyline::begin;
-%ignore ofPolyline::end;
-%ignore ofPolyline::rbegin;
-%ignore ofPolyline::rend;
+%ignore ofPolyline_::begin;
+%ignore ofPolyline_::end;
+%ignore ofPolyline_::rbegin;
+%ignore ofPolyline_::rend;
 
 %include "graphics/ofPolyline.h"
 
-#if OF_VERSION_MINOR > 9
-	#ifdef OF_SWIG_RENAME
-		%template(Polyline) ofPolyline_<ofDefaultVertexType>;
-	#else
-		%template(ofPolyline) ofPolyline_<ofDefaultVertexType>;
-	#endif
+// tell SWIG about template classes
+#ifdef OF_SWIG_RENAME
+	%template(Polyline) ofPolyline_<ofDefaultVertexType>;
+#else
+	%template(ofPolyline) ofPolyline_<ofDefaultVertexType>;
 #endif
 
 // ----- ofRendererCollection.h -----
@@ -153,16 +159,18 @@
 #endif
 
 // DIFF: ofGraphics.h:
-// DIFF:   ignoring foDrawBitmapString template functions in favor of
-// DIFF:   string versions target languages can handle the string conversions
-%ignore ofDrawBitmapString(const T &, const ofPoint&);
+// DIFF:   ignoring ofDrawBitmapString() template functions in favor of
+// DIFF:   string versions, target languages can handle the string conversions
 %ignore ofDrawBitmapString(const T &, float, float);
+%ignore ofDrawBitmapString(const T &, const glm::vec3 &);
+%ignore ofDrawBitmapString(const T &, const glm::vec2 &);
 %ignore ofDrawBitmapString(const T &, float, float, float);
 
 // manually define string functions here otherwise they get redefined by SWIG & then ignored
-void ofDrawBitmapString(const string & textString, float x, float y);
-void ofDrawBitmapString(const string & textString, const ofPoint & p);
-void ofDrawBitmapString(const string & textString, float x, float y, float z);
+void ofDrawBitmapString(const std::string & textString, float x, float y);
+void ofDrawBitmapString(const std::string & textString, const glm::vec3 & p);
+void ofDrawBitmapString(const std::string & textString, const glm::vec2 & p);
+void ofDrawBitmapString(const std::string & textString, float x, float y, float z);
 
 %include "graphics/ofGraphics.h"
 
@@ -183,20 +191,33 @@ void ofDrawBitmapString(const string & textString, float x, float y, float z);
 
 // ----- ofTrueTypeFont.h -----
 
-// ignore internal font struct
-%ignore charProps;
-
 // DIFF: ofTrueTypeFont.h:
+//         ignore internal font structs
+%ignore FT_Face;
+
+// DIFF:   ignoring ofUnicode and ofAlphabet
+%ignore ofUnicode;
+%ignore ofAlphabet;
+%ignore ofUnicode::range; // nested struct
+
 // DIFF:   ignoring ofTrueTypeShutdown() & ofExitCallback() friend
 %ignore ofTrueTypeShutdown;
-%ignore ofExitCallback();
+%ignore ofExitCallback;
 
 // DIFF:   ignoring const & copy constructor in favor of && constructor
 %ignore ofTrueTypeFont::ofTrueTypeFont(ofTrueTypeFont const &);
 
-// string static const strings
-%rename(TTF_SANS) OF_TTF_SANS;
-%rename(TTF_SERIF) OF_TTF_SERIF;
-%rename(TTF_MONO) OF_TTF_MONO;
+// DIFF:   ignoring ofTrueTypeFontSettings struct
+%ignore ofTrueTypeFontSettings;
+%ignore ofTrueTypeFont::Settings;
+%ignore ofTrueTypeFont::load(const ofTrueTypeFontSettings &);
+%ignore ofTrueTypeFont::setDirection(ofTrueTypeFontDirection);
+
+// DIFF:   ignoring protected structs
+%ignore ofTrueTypeFont::range;
+%ignore ofTrueTypeFont::glyph;
+%ignore ofTrueTypeFont::glyphProps;
+
+// TODO:   find a way to release ofRectangle returned by getStringBoundingBox()
 
 %include "graphics/ofTrueTypeFont.h"

@@ -13,10 +13,6 @@
 
 // not needed
 
-// ----- ofAppGlutWindow.h -----
-
-// not needed
-
 // ----- ofAppGLFWWindow.h -----
 
 // not needed
@@ -42,11 +38,12 @@
 %ignore ofRunApp;
 %ignore ofRunMainLoop;
 
-// DIFF:   ofSetAppPtr not applicable in a target language
-%ignore ofSetAppPtr;
+// DIFF:   ofGetAppPtr not applicable in a target language
+%ignore ofGetAppPtr;
 
-// DIFF:   ofGetWindowPtr not applicable in a target language
+// DIFF:   ofGetWindowPtr and ofGetCurrentWindow not applicable in a target language
 %ignore ofGetWindowPtr;
+%ignore ofGetCurrentWindow;
 
 // DIFF:   get/set current renderer not applicable to target language
 %ignore ofSetCurrentRenderer;

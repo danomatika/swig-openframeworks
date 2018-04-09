@@ -1,6 +1,10 @@
 // video folder bindings
 // 2017 Dan Wilcox <danomatika@gmail.com>
 
+// ----- ofVideoBaseTypes.h -----
+
+// handled in main.i
+
 // ----- ofVideoGrabber.h -----
 
 // DIFF: ofVideoGrabber.h: ignore getGrabber/setGrabber

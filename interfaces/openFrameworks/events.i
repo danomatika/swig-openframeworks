@@ -1,6 +1,10 @@
 // events folder bindings
 // 2017 Dan Wilcox <danomatika@gmail.com>
 
+// ----- ofEvent.h -----
+
+// not needed
+
 // ----- ofEvents.h -----
 
 // DIFF: ofEvents.h:
@@ -12,12 +16,15 @@
 // need ofTouchEventArgs for touch callbacks
 %ignore ofAudioEventArgs;
 %ignore ofResizeEventArgs;
+%ignore ofWindowPosEventArgs;
 %ignore ofMessage;
+%ignore ofTimeMode;
+
+%ignore ofCoreEvents;
 
 // DIFF:   ignore ofSendMessage() with ofMessage in favor of std::string
 %ignore ofSendMessage(ofMessage msg);
 
-%ignore ofCoreEvents;
 %ignore ofEvents;
 
 %ignore ofRegisterMouseEvents;
@@ -31,21 +38,10 @@
 %ignore ofUnregisterGetMessages;
 %ignore ofUnregisterDragEvents;
 
-%ignore ofNotifySetup;
-%ignore ofNotifyUpdate;
-%ignore ofNotifyDraw;
-%ignore ofNotifyKeyPressed;
-%ignore ofNotifyKeyReleased;
-%ignore ofNotifyKeyEvent;
-%ignore ofNotifyMousePressed;
-%ignore ofNotifyMouseReleased;
-%ignore ofNotifyMouseDragged;
-%ignore ofNotifyMouseMoved;
-%ignore ofNotifyMouseEvent;
-%ignore ofNotifyExit;
-%ignore ofNotifyWindowResized;
-%ignore ofNotifyWindowEntry;
-%ignore ofNotifyDragEvent;
+// glm::vec2 forward declare for ofTouchEventArgs
+namespace glm {
+	struct vec2 {};
+}
 
 %include "events/ofEvents.h"
 

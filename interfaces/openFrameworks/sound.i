@@ -1,13 +1,9 @@
 // sound folder bindings
 // 2017 Dan Wilcox <danomatika@gmail.com>
 
-// ----- ofBaseSoundPlayer.h -----
+// ----- ofSoundBaseTypes.h -----
 
-// not needed
-
-// ----- ofBaseSoundStream.h -----
-
-// not needed
+// handled in main.i
 
 // ----- ofFmodSoundPlayer.h -----
 
@@ -38,7 +34,7 @@
 %ignore ofBaseSoundPlayer;
 class ofBaseSoundPlayer {};
 
-// DIFF: ofSoundPlayer.h: warnings say "FIX THIS SHIT", so leaving out fmod global functions
+// DIFF: ofSoundPlayer.h: ignoring global FMOD functions
 %ignore ofSoundStopAll;
 %ignore ofSoundShutdown;
 %ignore ofSoundSetVolume;

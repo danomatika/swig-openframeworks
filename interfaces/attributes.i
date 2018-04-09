@@ -122,7 +122,7 @@
 // ATTR: ofFileUtils.h: ofBuffer getter: length, data, text
 %attribute(ofBuffer, long, length, size);
 %attribute(ofBuffer, char *, data, getData);
-%attributestring(ofBuffer, string, text, getText);
+%attributestring(ofBuffer, std::string, text, getText);
 
 // ----- ofVideoGrabber.h -----
 
@@ -146,7 +146,7 @@
 // ATTR:           height, duration, loaded, playing, initialized, numFrames
 // ATTR:   getter/setter: usingTexture, pixelFormat, position,
 // ATTR:                  speed, loopState, paused, frame
-%attributestring(ofVideoPlayer, string, moviePath, getMoviePath);
+%attributestring(ofVideoPlayer, std::string, moviePath, getMoviePath);
 %attribute(ofVideoPlayer, ofPixelFormat, pixelFormat, getPixelFormat, setPixelFormat);
 %attribute(ofVideoPlayer, bool, frameNew, isFrameNew);
 %attribute(ofVideoPlayer, ofPixels &, pixels, getPixels);

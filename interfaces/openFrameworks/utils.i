@@ -11,9 +11,20 @@
 
 // ----- ofXml.h -----
 
-// DIFF: ofXml.h: ignoring PocoDocument & PocoElement getters
-%ignore ofXml::getPocoDocument;
-%ignore ofXml::getPocoElement;
+// DIFF: ofXml.h: ignoring find() as it returns a pugi::xpath_node_set
+%ignore ofXml::find;
+
+// DIFF: ofXml.h: ignoring iterators and nested structs
+%ignore ofXmlIterator;
+%ignore ofXmlSearchIterator;
+%ignore ofXml::Search;
+%ignore ofXml::Attribute;
+%ignore ofXml::Range;
+%ignore ofXml::Search::end;
+%ignore ofXml::Range::end;
+
+// DIFF: ofXml.h: ignoring bool operator
+%ignore ofXml::operator bool;
 
 %include "utils/ofXml.h"
 
@@ -28,8 +39,8 @@
 // ----- ofFileUtils.h -----
 
 // forward declare fstream for ofFile
-%ignore fstream;
-class fstream {};
+%ignore std::fstream;
+class std::fstream {};
 
 // DIFF: ofFileUtils.h:
 // DIFF:   ignoring iterators
@@ -43,15 +54,15 @@ class fstream {};
 %ignore ofDirectory::rend;
 
 // DIFF:   ignoring ofBuffer istream & ostream functions
-%ignore ofBuffer::ofBuffer(istream &);
-%ignore ofBuffer::ofBuffer(istream &, size_t);
-%ignore ofBuffer::set(istream &);
-%ignore ofBuffer::set(istream &, size_t);
-%ignore ofBuffer::writeTo(ostream &) const;
+%ignore ofBuffer::ofBuffer(std::istream &);
+%ignore ofBuffer::ofBuffer(std::istream &, size_t);
+%ignore ofBuffer::set(std::istream &);
+%ignore ofBuffer::set(std::istream &, size_t);
+%ignore ofBuffer::writeTo(std::ostream &) const;
 
-%ignore ofBuffer::ofBuffer(const string &);
-%ignore ofBuffer::set(const string &);
-%ignore ofBuffer::append(const string&);
+%ignore ofBuffer::ofBuffer(const std::string &);
+%ignore ofBuffer::set(const std::string &);
+%ignore ofBuffer::append(const std::string&);
 
 // ignore char* getData() in preference to const char* getData() whose return
 // type is overriden below
@@ -59,27 +70,20 @@ class fstream {};
 
 // DIFF:   pass binary data to ofBuffer as full char strings
 // pass binary data & byte length as a single argument for ofBuffer
-
-// ofBuffer constructor uses "buffer" and "size" while set & append use "_buffer" and "_size"
 %apply(char *STRING, size_t LENGTH) {(const char * buffer, std::size_t size)};
-%apply(char *STRING, size_t LENGTH) {(const char * _buffer, std::size_t _size)};
 
 // DIFF:   ignoring nested ofBuffer Line & Lines structs
 %ignore ofBuffer::Line;
 %ignore ofBuffer::Lines;
 %ignore ofBuffer::getLines();
-%ignore ofBuffer::Lines::end();
 
-#if OF_VERSION_MINOR > 9
 // DIFF:   ignoring nested ofBuffer RLine & RLines structs
 %ignore ofBuffer::RLine;
 %ignore ofBuffer::RLines;
 %ignore ofBuffer::getReverseLines();
-%ignore ofBuffer::RLines::end();
-#endif
 
 // DIFF:   ignoring string, filebuf, & std::filesystem::path operators
-%ignore ofBuffer::operator string() const;
+%ignore ofBuffer::operator std::string() const;
 %ignore ofFile::getFileBuffer() const;
 %ignore ofFile::operator std::filesystem::path();
 %ignore ofFile::operator const std::filesystem::path() const;
@@ -96,7 +100,7 @@ class fstream {};
 
 // function wrapper for ofLog class
 %inline %{
-	void log(ofLogLevel level, const string & message) {
+	void log(ofLogLevel level, const std::string & message) {
 		ofLog(level, message);
 	}
 %}
@@ -130,24 +134,20 @@ class fstream {};
 
 // not needed
 
+// ----- ofThreadChannel.h -----
+
+// not needed
+
 // ----- ofURLFileLoader.h -----
 
 // DIFF: ofURLFileLoader.h: ignoring ofHttpResponse ofBuffer operator
 %ignore ofHttpResponse::operator ofBuffer&();
 
+// DIFF: ofURLFileLoader.h: ignoring ofURLResponseEvent()
+%ignore ofURLResponseEvent();
+
 %include "utils/ofURLFileLoader.h"
 
 // ----- ofUtils.h -----
 
-// DIFF: ofUtils.h:
-// DIFF:   ignoring ofFromString as templating results in too much overloading
-%ignore ofFromString;
-
-// DIFF:   variable argument support is painful, safer to ignore
-// see http://www.swig.org/Doc2.0/Varargs.html
-%ignore ofVAArgsToString;
-
-// DIFF:   ignoring ofUTF8Iterator
-%ignore ofUTF8Iterator;
-
-%include "utils/ofUtils.h"
+// handled in main.i
