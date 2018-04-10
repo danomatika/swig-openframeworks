@@ -70,10 +70,10 @@
 
 // ----- other -----
 
-// DIFF: ofFbo: (Lua) ofFboBeginMode | operator renamed to of.FboModeOr(m1, m2)
-// DIFF: ofFbo: (Lua) ofFboBeginMode & operator renamed to of.FboModeAnd(m1, m2)
-%rename(FboModeOr) operator | (ofFboBeginMode, ofFboBeginMode);
-%rename(FboModeAnd) operator & (ofFboBeginMode, ofFboBeginMode);
+// DIFF: ofFbo: (Lua) ofFboMode | operator renamed to of.FboModeOr(m1, m2)
+// DIFF: ofFbo: (Lua) ofFboMode & operator renamed to of.FboModeAnd(m1, m2)
+%rename(FboModeOr) operator | (ofFboMode, ofFboMode);
+%rename(FboModeAnd) operator & (ofFboMode, ofFboMode);
 
 // DIFF: ofTrueTypeFont.h: (LUA) string static const strings
 %rename(TTF_SANS) OF_TTF_SANS;
