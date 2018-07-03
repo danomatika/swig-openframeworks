@@ -32,8 +32,10 @@
 // tell SWIG about template classes
 #ifdef OF_SWIG_RENAME
 	%template(Mesh) ofMesh_<ofDefaultVertexType, ofDefaultNormalType, ofDefaultColorType, ofDefaultTexCoordType>;
+	%template(MeshFace) ofMeshFace_<ofDefaultVertexType, ofDefaultNormalType, ofDefaultColorType, ofDefaultTexCoordType>;
 #else
 	%template(ofMesh) ofMesh_<ofDefaultVertexType, ofDefaultNormalType, ofDefaultColorType, ofDefaultTexCoordType>;
+	%template(ofMeshFace) ofMeshFace_<ofDefaultVertexType, ofDefaultNormalType, ofDefaultColorType, ofDefaultTexCoordType>;
 #endif
 
 // ----- of3dPrimitives.h -----
