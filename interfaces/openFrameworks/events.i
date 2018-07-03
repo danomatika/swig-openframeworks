@@ -45,6 +45,29 @@ namespace glm {
 
 %include "events/ofEvents.h"
 
+// DIFF:   added ofTouchEventArgs getters getX(), getY()
+// DIFF:   added ofTouchEventArgs setters setX(), setY()
+// DIFF:   added target language tostring wrapper for ofTouchEventArgs::operator <<
+%extend ofTouchEventArgs {
+
+	// pos getters
+	float getX() {return $self->r;}
+	float getY() {return $self->g;}
+
+	// pos setters
+	void setX(float r) {$self->r = r;}
+	void setY(float g) {$self->g = g;}
+
+	const char* __str__() {
+		stringstream str;
+		str << (*$self);
+		return str.str().c_str();
+	}
+};
+
+%attributeVar(ofTouchEventArgs, float, x, x, x);
+%attributeVar(ofTouchEventArgs, float, y, y, y);
+
 // ----- ofEventUtils.h -----
 
 // not needed
