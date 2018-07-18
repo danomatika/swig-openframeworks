@@ -1,9 +1,9 @@
 #
 # Makefile to generate OF bindings using SWIG
 #
-# 2014 Dan Wilcox <danomatika@gmail.com>
+# 2014-2018 Dan Wilcox <danomatika@gmail.com>
 #
-# running `make` generates desktop os lua bindings and puts them in ../src,
+# running `make` generates desktop os lua bindings and puts them in ./lua,
 # running `make ios` generates ios lua bindings, etc
 #
 # override any of the following variables using make, i.e. to generate Python 
@@ -18,6 +18,63 @@ SWIG = swig
 # default output language, see swig -h for more
 LANG = lua
 
+# default platform target, available targets are:
+#   * desktop: win, linux, & mac osx
+#   * ios: apple iOS using OpenGL ES
+#   * linuxarm: embedded linux using OpenGL ES
+TARGET = desktop
+
+# where to place the generated bindings
+DEST_DIR = $(LANG)
+
+# any extra SWIG flags per-language, etc
+SWIG_FLAGS = -O -small
+
+##############
+# main targets
+##############
+
+.PHONY: all clean desktop ios linuxarm header libs libs-clean \
+openFrameworks openFrameorks-header openFrameorks-symbols openFrameworks-clean \
+glm glm-symbols glm-clean
+
+all: desktop header libs
+
+clean: openFrameworks-clean libs-clean
+
+# desktop OS generation
+desktop: desktop-prepare openFrameworks
+
+desktop-prepare:
+	$(eval TARGET := desktop)
+	$(eval CFLAGS := $(CFLAGS))
+
+# iOS specific generation
+ios: ios-prepare openFrameworks
+
+ios-prepare:
+	$(eval TARGET := ios)
+	$(eval CFLAGS := $(CFLAGS) -DTARGET_OPENGLES -DTARGET_IOS)
+
+# embedded linux specific generation
+linuxarm: linuxarm-prepare openFrameworks
+
+linuxarm-prepare:
+	$(eval TARGET := linuxarm)
+	$(eval CFLAGS := $(CFLAGS) -DTARGET_OPENGLES)
+
+# runtime header generation
+header: openFrameworks-header
+
+# additional library generation
+libs: glm
+
+libs-clean: glm-clean
+
+#######################
+# openFrameworks module
+#######################
+
 # module name
 MODULE_NAME = of
 
@@ -27,26 +84,11 @@ RENAME = true
 # allow deprecated functions? otherwise, ignore
 DEPRECATED = false
 
-# default platform target, available targets are:
-#   * desktop: win, linux, & mac osx
-#   * ios: apple iOS using OpenGL ES
-#   * linuxarm: embedded linux using OpenGL ES
-TARGET = desktop
-
 # generated bindings filename
-NAME = openFrameworks_wrap
+NAME = ofBindings
 
-# where to copy the generated bindings
-DEST_DIR = ../src/bindings
-
-# where to copy the generated specific language files
-DEST_LANG_DIR = .
-
-# OF header includes
-OF_HEADERS = -I../../../libs/openFrameworks
-
-# any extra SWIG flags per-language, etc
-SWIG_FLAGS =
+# OF libs header path
+OF_HEADERS = -I../../../libs
 
 # Python specific preferences
 # typically, long names are used in Python,
@@ -54,81 +96,66 @@ SWIG_FLAGS =
 ifeq ($(LANG), python)
 	MODULE_NAME = openframeworks
 	RENAME = false
-	SWIG_FLAGS = -modern
+	SWIG_FLAGS += -modern
 endif
 
-# populate CFLAGS
+# populate CFLAGS for openFrameworks
+OF_CFLAGS = $(OF_HEADERS)/openFrameworks -DMODULE_NAME=$(MODULE_NAME)
+
 ifeq ($(RENAME), true)
-	RENAME_CFLAGS = -DOF_SWIG_RENAME
-else
-	RENAME_CFLAGS = 
+	OF_CFLAGS += -DOF_SWIG_RENAME
 endif
 
 ifeq ($(DEPRECATED), true)
-	DEPRECATED_CFLAGS = -DOF_SWIG_DEPRECATED
-else
-	DEPRECATED_CFLAGS =
+	OF_CFLAGS += -DOF_SWIG_DEPRECATED
 endif
 
 ifeq ($(ATTRIBUTES), true)
-	ATTRIBUTES_CFLAGS = -DOF_SWIG_ATTRIBUTES
-else
-	ATTRIBUTES_CFLAGS =
+	OF_CFLAGS += -DOF_SWIG_ATTRIBUTES
 endif
 
-CFLAGS = $(OF_HEADERS) -DMODULE_NAME=$(MODULE_NAME) $(RENAME_CFLAGS) $(DEPRECATED_CFLAGS) $(ATTRIBUTES_CFLAGS)
-
-.PHONY: all debug clean desktop ios linuxarm
-
 # generates bindings
-bindings:
+openFrameworks:
+	@echo "### Generating: openFrameworks $(TARGET)"
+	@mkdir -p $(DEST_DIR)/$(TARGET)
+	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) $(CFLAGS) $(OF_CFLAGS) -o $(DEST_DIR)/$(TARGET)/$(NAME).cpp openFrameworks.i
 
-	@echo Generating for: $(TARGET)
-	@echo LANG = $(LANG)
-	@echo CFLAGS = $(CFLAGS)
-	@echo NAME = $(NAME)
-	@echo DEST_DIR = $(DEST_DIR)
-	
-	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -fcompact -fvirtual $(CFLAGS) -outdir $(DEST_LANG_DIR) openFrameworks.i
-	mv openFrameworks_wrap.cxx $(NAME).cpp
-
+# generates swig runtime header
+openFrameworks-header:
+	@echo "### Generating: openFrameworks header"
 	$(SWIG) -c++ -$(LANG) -external-runtime $(NAME).h
 
-# move generated files to DEST_DIR
-move:
-	mkdir -p $(DEST_DIR)/$(TARGET)
-	mv *.h $(DEST_DIR)
-	mv *.cpp $(DEST_DIR)/$(TARGET)
-
 # outputs swig language symbols
-symbols:
-	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -fcompact -fvirtual -debug-lsymbols $(CFLAGS) openFrameworks.i > $(MODULE_NAME)_$(LANG)_symbols.txt
+openFrameworks-symbols:
+	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -debug-lsymbols $(CFLAGS) $(OF_CFLAGS) openFrameworks.i > $(MODULE_NAME)_$(LANG)_symbols.txt
 	rm -f *.cxx
 	if [ $(LANG) == "python" ]; then rm -f *.py; fi
 
-clean:
-	rm -f $(DEST_DIR)/$(FILENAME).h
+# clean dest dir
+openFrameworks-clean:
 	rm -rf $(DEST_DIR)/desktop
 	rm -rf $(DEST_DIR)/ios
-	rm -f debug.txt
+	rm -rf $(DEST_DIR)/linuxarm
+	rm -f $(DEST_DIR)/$(NAME).h
+	rm -f $(MODULE_NAME)_*_symbols.txt
 
-# desktop OS generation
-desktop-prepare:
-	$(eval TARGET := desktop)
-	$(eval CFLAGS := $(CFLAGS))
+############
+# glm module
+############
 
-desktop: desktop-prepare bindings move
+# generates glm bindings
+glm:
+	@echo "### Generating: glm"
+	@mkdir -p $(DEST_DIR)
+	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) $(OF_HEADERS)/glm/include -o $(DEST_DIR)/glmBindings.cpp glm.i
 
-# iOS specific generation
-ios-prepare:
-	$(eval TARGET := ios)
-	$(eval CFLAGS := $(CFLAGS) -DTARGET_OPENGLES -DTARGET_IOS)
+# outputs swig language symbols
+glm-symbols:
+	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -debug-lsymbols $(OF_HEADERS)/glm/include glm.i > glm_$(LANG)_symbols.txt
+	rm -f *.cxx
+	if [ $(LANG) == "python" ]; then rm -f *.py; fi
 
-ios: ios-prepare bindings move
-
-# embedded linux specific generation
-linuxarm-prepare:
-	$(eval TARGET := linuxarm)
-	$(eval CFLAGS := $(CFLAGS) -DTARGET_OPENGLES)
-
-linuxarm: linuxarm-prepare bindings move
+# clean dest dir
+glm-clean:
+	rm -f $(DEST_DIR)/glmBindings.cpp
+	rm -f glm_*_symbols.txt

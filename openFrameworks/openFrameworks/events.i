@@ -38,16 +38,10 @@
 %ignore ofUnregisterGetMessages;
 %ignore ofUnregisterDragEvents;
 
-// glm::vec2 forward declare for ofTouchEventArgs
-namespace glm {
-	struct vec2 {};
-}
-
 %include "events/ofEvents.h"
 
-// DIFF:   added ofTouchEventArgs getters getX(), getY()
-// DIFF:   added ofTouchEventArgs setters setX(), setY()
 // DIFF:   added target language tostring wrapper for ofTouchEventArgs::operator <<
+// TODO:   ofTouchEventArgs inheritance from glm::vec2 doesn't create x & y attributes
 %extend ofTouchEventArgs {
 
 	// pos getters
@@ -65,6 +59,8 @@ namespace glm {
 	}
 };
 
+// manually create attributes since inherting from
+// glm::vec2 doesn't seem to create them
 %attributeVar(ofTouchEventArgs, float, x, x, x);
 %attributeVar(ofTouchEventArgs, float, y, y, y);
 

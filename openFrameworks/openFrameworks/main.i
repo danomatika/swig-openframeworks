@@ -39,7 +39,17 @@ typedef float GLfloat;
 
 // ----- ofMathConstants.h -----
 
-// include early for glm::vec* declarations
+%ignore ofDefaultVec2;
+%ignore ofDefaultVec3;
+%ignore ofDefaultVec4;
+%ignore ofDefaultTexCoordType;
+
+// import the glm types
+%import(module="glm") "../../glm.i"
+
+// include early for glm::vec* declarations,
+// edit: not quite needed for now as this is handled below...
+// ... needed for math constants
 %include "math/ofMathConstants.h"
 
 // ----- ofUtils.h -----
@@ -57,12 +67,12 @@ typedef float GLfloat;
 
 // manually rename these otherwise the initial U in UTF ends up lowercase
 #ifdef OF_SWIG_RENAME
-	%rename ofUTF8Append UTF8Append;
-	%rename ofUTF8Insert UTF8Insert;
-	%rename ofUTF8Erase UTF8Erase;
-	%rename ofUTF8Substring UTF8Substring;
-	%rename ofUTF8ToString UTF8ToString;
-	%rename ofUTF8Length UTF8Length;
+	%rename(ofUTF8Append) UTF8Append;
+	%rename(ofUTF8Insert) UTF8Insert;
+	%rename(ofUTF8Erase) UTF8Erase;
+	%rename(ofUTF8Substring) UTF8Substring;
+	%rename(ofUTF8ToString) UTF8ToString;
+	%rename(ofUTF8Length) UTF8Length;
 #endif
 
 // include early for ofToString template declaration

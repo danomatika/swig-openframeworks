@@ -77,8 +77,9 @@ namespace filesystem {
 
 %typemap(argout) string &INOUT = string &OUTPUT;
 
-// a really cut down version of the string class
-// this provides basic mapping of lua strings <-> std::string and little else
+// a really cut down version of the std::filesystem::path class
+// this provides basic mapping of lua strings <-> std::filesystem::path
+// and little else
 class path {
 	public:
 		path();

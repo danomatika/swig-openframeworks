@@ -1,4 +1,8 @@
-
-*_symbols.txt
+# generated files
 *.cpp
 *.h
+*_symbols.txt
+
+# generated directories
+lua
+python

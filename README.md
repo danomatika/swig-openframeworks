@@ -84,6 +84,49 @@ In Python, the module (aka library) is called "openframeworks" and its members r
     color = ofColor()
     ...
 
+glm Bindings
+------------
+
+As of openFrameworks 0.10.0, the glm library math types (vec3, mat3, quat, etc) have become integral to the OF API and are now wrapped via a swig interface as well. The resulting module is named "glm" and associated functions and types are accessed from within this name space.
+
+For example, in Lua:
+
+    -- constructors
+    local v1 = glm.vec3(1, 2, 3)
+    local v2 = glm.vec3(4, 5, 6)
+     
+    -- operators
+    local v3 = v1 + v2
+    v3 = v2 / v1
+     
+    -- functions
+    local dot = glm.dot(v1, v2)
+
+One **important point**: Most scripting languages cannot support the casting operators which allow the OF math types (ofVec3f, ofMatrix3x3, etc) to be used with functions which take glm type arguments. To get around this problem, each math type has a special member function which returns the associated glm type:
+
+* ofVec2f -> glm::vec2: vec2()
+* ofVec3f -> glm::vec3: vec3()
+* ofVec4f -> glm::vec4: vec4()
+* ofQuaternion -> glm::quat: quat()
+* ofMatrix3x3 -> glm::mat4: mat3()
+* ofMatrix4x4 -> glm::mat4: mat4()
+
+Essentially, the following will *not* work as it does in C++:
+
+    -- error!
+    local v = of.Vec2f(100, 100)
+    of.drawRectangle(v, 20, 20) -- needs a glm.vec2
+
+Either convert the OF math type to a glm type or use a glm type directly:
+
+    -- convert
+    local v = of.Vec2f(100, 100)
+    of.drawRectangle(v.vec2(), 20, 20)
+     
+    -- use glm::vec2
+    local v = glm.vec2(100, 100)
+    of.drawRectangle(v, 20, 20)
+
 Usage
 -----
 

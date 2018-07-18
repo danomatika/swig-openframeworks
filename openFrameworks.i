@@ -1,4 +1,4 @@
-// SWIG (http://www.swig.org) interface wrapper for the OpenFrameworks core API
+// SWIG (http://www.swig.org) interface wrapper for the openFrameworks core API
 // 2014-17 Dan Wilcox <danomatika@gmail.com>
 
 // workaround when compiling in MinGW (Python)
@@ -60,17 +60,17 @@
 // ----- Lang specifics ------
 
 #ifdef SWIGLUA
-%include "interfaces/lang/lua/lua.i"
+%include "openFrameworks/lang/lua/lua.i"
 #endif
 
 #ifdef SWIGPYTHON
-%include "interfaces/lang/lua/python.i"
+%include "openFrameworks/lang/lua/python.i"
 #endif
 
 // ----- Deprecated ------
 
 #ifndef OF_SWIG_DEPRECATED
-	%include "interfaces/deprecated.i"
+	%include "openFrameworks/deprecated.i"
 #endif
 
 // ----- Bindings------
@@ -108,23 +108,23 @@
 // This forward declaration is then overridden by the actual implementation after
 // %include "SomeClass.h" later on.
 
-%include "interfaces/openFrameworks/main.i"
-%include "interfaces/openFrameworks/3d.i"
-%include "interfaces/openFrameworks/app.i"
+%include "openFrameworks/openFrameworks/main.i"
+%include "openFrameworks/openFrameworks/3d.i"
+%include "openFrameworks/openFrameworks/app.i"
 #if !defined(TARGET_IOS) && !defined(TARGET_ANDROID)
-%include "interfaces/openFrameworks/communication.i"
+%include "openFrameworks/openFrameworks/communication.i"
 #endif
-%include "interfaces/openFrameworks/math.i"
-%include "interfaces/openFrameworks/events.i"
-%include "interfaces/openFrameworks/gl.i"
-%include "interfaces/openFrameworks/graphics.i"
-%include "interfaces/openFrameworks/sound.i"
-%include "interfaces/openFrameworks/types.i"
-%include "interfaces/openFrameworks/utils.i"
-%include "interfaces/openFrameworks/video.i"
+%include "openFrameworks/openFrameworks/math.i"
+%include "openFrameworks/openFrameworks/events.i"
+%include "openFrameworks/openFrameworks/gl.i"
+%include "openFrameworks/openFrameworks/graphics.i"
+%include "openFrameworks/openFrameworks/sound.i"
+%include "openFrameworks/openFrameworks/types.i"
+%include "openFrameworks/openFrameworks/utils.i"
+%include "openFrameworks/openFrameworks/video.i"
 
 // ----- Attributes ------
 
 #ifdef OF_SWIG_ATTRIBUTES
-	%include "interfaces/attributes.i"
+	%include "openFrameworks/attributes.i"
 #endif

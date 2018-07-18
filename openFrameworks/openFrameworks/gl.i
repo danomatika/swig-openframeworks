@@ -52,10 +52,10 @@
 
 // manually rename these otherwise the initial G in GL ends up lowercase
 #ifdef OF_SWIG_RENAME
-	%rename ofGLCheckExtension GLCheckExtension;
-	%rename ofGLSLVersionFromGL GLSLVersionFromGL;
-	%rename ofGLSupportedExtensions GLSupportedExtensions;
-	%rename ofGLSupportsNPOTTextures GLSupportsNPOTTextures;
+	%rename(ofGLCheckExtension) GLCheckExtension;
+	%rename(ofGLSLVersionFromGL) GLSLVersionFromGL;
+	%rename(ofGLSupportedExtensions) GLSupportedExtensions;
+	%rename(ofGLSupportsNPOTTextures) GLSupportsNPOTTextures;
 #endif
 
 // ignore extra GL defines
