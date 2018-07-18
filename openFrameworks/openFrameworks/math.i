@@ -42,11 +42,17 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %include "math/ofMatrix3x3.h"
 
 %extend ofMatrix3x3 {
+
+	glm::mat3 mat3() {
+		return (*$self);
+	}
+
 	const char* __str__() {
-		stringstream str;
+		ostringstream str;
 		str << (*$self);
 		return str.str().c_str();
 	}
+
 };
 
 // ----- ofMatrix4x4.h -----
@@ -60,11 +66,17 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %include "math/ofMatrix4x4.h"
 
 %extend ofMatrix4x4 {
+
+	glm::mat4 mat4() {
+		return (*$self);
+	}
+
 	const char* __str__() {
-		stringstream str;
+		ostringstream str;
 		str << (*$self);
 		return str.str().c_str();
 	}
+
 };
 
 // ----- ofQuaternion.h -----
@@ -82,8 +94,13 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %include "math/ofQuaternion.h"
 
 %extend ofQuaternion {
+
+	glm::quat quat() {
+		return (*$self);
+	}
+
 	const char* __str__() {
-		stringstream str;
+		ostringstream str;
 		str << (*$self);
 		return str.str().c_str();
 	}
@@ -91,14 +108,20 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofVec2f.h -----
 
-// DIFF: ofVec2f.h: ignoring glm::vec2 operator
+// DIFF: ofVec2f.h: ignoring glm::vec2 operator,
+// DIFF::           use vec2() accessor instead
 %ignore ofVec2f::operator glm::vec2;
 
 %include "math/ofVec2f.h"
 
 %extend ofVec2f {
+
+	glm::vec2 vec2() {
+		return (*$self);
+	}
+
 	const char* __str__() {
-		stringstream str;
+		ostringstream str;
 		str << (*$self);
 		return str.str().c_str();
 	}
@@ -106,14 +129,20 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofVec3f.h -----
 
-// DIFF: ofVec3f.h: ignoring glm::vec3 operator
+// DIFF: ofVec3f.h: ignoring glm::vec3 operator,
+// DIFF::           use vec3() accessor instead
 %ignore ofVec3f::operator glm::vec3;
 
 %include "math/ofVec3f.h"
 
 %extend ofVec3f {
+
+	glm::vec3 vec3() {
+		return (*$self);
+	}
+
 	const char* __str__() {
-		stringstream str;
+		ostringstream str;
 		str << (*$self);
 		return str.str().c_str();
 	}
@@ -121,14 +150,20 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofVec4f.h -----
 
-// DIFF: ofVec4f.h: ignoring glm::vec4 operator
+// DIFF: ofVec4f.h: ignoring glm::vec4 operator,
+// DIFF::           use vec4() accessor instead
 %ignore ofVec4f::operator glm::vec4;
 
 %include "math/ofVec4f.h"
 
 %extend ofVec4f {
+
+	glm::vec4 vec4() {
+		return (*$self);
+	}
+
 	const char* __str__() {
-		stringstream str;
+		ostringstream str;
 		str << (*$self);
 		return str.str().c_str();
 	}

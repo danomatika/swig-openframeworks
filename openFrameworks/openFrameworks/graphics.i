@@ -7,6 +7,12 @@
 
 // ----- ofGraphicsConstants.h -----
 
+// make sure we use the actual classes
+%ignore ofDefaultVertexType;
+%ignore ofDefaultNormalType;
+%ignore ofDefaultColorType;
+%ignore ofDefaultTexCoordType;
+
 %include "graphics/ofGraphicsConstants.h"
 
 // ----- ofPixels.h -----
