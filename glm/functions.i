@@ -252,3 +252,11 @@ FLOAT_SCALAR_OR_VECTOR(coth);
 FLOAT_SCALAR_OR_VECTOR(asech);
 FLOAT_SCALAR_OR_VECTOR(acsch);
 FLOAT_SCALAR_OR_VECTOR(acoth);
+
+// ----- glm/gtx/fast_square_root.hpp -----
+
+FLOAT_VECTOR(fastSqrt);
+FLOAT_SCALAR_OR_VECTOR(fastInverseSqrt);
+FLOAT_VECTOR_RETURN_VALUE(fastLength);
+FLOAT_VECTOR_RETURN_VALUE_2_PARAMS(fastDistance);
+FLOAT_VECTOR(fastNormalize);

@@ -21,6 +21,7 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/reciprocal.hpp>
+#include <glm/gtx/fast_square_root.hpp>
 %}
 
 // ----- C++ -----
@@ -29,7 +30,7 @@
 %include <std_string.i>
 
 // expanded primitives
-%typedef unsigned int size_t;
+%typedef unsigned int std::size_t;
 
 // ----- Bindings------
 
