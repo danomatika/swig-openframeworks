@@ -197,9 +197,15 @@ FLOAT_SCALAR_OR_VECTOR(asinh);
 FLOAT_SCALAR_OR_VECTOR(acosh);
 FLOAT_SCALAR_OR_VECTOR(atanh);
 
-// ----- glm/detail/func_vector_relational.hpp -----
+// ----- glm/gtc/epsilon.hpp -----
 
-// skipping for now due to bvec types
+bool epsilonEqual(const float &, const float &, const float &);
+vec2 epsilonEqual(const vec2 &, const vec2 &, const float &);
+vec3 epsilonEqual(const vec3 &, const vec3 &, const float &);
+
+bool epsilonNotEqual(const float &, const float &, const float &);
+vec2 epsilonNotEqual(const vec2 &, const vec2 &, const float &);
+vec3 epsilonNotEqual(const vec3 &, const vec3 &, const float &);
 
 // ----- glm/gtc/matrix_access.hpp -----
 
@@ -244,30 +250,20 @@ vec3 unProject(const vec3 &, const mat4 &, const mat4 &, const vec4 &);
 mat4 pickMatrix(const vec2 &, const vec2 &, const vec4 &);
 mat4 lookAt(const vec3 &, const vec3 &, const vec3 &);
 
-// ----- glm/gtc/reciprocal.hpp -----
-
-FLOAT_SCALAR_OR_VECTOR(sec);
-FLOAT_SCALAR_OR_VECTOR(csc);
-FLOAT_SCALAR_OR_VECTOR(cot);
-FLOAT_SCALAR_OR_VECTOR(asec);
-FLOAT_SCALAR_OR_VECTOR(acsc);
-FLOAT_SCALAR_OR_VECTOR(acot);
-FLOAT_SCALAR_OR_VECTOR(sech);
-FLOAT_SCALAR_OR_VECTOR(csch);
-FLOAT_SCALAR_OR_VECTOR(coth);
-FLOAT_SCALAR_OR_VECTOR(asech);
-FLOAT_SCALAR_OR_VECTOR(acsch);
-FLOAT_SCALAR_OR_VECTOR(acoth);
-
 // ----- glm/gtx/compatibility.hpp -----
 
-// atan2(float, float);
 FLOAT_VECTOR_2_PARAMS(atan2);
-// ignoring isfinite() for now
+bool isfinite(float &);
+vec2 isfinite(vec2 &);
+vec3 isfinite(vec3 &);
+vec4 isfinite(vec4 &);
 FLOAT_SCALAR_OR_VECTOR_3_PARAMS(lerp);
 FLOAT_SCALAR_OR_VECTOR_3_PARAMS_VECTOR_VECTOR_VALUE(lerp);
-//float saturate(float);
 FLOAT_VECTOR(saturate);
+
+// scalar types seem to cause issues
+//float atan2(float, float);
+//float saturate(float);
 
 // ----- glm/gtx/fast_square_root.hpp -----
 
@@ -276,6 +272,22 @@ FLOAT_SCALAR_OR_VECTOR(fastInverseSqrt);
 FLOAT_VECTOR_RETURN_VALUE(fastLength);
 FLOAT_VECTOR_RETURN_VALUE_2_PARAMS(fastDistance);
 FLOAT_VECTOR(fastNormalize);
+
+// ----- glm/gtx/norm.hpp -----
+
+FLOAT_VECTOR_RETURN_VALUE(length2);
+FLOAT_VECTOR_RETURN_VALUE_2_PARAMS(distance2);
+float l1Norm(vec3 const &, vec3 const &);
+float l1Norm(vec3 const &);
+float l2Norm(vec3 const &, vec3 const &);
+float l2Norm(vec3 const &);
+float lxNorm(vec3 const &, vec3 const &, unsigned int);
+float lxNorm(vec3 const &, unsigned int);
+
+// ----- glm/gtc/perpendicular.hpp -----
+
+vec2 perp(const vec2 &, const vec2 &);
+vec3 perp(const vec3 &, const vec3 &);
 
 // ----- glm/gtx/rotate_vector.hpp -----
 
@@ -290,6 +302,25 @@ vec4 rotateY(const vec4 &, const float &);
 vec3 rotateZ(const vec3 &, const float &);
 vec4 rotateZ(const vec4 &, const float &);
 vec3 slerp(const vec3 &, const vec3 &, const float &);
+
+// ----- glm/gtc/scalar_multiplication.hpp -----
+
+// handled in the type interfaces (ie. vec2.i, vec3.i, etc)
+
+// ----- glm/gtx/spline.hpp -----
+
+vec2 catmullRom(const vec2 &, const vec2 &, const vec2 &, const vec2 &, const float &);
+vec3 catmullRom(const vec3 &, const vec3 &, const vec3 &, const vec3 &, const float &);
+vec2 cubic(const vec2 &, const vec2 &, const vec2 &, const vec2 &, const float &);
+vec3 cubic(const vec3 &, const vec3 &, const vec3 &, const vec3 &, const float &);
+vec2 hermite(const vec2 &, const vec2 &, const vec2 &, const vec2 &, const float &);
+vec3 hermite(const vec3 &, const vec3 &, const vec3 &, const vec3 &, const float &);
+
+// ----- glm/gtx/transform.hpp -----
+
+mat4 rotate(float angle, const vec3 &);
+mat4 scale(const vec3 &);
+mat4 translate(const vec3 &);
 
 // ----- glm/gtx/vector_angle.hpp -----
 
