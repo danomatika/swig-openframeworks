@@ -21,7 +21,10 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/reciprocal.hpp>
+#include <glm/gtx/compatibility.hpp>
 #include <glm/gtx/fast_square_root.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/vector_angle.hpp>
 %}
 
 // ----- C++ -----

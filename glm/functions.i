@@ -93,6 +93,12 @@
     vec4 function_name(const vec4 &, const float &, const float &);
 %enddef
 
+%define FLOAT_SCALAR_OR_VECTOR_3_PARAMS_VECTOR_VECTOR_VALUE(function_name)
+    vec2 function_name(const vec2 &, const vec2 &, const float &);
+    vec3 function_name(const vec3 &, const vec3 &, const float &);
+    vec4 function_name(const vec4 &, const vec4 &, const float &);
+%enddef
+
 // ----- glm/detail/func_common.hpp -----
 
 FLOAT_SCALAR_OR_VECTOR(abs);
@@ -219,18 +225,18 @@ mat4 translate(const mat4 &, const vec3 &);
 mat4 rotate(const mat4 &, const float &, const vec3 &);
 mat4 scale(const mat4 &, const vec3 &);
 mat4 ortho(const float &, const float &,
-             const float &, const float &);
+           const float &, const float &);
 mat4 ortho(const float &, const float &,
+           const float &, const float &,
+           const float &, const float &);
+mat4 frustum(const float &, const float &,
              const float &, const float &,
              const float &, const float &);
-mat4 frustum(const float &, const float &,
-               const float &, const float &,
-               const float &, const float &);
 mat4 perspective(const float &, const float &,
-                   const float &, const float &);
+                 const float &, const float &);
 mat4 perspectiveFov(const float &,
-                      const float &, const float &,
-                      const float &, const float &);
+                    const float &, const float &,
+                    const float &, const float &);
 mat4 infinitePerspective(const float &, const float &, const float &);
 mat4 tweakedInfinitePerspective(const float &, const float &, const float &);
 vec3 project(const vec3 &, const mat4 &, const mat4 &, const vec4 &);
@@ -253,6 +259,16 @@ FLOAT_SCALAR_OR_VECTOR(asech);
 FLOAT_SCALAR_OR_VECTOR(acsch);
 FLOAT_SCALAR_OR_VECTOR(acoth);
 
+// ----- glm/gtx/compatibility.hpp -----
+
+// atan2(float, float);
+FLOAT_VECTOR_2_PARAMS(atan2);
+// ignoring isfinite() for now
+FLOAT_SCALAR_OR_VECTOR_3_PARAMS(lerp);
+FLOAT_SCALAR_OR_VECTOR_3_PARAMS_VECTOR_VECTOR_VALUE(lerp);
+//float saturate(float);
+FLOAT_VECTOR(saturate);
+
 // ----- glm/gtx/fast_square_root.hpp -----
 
 FLOAT_VECTOR(fastSqrt);
@@ -260,3 +276,23 @@ FLOAT_SCALAR_OR_VECTOR(fastInverseSqrt);
 FLOAT_VECTOR_RETURN_VALUE(fastLength);
 FLOAT_VECTOR_RETURN_VALUE_2_PARAMS(fastDistance);
 FLOAT_VECTOR(fastNormalize);
+
+// ----- glm/gtx/rotate_vector.hpp -----
+
+mat4 orientation(const vec3 &, const vec3 &);
+vec2 rotate(const vec2 &, const float &);
+vec3 rotate(const vec3 &, const float &, const vec3 &);
+vec4 rotate(const vec4 &, const float &, const vec3 &);
+vec3 rotateX(const vec3 &, const float &);
+vec4 rotateX(const vec4 &, const float &);
+vec3 rotateY(const vec3 &, const float &);
+vec4 rotateY(const vec4 &, const float &);
+vec3 rotateZ(const vec3 &, const float &);
+vec4 rotateZ(const vec4 &, const float &);
+vec3 slerp(const vec3 &, const vec3 &, const float &);
+
+// ----- glm/gtx/vector_angle.hpp -----
+
+FLOAT_VECTOR_RETURN_VALUE_2_PARAMS(angle);
+float orientedAngle(const vec2 &, const vec2 &);
+float orientedAngle(const vec3 &, const vec3 &, const vec3 &);
