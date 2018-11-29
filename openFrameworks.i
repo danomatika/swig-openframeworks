@@ -64,7 +64,7 @@
 #endif
 
 #ifdef SWIGPYTHON
-%include "openFrameworks/lang/lua/python.i"
+%include "openFrameworks/lang/python/python.i"
 #endif
 
 // ----- Deprecated ------
