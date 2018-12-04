@@ -15,12 +15,7 @@
 
 %pythoncode %{
 
-# handle typedefs which swig doesn't wrap
-ofPoint = ofVec3f
-
-# renaming log -> ofLog
-ofLog = log
-del log
+OF_PRIMITIVE_TRIANGLE_STRIP = None
 
 %}
 
