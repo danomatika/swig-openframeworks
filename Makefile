@@ -129,7 +129,7 @@ openFrameworks-header:
 openFrameworks-symbols:
 	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -debug-lsymbols $(CFLAGS) $(OF_CFLAGS) openFrameworks.i > $(MODULE_NAME)_$(LANG)_symbols.txt
 	rm -f *.cxx
-	if [ $(LANG) == "python" ]; then rm -f *.py; fi
+	if [ $(LANG) = "python" ]; then rm -f *.py; fi
 
 # clean dest dir
 openFrameworks-clean:
@@ -153,7 +153,7 @@ glm:
 glm-symbols:
 	$(SWIG) -c++ -$(LANG) $(SWIG_FLAGS) -debug-lsymbols $(OF_HEADERS)/glm/include glm.i > glm_$(LANG)_symbols.txt
 	rm -f *.cxx
-	if [ $(LANG) == "python" ]; then rm -f *.py; fi
+	if [ $(LANG) = "python" ]; then rm -f *.py; fi
 
 # clean dest dir
 glm-clean:
