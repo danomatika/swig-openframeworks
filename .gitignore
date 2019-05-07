@@ -4,5 +4,5 @@
 *_symbols.txt
 
 # generated directories
-lua
-python
+./lua
+./python

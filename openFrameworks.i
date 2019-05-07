@@ -128,3 +128,13 @@
 #ifdef OF_SWIG_ATTRIBUTES
 	%include "openFrameworks/attributes.i"
 #endif
+
+// ----- Lang code ------
+
+#ifdef SWIGLUA
+%include "openFrameworks/lang/lua/lua_code.i"
+#endif
+
+#ifdef SWIGPYTHON
+%include "openFrameworks/lang/python/python_code.i"
+#endif
