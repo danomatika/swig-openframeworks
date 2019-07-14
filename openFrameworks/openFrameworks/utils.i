@@ -23,6 +23,9 @@
 %ignore ofXml::Search::end;
 %ignore ofXml::Range::end;
 
+// DIFF: ofXml.h: ignore removeAttribute(&&)
+%ignore ofXml::removeAttribute(Attribute &&);
+
 // DIFF: ofXml.h: ignoring bool operator
 %ignore ofXml::operator bool;
 
