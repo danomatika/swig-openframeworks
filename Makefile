@@ -123,7 +123,7 @@ openFrameworks:
 # generates swig runtime header
 openFrameworks-header:
 	@echo "### Generating: openFrameworks header"
-	$(SWIG) -c++ -$(LANG) -external-runtime $(NAME).h
+	$(SWIG) -c++ -$(LANG) -external-runtime $(DEST_DIR)/$(NAME).h
 
 # outputs swig language symbols
 openFrameworks-symbols:
