@@ -145,9 +145,7 @@ template<typename T> class ofBaseImage_ {};
 #endif
 
 // DIFF: ofImage.h:
-// DIFF:   ignore global helper functions
-%ignore ofLoadImage;
-%ignore ofSaveImage;
+// DIFF:   ignore ofCloseFreeImage()
 %ignore ofCloseFreeImage;
 
 // DIFF:   ignoring ofPixels operator

@@ -137,8 +137,10 @@
 
 // tell SWIG about template classes
 #ifdef OF_SWIG_RENAME
+	%template(VertexVector) std::vector<ofDefaultVertexType>;
 	%template(Polyline) ofPolyline_<ofDefaultVertexType>;
 #else
+	%template(ofVertexVector) std::vector<ofDefaultVertexType>;
 	%template(ofPolyline) ofPolyline_<ofDefaultVertexType>;
 #endif
 
