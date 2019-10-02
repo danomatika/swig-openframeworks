@@ -135,6 +135,20 @@
 
 %include "graphics/ofPolyline.h"
 
+// DIFF: ofPolyline.h: added removeVertex() function
+%extend ofPolyline_ {
+
+	// ofPolyLine does not have an explicit removeVertex so we add one for now,
+	// note: throws exception when out of bounds
+	void ofPolyline_::removeVertex(unsigned int index) {
+		if(index >= $self->size()) {
+			throw std::out_of_range("in ofPolyLine::removeVertex()");
+		}
+		$self->getVertices().erase($self->getVertices().begin() + index);
+		$self->flagHasChanged();
+	}
+};
+
 // tell SWIG about template classes
 #ifdef OF_SWIG_RENAME
 	%template(VertexVector) std::vector<ofDefaultVertexType>;
