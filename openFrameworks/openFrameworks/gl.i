@@ -77,11 +77,8 @@
 %ignore ofBaseMaterial;
 class ofBaseMaterial {};
 
-// DIFF: ofMaterial.h: ignoring ofMaterialSettings
-%ignore ofMaterialSettings;
+// DIFF: ofMaterial.h: ignoring ofMaterial::Data
 %ignore ofMaterial::Data;
-%ignore setup(const ofMaterialSettings);
-%ignore getSettings();
 
 %include "gl/ofMaterial.h"
 
