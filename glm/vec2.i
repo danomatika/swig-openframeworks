@@ -1,7 +1,7 @@
 // glm::vec2 bindings
 // 2018 Dan Wilcox <danomatika@gmail.com>
 
-// ----- detail/type_vec2.hpp -----
+// ----- glm/detail/type_vec2.hpp -----
 
 struct vec2 {
 

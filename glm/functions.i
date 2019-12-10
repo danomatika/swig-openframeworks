@@ -99,7 +99,7 @@
     vec4 function_name(const vec4 &, const vec4 &, const float &);
 %enddef
 
-// ----- glm/detail/func_common.hpp -----
+// ----- glm/common.hpp -----
 
 FLOAT_SCALAR_OR_VECTOR(abs);
 FLOAT_SCALAR_OR_VECTOR(sign);
@@ -143,7 +143,7 @@ bool isnan(const float &);
 bool isinf(const float &);
 FLOAT_SCALAR_OR_VECTOR_3_PARAMS(fma);
 
-// ----- glm/detail/func_exponential.hpp -----
+// ----- glm/exponential.hpp -----
 
 FLOAT_SCALAR_OR_VECTOR_2_PARAMS(pow);
 FLOAT_SCALAR_OR_VECTOR(exp);
@@ -153,7 +153,7 @@ FLOAT_SCALAR_OR_VECTOR(log2);
 FLOAT_VECTOR(sqrt);
 FLOAT_SCALAR_OR_VECTOR(inversesqrt);
 
-// ----- detail/func_geometric.hpp -----
+// ----- glm/geometric.hpp -----
 
 FLOAT_VECTOR_RETURN_VALUE(length);
 FLOAT_VECTOR_RETURN_VALUE_2_PARAMS(distance);
@@ -166,7 +166,7 @@ vec2 refract(const vec2 &, const vec2 &, const float &);
 vec3 refract(const vec3 &, const vec3 &, const float &);
 vec4 refract(const vec4 &, const vec4 &, const float &);
 
-// ----- glm/detail/func_matrix.hpp -----
+// ----- glm/matrix.hpp -----
 
 mat3 matrixCompMult(const mat3 &, const mat3 &);
 mat4 matrixCompMult(const mat4 &, const mat4 &);
@@ -179,7 +179,7 @@ float determinant(const mat4 &);
 mat3 inverse(const mat3 &);
 mat4 inverse(const mat4 &);
 
-// ----- glm/detail/func_trigonometric.hpp -----
+// ----- glm/trigonometric.hpp -----
 
 FLOAT_SCALAR_OR_VECTOR(radians);
 FLOAT_SCALAR_OR_VECTOR(degrees);
@@ -225,11 +225,16 @@ mat4 affineInverse(const mat4 &);
 mat3 inverseTranspose(const mat3 &);
 mat4 inverseTranspose(const mat4 &);
 
-// ----- glm/gtc/matrix_transform.hpp -----
+// ----- glm/ext/matrix_transform.hpp -----
 
+//mat4 identity();
 mat4 translate(const mat4 &, const vec3 &);
 mat4 rotate(const mat4 &, const float &, const vec3 &);
 mat4 scale(const mat4 &, const vec3 &);
+mat4 lookAt(const vec3 &, const vec3 &, const vec3 &);
+
+// ----- glm/ext/matrix_clip_space.hpp -----
+
 mat4 ortho(const float &, const float &,
            const float &, const float &);
 mat4 ortho(const float &, const float &,
@@ -245,21 +250,23 @@ mat4 perspectiveFov(const float &,
                     const float &, const float &);
 mat4 infinitePerspective(const float &, const float &, const float &);
 mat4 tweakedInfinitePerspective(const float &, const float &, const float &);
+
+// ----- glm/ext/matrix_projection.hpp -----
+
 vec3 project(const vec3 &, const mat4 &, const mat4 &, const vec4 &);
 vec3 unProject(const vec3 &, const mat4 &, const mat4 &, const vec4 &);
 mat4 pickMatrix(const vec2 &, const vec2 &, const vec4 &);
-mat4 lookAt(const vec3 &, const vec3 &, const vec3 &);
 
 // ----- glm/gtx/compatibility.hpp -----
 
+FLOAT_SCALAR_OR_VECTOR_3_PARAMS(lerp);
+FLOAT_SCALAR_OR_VECTOR_3_PARAMS_VECTOR_VECTOR_VALUE(lerp);
+FLOAT_VECTOR(saturate);
 FLOAT_VECTOR_2_PARAMS(atan2);
 bool isfinite(float &);
 vec2 isfinite(vec2 &);
 vec3 isfinite(vec3 &);
 vec4 isfinite(vec4 &);
-FLOAT_SCALAR_OR_VECTOR_3_PARAMS(lerp);
-FLOAT_SCALAR_OR_VECTOR_3_PARAMS_VECTOR_VECTOR_VALUE(lerp);
-FLOAT_VECTOR(saturate);
 
 // scalar types seem to cause issues
 //float atan2(float, float);
@@ -284,14 +291,14 @@ float l2Norm(vec3 const &);
 float lxNorm(vec3 const &, vec3 const &, unsigned int);
 float lxNorm(vec3 const &, unsigned int);
 
-// ----- glm/gtc/perpendicular.hpp -----
+// ----- glm/gtx/perpendicular.hpp -----
 
 vec2 perp(const vec2 &, const vec2 &);
 vec3 perp(const vec3 &, const vec3 &);
 
 // ----- glm/gtx/rotate_vector.hpp -----
 
-mat4 orientation(const vec3 &, const vec3 &);
+vec3 slerp(const vec3 &, const vec3 &, const float &);
 vec2 rotate(const vec2 &, const float &);
 vec3 rotate(const vec3 &, const float &, const vec3 &);
 vec4 rotate(const vec4 &, const float &, const vec3 &);
@@ -301,9 +308,9 @@ vec3 rotateY(const vec3 &, const float &);
 vec4 rotateY(const vec4 &, const float &);
 vec3 rotateZ(const vec3 &, const float &);
 vec4 rotateZ(const vec4 &, const float &);
-vec3 slerp(const vec3 &, const vec3 &, const float &);
+mat4 orientation(const vec3 &, const vec3 &);
 
-// ----- glm/gtc/scalar_multiplication.hpp -----
+// ----- glm/gtx/scalar_multiplication.hpp -----
 
 // handled in the type interfaces (ie. vec2.i, vec3.i, etc)
 
@@ -311,16 +318,16 @@ vec3 slerp(const vec3 &, const vec3 &, const float &);
 
 vec2 catmullRom(const vec2 &, const vec2 &, const vec2 &, const vec2 &, const float &);
 vec3 catmullRom(const vec3 &, const vec3 &, const vec3 &, const vec3 &, const float &);
-vec2 cubic(const vec2 &, const vec2 &, const vec2 &, const vec2 &, const float &);
-vec3 cubic(const vec3 &, const vec3 &, const vec3 &, const vec3 &, const float &);
 vec2 hermite(const vec2 &, const vec2 &, const vec2 &, const vec2 &, const float &);
 vec3 hermite(const vec3 &, const vec3 &, const vec3 &, const vec3 &, const float &);
+vec2 cubic(const vec2 &, const vec2 &, const vec2 &, const vec2 &, const float &);
+vec3 cubic(const vec3 &, const vec3 &, const vec3 &, const vec3 &, const float &);
 
 // ----- glm/gtx/transform.hpp -----
 
+mat4 translate(const vec3 &);
 mat4 rotate(float angle, const vec3 &);
 mat4 scale(const vec3 &);
-mat4 translate(const vec3 &);
 
 // ----- glm/gtx/vector_angle.hpp -----
 

@@ -1,7 +1,7 @@
 // glm::vec4 bindings
 // 2018 Dan Wilcox <danomatika@gmail.com>
 
-// ----- detail/type_vec4.hpp -----
+// ----- glm/detail/type_vec4.hpp -----
 
 struct vec4 {
     

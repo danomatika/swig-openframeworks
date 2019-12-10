@@ -1,7 +1,7 @@
 // glm::quat bindings
 // 2018 Dan Wilcox <danomatika@gmail.com>
 
-// ----- gtc/quaternion.hpp -----
+// ----- glm/gtc/quaternion.hpp -----
 
 struct quat {
 

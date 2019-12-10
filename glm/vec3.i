@@ -1,7 +1,7 @@
 // glm::vec3 bindings
 // 2018 Dan Wilcox <danomatika@gmail.com>
 
-// ----- detail/type_vec3.hpp -----
+// ----- glm/detail/type_vec3.hpp -----
 
 struct vec3 {
     

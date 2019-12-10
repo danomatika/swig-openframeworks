@@ -1,7 +1,7 @@
 // glm::mat3 bindings
 // 2018 Dan Wilcox <danomatika@gmail.com>
 
-// ----- detail/type_mat3.hpp -----
+// ----- glm/detail/type_mat3.hpp -----
 
 struct mat3 {
 

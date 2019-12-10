@@ -1,7 +1,7 @@
 // glm::mat4 bindings
 // 2018 Dan Wilcox <danomatika@gmail.com>
 
-// ----- detail/type_mat4hpp -----
+// ----- glm/detail/type_mat4hpp -----
 
 struct mat4 {
 
