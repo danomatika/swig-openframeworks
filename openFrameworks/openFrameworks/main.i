@@ -9,6 +9,7 @@
 
 // TODO: make sure returned class instances are freed by using %newobject
 
+// tell SWIG about template vectors,
 // needed for functions and return types
 namespace std {
 	%template(IntVector) std::vector<int>;
@@ -19,7 +20,8 @@ namespace std {
 	%template(TextureVector) std::vector<ofTexture>;
 };
 
-// SWIG needs to know about boost::filesystem or it throws an error
+// SWIG needs to know about boost::filesystem or it throws an error when it
+// gets to ofFileUtils.h
 namespace boost {
 	namespace filesystem {}
 }
