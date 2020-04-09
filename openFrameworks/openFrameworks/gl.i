@@ -105,21 +105,7 @@ class ofBaseMaterial {};
 // DIFF:   ignore defaultAttributes enum
 %ignore ofShader::defaultAttributes;
 
-// ignore destructor
-//%ignore ofShader::~ofShader;
-
 %include "gl/ofShader.h"
-
-// TODO: ofShader.h: remove custom destructor if bug fixed in future OF versions
-// DIFF: ofShader.h: custom destructor so shaders are unbound before deletion
-//%rename("%s") ofShader::~ofShader; // unignore
-//%extend ofShader {
-//public:
-//	~ofShader() {
-//		$self->end();
-//		delete $self;
-//	}
-//};
 
 // ----- ofTexture.h -----
 
