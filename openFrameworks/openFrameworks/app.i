@@ -3,7 +3,12 @@
 
 // ----- ofWindowSettings.h -----
 
-// not needed
+// DIFF: ofWindowSettings.h:
+// DIFF:   ignoring api-specific window settings classes
+%ignore ofGLWindowSettings;
+%ignore ofGLESWindowSettings;
+
+%include "app/ofWindowSettings.h"
 
 // ----- ofMainLoop.h -----
 
