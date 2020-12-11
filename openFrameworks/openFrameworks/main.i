@@ -63,6 +63,8 @@ typedef float GLfloat;
 
 // ----- ofUtils.h -----
 
+// TODO: ignore ofTime std::chrono stuff?
+
 // DIFF: ofUtils.h:
 // DIFF:   ignoring ofFromString as templating results in too much overloading
 %ignore ofFromString;
@@ -112,10 +114,8 @@ class ofBaseHasPixels {};
 // DIFF:   ignoring setActiveDrawBufers() due to std::vector
 %ignore setActiveDrawBuffers(const vector<int>& i);
 
-// DIFF:   ignoring ofFboSettings struct
-%ignore ofFboSettings;
+// DIFF:   ignoring ofFbo::Settings struct
 %ignore ofFbo::Settings;
-%ignore allocate(ofFboSettings);
 
 %include "gl/ofFbo.h"
 
