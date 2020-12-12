@@ -16,8 +16,13 @@ namespace std {
 	%template(FloatVector) std::vector<float>;
 	%template(StringVector) std::vector<std::string>;
 	%template(UCharVector) std::vector<unsigned char>;
-	%template(VideoDeviceVector) std::vector<ofVideoDevice>;
+#ifdef OF_SWIG_RENAME
 	%template(TextureVector) std::vector<ofTexture>;
+	%template(VideoDeviceVector) std::vector<ofVideoDevice>;
+#else
+	%template(ofTextureVector) std::vector<ofTexture>;
+	%template(ofVideoDeviceVector) std::vector<ofVideoDevice>;
+#endif
 };
 
 // SWIG needs to know about boost::filesystem or it throws an error when it
@@ -45,6 +50,15 @@ typedef float GLfloat;
 #endif
 
 %include "utils/ofConstants.h"
+
+// tell SWIG about template vectors
+namespace std {
+#ifdef OF_SWIG_RENAME
+	%template(IndexTypeVector) std::vector<ofIndexType>;
+#else
+	%template(ofIndexTypeVector) std::vector<ofIndexType>;
+#endif
+};
 
 // ----- ofMathConstants.h -----
 
