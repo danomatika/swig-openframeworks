@@ -6,3 +6,6 @@
 # generated directories
 ./lua
 ./python
+
+# macOS
+.DS_Store
