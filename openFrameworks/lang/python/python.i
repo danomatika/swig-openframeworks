@@ -1,6 +1,8 @@
 // Python specific settings
 // 2017 Dan Wilcox <danomatika@gmail.com>
 
+%include "of_filesystem_path.i"
+
 // ----- operator overloads -----
 
 %rename(__getitem__) *::operator[];

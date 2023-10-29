@@ -1,12 +1,28 @@
-// std::filesystem::path wrapper to convert to Lua strings automatically
-// adapted from SWIG lua/std_string.i
-// 2017 Dan Wilcox <danomatika@gmail.com>
+// of::filesystem::path wrapper to convert to Lua strings automatically
+// adapted from SWIG Lib/lua/std_string.i
+// 2017,2023 Dan Wilcox <danomatika@gmail.com>
 
+// dummy declarations as oF 0.12+ aliases of::filesystem from boost::filesystem,
+// std::filesystem, or std::experimental::filesystem or SWIG throws an unknown
+// type error when it gets to ofConstants.h
+namespace std {
+	namespace filesystem {}
+}
+namespace std {
+	namespace experimental {
+		namespace filesystem {}
+	}
+}
+namespace boost {
+	namespace filesystem {}
+}
+
+// of::filesystem::path type alias set in ofConstants.h
 %{
-#include <boost/filesystem.hpp>
+#include "ofConstants.h"
 %}
 
-namespace std {
+namespace of {
 namespace filesystem {
 
 %naturalvar path;
@@ -62,7 +78,7 @@ namespace filesystem {
 	$1 = lua_isstring(L, $input);
 }
 
-%typemap(in) string &INPUT = const string &;
+%typemap(in) path &INPUT = const path &;
 
 %typemap(in, numinputs=0) string &OUTPUT ($*1_ltype temp) {
 	$1 = &temp;
@@ -73,7 +89,7 @@ namespace filesystem {
 	SWIG_arg++;
 }
 
-%typemap(in) string &INOUT = const string &;
+%typemap(in) path &INOUT = const path &;
 
 %typemap(argout) string &INOUT = string &OUTPUT;
 
@@ -90,4 +106,4 @@ class path {
 };
 
 } // filesystem
-} // std
+} // of

@@ -1,7 +1,7 @@
 // Lua specific settings
 // 2017 Dan Wilcox <danomatika@gmail.com>
 
-%include "std_filesystem_path.i"
+%include "of_filesystem_path.i"
 
 // ----- typemaps -----
 

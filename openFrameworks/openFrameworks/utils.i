@@ -85,13 +85,13 @@ class std::fstream {};
 %ignore ofBuffer::RLines;
 %ignore ofBuffer::getReverseLines();
 
-// DIFF:   ignoring string, filebuf, & std::filesystem::path operators
+// DIFF:   ignoring string, filebuf, & of::filesystem::path operators
 %ignore ofBuffer::operator std::string() const;
 %ignore ofFile::getFileBuffer() const;
-%ignore ofFile::operator std::filesystem::path();
-%ignore ofFile::operator const std::filesystem::path() const;
-%ignore ofDirectory::operator std::filesystem::path();
-%ignore ofDirectory::operator const std::filesystem::path() const;
+%ignore ofFile::operator of::filesystem::path();
+%ignore ofFile::operator of::filesystem::path() const;
+%ignore ofDirectory::operator of::filesystem::path();
+%ignore ofDirectory::operator of::filesystem::path() const;
 
 %include "utils/ofFileUtils.h"
 

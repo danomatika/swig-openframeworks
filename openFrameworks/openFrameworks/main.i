@@ -25,15 +25,6 @@ namespace std {
 #endif
 };
 
-// SWIG needs to know about boost::filesystem or it throws an error when it
-// gets to ofFileUtils.h
-namespace boost {
-	namespace filesystem {}
-}
-
-// DIFF: std::filesystem::path is converted to string in the target language
-%ignore std::filesystem::path;
-
 // ----- ofConstants.h -----
 
 // GL types used as OF arguments, etc so SWIG needs to know about them
