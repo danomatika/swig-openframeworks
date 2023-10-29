@@ -3,7 +3,7 @@ swig-openframeworks
 
 a SWIG interface for openFrameworks with included Makefile
 
-Copyright (c) [Dan Wilcox](danomatika.com) 2015-2018
+Copyright (c) [Dan Wilcox](danomatika.com) 2015-2023
 
 BSD Simplified License.
 
@@ -22,7 +22,7 @@ swig-openframeworks provides a centralized OpenFrameworks API interface file for
 Installation
 ------------
 
-This repository is designed to be used as a submodule within OpenFrameworks addons which provide scripting access to OF.
+This repository is designed to be used as a submodule within OpenFrameworks addons which provide scripting access to oF.
 
 The suggested installation is to the `swig` folder in your main repo:
 
@@ -39,12 +39,12 @@ If you are using a stable version (0.8.4, 0.9.0, ...) of OpenFrameworks then you
 
 The master branch of swig-openframeworks will work with the current stable version.
 
-OF API Bindings
+oF API Bindings
 ---------------
 
 Currently the swig interface file covers *most* of the api while leaving out base classes. It creates a module containing all the imported functions, classes, constants & enums.
 
-To see the main differences with the OF C++ API run the following:
+To see the main differences with the oF C++ API run the following:
 
     find . -name "*.i" -exec grep "// DIFF" {} \;
      
@@ -87,7 +87,7 @@ In Python, the module (aka library) is called "openframeworks" and its members r
 glm Bindings
 ------------
 
-As of openFrameworks 0.10.0, the glm library math types (vec3, mat3, quat, etc) have become integral to the OF API and are now wrapped via a swig interface as well. The resulting module is named "glm" and associated functions and types are accessed from within this name space.
+As of openFrameworks 0.10.0, the glm library math types (vec3, mat3, quat, etc) have become integral to the oF API and are now wrapped via a swig interface as well. The resulting module is named "glm" and associated functions and types are accessed from within this name space.
 
 For example, in Lua:
 
@@ -102,7 +102,7 @@ For example, in Lua:
     -- functions
     local dot = glm.dot(v1, v2)
 
-One **important point**: Most scripting languages cannot support the casting operators which allow the OF math types (ofVec3f, ofMatrix3x3, etc) to be used with functions which take glm type arguments. To get around this problem, each math type has a special member function which returns the associated glm type:
+One **important point**: Most scripting languages cannot support the casting operators which allow the oF math types (ofVec3f, ofMatrix3x3, etc) to be used with functions which take glm type arguments. To get around this problem, each math type has a special member function which returns the associated glm type:
 
 * ofVec2f -> glm::vec2: vec2()
 * ofVec3f -> glm::vec3: vec3()
@@ -117,7 +117,7 @@ Essentially, the following will *not* work as it does in C++:
     local v = of.Vec2f(100, 100)
     of.drawRectangle(v, 20, 20) -- needs a glm.vec2
 
-Either convert the OF math type to a glm type or use a glm type directly:
+Either convert the oF math type to a glm type or use a glm type directly:
 
     -- convert
     local v = of.Vec2f(100, 100)
@@ -192,7 +192,7 @@ By default, functions, classes, enums, & defines are reamed to strip the "of" pr
 
 ### Deprecated Functions & Classes
 
-By default, functions & classes marked as deprecated in the OF api are ignored when generating bindings. If you want to allow deprecations, set the DEPRECATED makefile variable to true:
+By default, functions & classes marked as deprecated in the oF api are ignored when generating bindings. If you want to allow deprecations, set the DEPRECATED makefile variable to true:
 
     make DEPRECATED=true
 
