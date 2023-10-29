@@ -19,8 +19,19 @@
 // TODO:   find a way to release static named ofColor instances
 
 // ignore SWIG Warning 312 from nested union that provides r, g, b, & a access
-// ignore SWIG Warning 320 from extern template classes
-#pragma SWIG nowarn=312,320
+// ignore SWIG Warning 320 from extern template classes (old)
+// ignore SWIG Warning 327 from extern templates (new)
+#pragma SWIG nowarn=312,320,327
+
+// DIFF:   ignore extra ofColor template types:
+// DIFF:   char, short, unsigned short, int, unsigned int, long, unsigned long
+%ignore ofColor_<char>;
+%ignore ofColor_<short>;
+%ignore ofColor_<unsigned short>;
+%ignore ofColor_<int>;
+%ignore ofColor_<unsigned int>;
+%ignore ofColor_<long>;
+%ignore ofColor_<unsigned long>;
 
 %include "types/ofColor.h"
 
@@ -66,15 +77,22 @@
 %attributeVar(ofColor_<unsigned short>, unsigned short, b, b, b);
 %attributeVar(ofColor_<unsigned short>, unsigned short, a, a, a);
 
+%attributeVar(ofColor_<double>, double, r, r, r);
+%attributeVar(ofColor_<double>, double, g, g, g);
+%attributeVar(ofColor_<double>, double, b, b, b);
+%attributeVar(ofColor_<double>, double, a, a, a);
+
 // tell SWIG about template classes
 #ifdef OF_SWIG_RENAME
 	%template(Color) ofColor_<unsigned char>;
 	%template(FloatColor) ofColor_<float>;
 	%template(ShortColor) ofColor_<unsigned short>;
+	%template(DoubleColor) ofColor_<double>;
 #else
 	%template(ofColor) ofColor_<unsigned char>;
 	%template(ofFloatColor) ofColor_<float>;
 	%template(ofShortColor) ofColor_<unsigned short>;
+	%template(ofDoubleColor) ofColor_<double>;
 #endif
 
 // ----- ofPoint.h -----
