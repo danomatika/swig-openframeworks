@@ -44,9 +44,11 @@
 // TODO:   ofTouchEventArgs inheritance from glm::vec2 doesn't create x & y attributes
 %extend ofTouchEventArgs {
 	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		static char temp[256];
+		ostringstream str;
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 };
 

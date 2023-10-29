@@ -56,9 +56,11 @@
 	void setA(PixelType a) {$self->a = a;}
 
 	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		static char temp[256];
+		ostringstream str;
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 };
 
@@ -123,9 +125,11 @@
 	float y;
 
 	const char* __str__() {
-		stringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		static char temp[256];
+		ostringstream str;
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 };
 

@@ -48,9 +48,11 @@ ofInterpolateHermite(float y1, float y2, float pct);
 	}
 
 	const char* __str__() {
+		static char temp[256];
 		ostringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 
 };
@@ -72,9 +74,11 @@ ofInterpolateHermite(float y1, float y2, float pct);
 	}
 
 	const char* __str__() {
+		static char temp[256];
 		ostringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 
 };
@@ -100,9 +104,11 @@ ofInterpolateHermite(float y1, float y2, float pct);
 	}
 
 	const char* __str__() {
+		static char temp[256];
 		ostringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 };
 
@@ -121,9 +127,11 @@ ofInterpolateHermite(float y1, float y2, float pct);
 	}
 
 	const char* __str__() {
+		static char temp[256];
 		ostringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 };
 
@@ -142,9 +150,11 @@ ofInterpolateHermite(float y1, float y2, float pct);
 	}
 
 	const char* __str__() {
+		static char temp[256];
 		ostringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 };
 
@@ -163,9 +173,11 @@ ofInterpolateHermite(float y1, float y2, float pct);
 	}
 
 	const char* __str__() {
+		static char temp[256];
 		ostringstream str;
-		str << (*$self);
-		return str.str().c_str();
+		str << (*self);
+		std::strcpy(temp, str.str().c_str());
+		return &temp[0];
 	}
 };
 
