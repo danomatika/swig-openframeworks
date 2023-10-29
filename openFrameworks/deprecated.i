@@ -143,6 +143,10 @@
 
 %ignore ofTrueTypeFont::loadFont;
 
+// ----- ofMath.h -----
+
+%ignore ofSeedRandom;
+
 // ----- ofVec2f.h -----
 
 %ignore ofVec2f::rescaled;
