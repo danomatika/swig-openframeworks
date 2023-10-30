@@ -33,12 +33,15 @@ typedef unsigned int GLenum;
 typedef unsigned int GLuint;
 typedef float GLfloat;
 
-// this in tesselator.h but SWIG needs to know about it for ofIndexType
+// this is in tesselator.h but SWIG needs to know about it for ofIndexType
 #if defined(TARGET_OPENGLES)
 	typedef unsigned short TESSindex;
 #else
 	typedef unsigned int TESSindex;
 #endif
+
+// this has no meaning outside of C++
+%ignore OF_HAS_CPP17;
 
 %include "utils/ofConstants.h"
 
