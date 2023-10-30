@@ -45,7 +45,7 @@
 %extend ofTouchEventArgs {
 	const char* __str__() {
 		static char temp[256];
-		ostringstream str;
+		std::stringstream str;
 		str << (*self);
 		std::strcpy(temp, str.str().c_str());
 		return &temp[0];
