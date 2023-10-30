@@ -40,8 +40,11 @@ typedef float GLfloat;
 	typedef unsigned int TESSindex;
 #endif
 
-// this has no meaning outside of C++
+// these has no meaning outside of C++
+%ignore OF_USE_LEGACY_VECTOR_MATH;
+%ignore OF_HAS_TLS;
 %ignore OF_HAS_CPP17;
+%ignore OF_USING_STD_FS;
 
 %include "utils/ofConstants.h"
 
