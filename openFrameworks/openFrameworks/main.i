@@ -77,6 +77,9 @@ namespace std {
 // TODO: ignore ofTime std::chrono stuff?
 
 // DIFF: ofUtils.h:
+// DIFF:   ignoring ofTime::getAsTimespec() as it's Unix only and low-level
+%ignore ofTime::getAsTimespec() const;
+
 // DIFF:   ignoring ofFromString as templating results in too much overloading
 %ignore ofFromString;
 
