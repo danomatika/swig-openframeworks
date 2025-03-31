@@ -110,6 +110,7 @@
 // ----- ofGraphics.h -----
 
 %ignore ofGetBackground;
+%ignore ofClear(float);
 %ignore ofbClearBg;
 %ignore ofTriangle;
 %ignore ofCircle;
@@ -194,6 +195,7 @@
 %ignore ofBuffer::getFirstLine;
 %ignore ofBuffer::isLastLine;
 %ignore ofBuffer::resetLineReader;
+%ignore ofFilePath::getFileName(const of::filesystem::path &, bool);
 %ignore ofFile::setReadOnly;
 %ignore ofDirectory::setReadOnly;
 %ignore ofDirectory::numFiles;
