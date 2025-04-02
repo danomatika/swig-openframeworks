@@ -3,7 +3,7 @@ swig-openframeworks
 
 a SWIG interface for openFrameworks with included Makefile
 
-Copyright (c) [Dan Wilcox](danomatika.com) 2015-2023
+Copyright (c) [Dan Wilcox](danomatika.com) 2015-2025
 
 BSD Simplified License.
 
@@ -72,7 +72,9 @@ The contents of the module are renamed by default:
 * **function**: ofBackground -> of.background
 * **class**: ofColor -> of.Color
 * **constant**: OF_LOG_VERBOSE -> of.LOG_VERBOSE
-* **enum**: ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
+* **enum**:
+  - global OF_KEY_BACKSPACE -> of.KEY_BACKSPACE
+  - class ofShader::POSITION_ATTRIBUTE -> of.Shader.POSITION_ATTRIBUTE
 
 ### Python
 
