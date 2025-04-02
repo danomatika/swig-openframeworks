@@ -93,6 +93,10 @@ namespace std {
 
 // TODO: ignore ofTime std::chrono stuff?
 
+// DIFF: ofUtils.h:
+// DIFF:   ignoring ofTime::getAsTimespec() as it's Unix only and low-level
+%ignore ofTime::getAsTimespec() const;
+
 // ofUrn was removed from OF 0.12.1 prelim, but leave for now
 // ofUtils.h: ignoring ofUrn
 /*
