@@ -5,10 +5,6 @@
 
 %include "utils/ofFpsCounter.h"
 
-// ----- ofTimer.h -----
-
-// not needed
-
 // ----- ofXml.h -----
 
 // DIFF: ofXml.h: ignoring find() as it returns a pugi::xpath_node_set
@@ -17,6 +13,7 @@
 // DIFF: ofXml.h: ignoring iterators and nested structs
 %ignore ofXmlIterator;
 %ignore ofXmlSearchIterator;
+%ignore ofXmlAttributeIterator;
 %ignore ofXml::Search;
 %ignore ofXml::Attribute;
 %ignore ofXml::Range;
@@ -28,6 +25,10 @@
 
 // DIFF: ofXml.h: ignoring bool operator
 %ignore ofXml::operator bool;
+
+// DIFF: ofXml.h: ignoring ofSerialize & ofDeserialize
+%ignore ofSerialize;
+%ignore ofDeserialize;
 
 %include "utils/ofXml.h"
 
@@ -93,6 +94,21 @@ class std::fstream {};
 %ignore ofDirectory::operator of::filesystem::path();
 %ignore ofDirectory::operator of::filesystem::path() const;
 
+// DIFF:   ignoring OF 0.12.1 prelim FS-related functions
+%ignore ofGetPathForDirectoryFS;
+%ignore ofGetAbsolutePathFS;
+%ignore getPathForDirectoryFS;
+%ignore getAbsolutePathFS;
+%ignore getCurrentExePathFS;
+%ignore getCurrentExeDirFS;
+%ignore pathFS;
+%ignore ofToDataPathFS;
+
+// DIFF:   ignoring OF 0.12.1 prelim internal helpers:
+// DIFF:   ofPathToString() & ofGetExtensionLower()
+%ignore ofPathToString;
+%ignore ofGetExtensionLower;
+
 %include "utils/ofFileUtils.h"
 
 // clear typemaps
@@ -125,21 +141,9 @@ class std::fstream {};
 
 %include "utils/ofLog.h"
 
-// ----- ofNoise.h -----
-
-// not needed
-
 // ----- ofSystemUtils.h -----
 
 %include "utils/ofSystemUtils.h"
-
-// ----- ofThread.h -----
-
-// not needed
-
-// ----- ofThreadChannel.h -----
-
-// not needed
 
 // ----- ofURLFileLoader.h -----
 

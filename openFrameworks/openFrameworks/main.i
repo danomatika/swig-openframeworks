@@ -64,6 +64,21 @@ namespace std {
 %ignore ofDefaultVec4;
 %ignore ofDefaultTexCoordType;
 
+// override these as constants since SWIG seems to ignores function calls,
+// ie. #define PI glm::pi<float>()
+#ifndef PI
+	#define PI 3.14159265358979323846
+#endif
+#ifndef TWO_PI
+	#define TWO_PI 6.28318530717958647692
+#endif
+#ifndef M_TWO_PI
+	#define M_TWO_PI 6.28318530717958647692
+#endif
+#ifndef HALF_PI
+	#define HALF_PI 1.57079632679489661923
+#endif
+
 // import the glm types
 %import(module="glm") "../../glm.i"
 
@@ -76,7 +91,24 @@ namespace std {
 
 // TODO: ignore ofTime std::chrono stuff?
 
-// DIFF: ofUtils.h:
+// ofUrn was removed from OF 0.12.1 prelim, but leave for now
+// ofUtils.h: ignoring ofUrn
+/*
+%ignore of::urn;
+%ignore of::urn::prepare();
+%ignore of::urn::set;
+%ignore of::urn::valid() const;
+%ignore of::urn::depleted() const;
+%ignore of::urn::capacity() const;
+%ignore of::urn::remain() const;
+%ignore of::urn::refill();
+%ignore of::urn::pull();
+%ignore of::urn::pull_or_empty();
+%ignore of::urn::get_values() const;
+%ignore of::urn::get_phase() const;
+%ignore ofUrn;
+*/
+
 // DIFF:   ignoring ofFromString as templating results in too much overloading
 %ignore ofFromString;
 
@@ -95,6 +127,11 @@ namespace std {
 	%rename(ofUTF8Substring) UTF8Substring;
 	%rename(ofUTF8ToString) UTF8ToString;
 	%rename(ofUTF8Length) UTF8Length;
+#endif
+
+// strip "OF_" from static const string
+#ifdef OF_SWIG_RENAME
+	%rename(BROWSER_DEFAULT_TARGET) OF_BROWSER_DEFAULT_TARGET;
 #endif
 
 // include early for ofToString template declaration

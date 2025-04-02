@@ -3,6 +3,10 @@
 
 // ----- ofMath.h -----
 
+// DIFF: ofMath.h: ignoring ofMin & ofMax version for differing types
+%ignore ofMin(const T &, const Q &);
+%ignore ofMax(const T &, const Q &);
+
 // ignore the template functions
 %ignore ofInterpolateCosine;
 %ignore ofInterpolateCubic;
@@ -36,17 +40,12 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofMatrix3x3.h -----
 
-// DIFF: ofMatrix3x3.h: ignoring glm::mat3 operator
-%ignore ofMatrix3x3::operator glm::mat3;
+// DIFF: ofMatrix3x3.h: renaming glm::mat3 operator to mat3()
+%rename(mat3) ofMatrix3x3::operator glm::mat3;
 
 %include "math/ofMatrix3x3.h"
 
 %extend ofMatrix3x3 {
-
-	glm::mat3 mat3() {
-		return (*$self);
-	}
-
 	const char* __str__() {
 		static char temp[256];
 		std::stringstream str;
@@ -54,7 +53,6 @@ ofInterpolateHermite(float y1, float y2, float pct);
 		std::strcpy(temp, str.str().c_str());
 		return &temp[0];
 	}
-
 };
 
 // ----- ofMatrix4x4.h -----
@@ -62,17 +60,12 @@ ofInterpolateHermite(float y1, float y2, float pct);
 // DIFF: ofMatrix4x4.h: ignoring operator(size_t, size_t) const overload
 %ignore ofMatrix4x4::operator()(std::size_t, std::size_t) const;
 
-// DIFF: ofMatrix4x4.h: ignoring glm::mat4 operator
-%ignore ofMatrix4x4::operator glm::mat4;
+// DIFF: ofMatrix4x4.h: renaming glm::mat4 operator to mat4()
+%rename(mat4) ofMatrix4x4::operator glm::mat4;
 
 %include "math/ofMatrix4x4.h"
 
 %extend ofMatrix4x4 {
-
-	glm::mat4 mat4() {
-		return (*$self);
-	}
-
 	const char* __str__() {
 		static char temp[256];
 		std::stringstream str;
@@ -80,13 +73,12 @@ ofInterpolateHermite(float y1, float y2, float pct);
 		std::strcpy(temp, str.str().c_str());
 		return &temp[0];
 	}
-
 };
 
 // ----- ofQuaternion.h -----
 
-// DIFF: ofQuaternion.h: ignoring glm::quat operator
-%ignore ofQuaternion::operator glm::quat;
+// DIFF: ofQuaternion.h: renaming glm::quat operator to quat()
+%rename(quat) ofQuaternion::operator glm::quat;
 
 // silence warning as SWIG ignores these anyway
 // since it uses the non-const versions
@@ -98,11 +90,6 @@ ofInterpolateHermite(float y1, float y2, float pct);
 %include "math/ofQuaternion.h"
 
 %extend ofQuaternion {
-
-	glm::quat quat() {
-		return (*$self);
-	}
-
 	const char* __str__() {
 		static char temp[256];
 		std::stringstream str;
@@ -114,18 +101,12 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofVec2f.h -----
 
-// DIFF: ofVec2f.h: ignoring glm::vec2 operator,
-// DIFF::           use vec2() accessor instead
-%ignore ofVec2f::operator glm::vec2;
+// DIFF: ofVec2f.h: renaming glm::vec2 operator to vec2()
+%rename(vec2) ofVec2f::operator glm::vec2;
 
 %include "math/ofVec2f.h"
 
 %extend ofVec2f {
-
-	glm::vec2 vec2() {
-		return (*$self);
-	}
-
 	const char* __str__() {
 		static char temp[256];
 		std::stringstream str;
@@ -137,18 +118,12 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofVec3f.h -----
 
-// DIFF: ofVec3f.h: ignoring glm::vec3 operator,
-// DIFF::           use vec3() accessor instead
-%ignore ofVec3f::operator glm::vec3;
+// DIFF: ofVec3f.h: renaming glm::vec3 operator to vec3()
+%rename(vec3) ofVec3f::operator glm::vec3;
 
 %include "math/ofVec3f.h"
 
 %extend ofVec3f {
-
-	glm::vec3 vec3() {
-		return (*$self);
-	}
-
 	const char* __str__() {
 		static char temp[256];
 		std::stringstream str;
@@ -160,18 +135,12 @@ ofInterpolateHermite(float y1, float y2, float pct);
 
 // ----- ofVec4f.h -----
 
-// DIFF: ofVec4f.h: ignoring glm::vec4 operator,
-// DIFF::           use vec4() accessor instead
-%ignore ofVec4f::operator glm::vec4;
+// DIFF: ofVec4f.h: renaming glm::vec4 operator to vec4()
+%rename(vec4) ofVec4f::operator glm::vec4;
 
 %include "math/ofVec4f.h"
 
 %extend ofVec4f {
-
-	glm::vec4 vec4() {
-		return (*$self);
-	}
-
 	const char* __str__() {
 		static char temp[256];
 		std::stringstream str;
@@ -180,7 +149,3 @@ ofInterpolateHermite(float y1, float y2, float pct);
 		return &temp[0];
 	}
 };
-
-// ----- ofVectorMath.h-----
-
-// not needed

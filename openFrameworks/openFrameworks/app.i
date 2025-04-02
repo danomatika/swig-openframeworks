@@ -10,22 +10,6 @@
 
 %include "app/ofWindowSettings.h"
 
-// ----- ofMainLoop.h -----
-
-// not needed
-
-// ----- ofAppNoWindow.h -----
-
-// not needed
-
-// ----- ofAppGLFWWindow.h -----
-
-// not needed
-
-// ----- ofAppBaseWindow.h -----
-
-// not needed
-
 // ----- ofAppRunner.h -----
 
 // DIFF: ofAppRunner.h:
@@ -67,7 +51,3 @@
 %ignore ofGetWin32Window;
 
 %include "app/ofAppRunner.h"
-
-// ----- ofBaseApp.h -----
-
-// not needed

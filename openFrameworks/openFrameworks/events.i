@@ -1,10 +1,6 @@
 // events folder bindings
 // 2017 Dan Wilcox <danomatika@gmail.com>
 
-// ----- ofEvent.h -----
-
-// not needed
-
 // ----- ofEvents.h -----
 
 // DIFF: ofEvents.h:
@@ -18,7 +14,6 @@
 %ignore ofResizeEventArgs;
 %ignore ofWindowPosEventArgs;
 %ignore ofMessage;
-%ignore ofTimeMode;
 
 %ignore ofCoreEvents;
 
@@ -38,6 +33,16 @@
 %ignore ofUnregisterGetMessages;
 %ignore ofUnregisterDragEvents;
 
+// OF 0.12.1 prelim replace ofTimeMode with an enum that SWIG doesn't ignore
+%inline %{
+	enum ofTimeModeEnum : int {
+		TimeMode_System,
+		TimeMode_FixedRate,
+		TimeMode_Filtered
+	};
+%}
+%ignore ofTimeMode;
+
 %include "events/ofEvents.h"
 
 // DIFF:   added target language tostring wrapper for ofTouchEventArgs::operator <<
@@ -52,11 +57,7 @@
 	}
 };
 
-// manually create attributes since inherting from
+// manually create attributes since inheriting from
 // glm::vec2 doesn't seem to create them
 %attributeVar(ofTouchEventArgs, float, x, x, x);
 %attributeVar(ofTouchEventArgs, float, y, y, y);
-
-// ----- ofEventUtils.h -----
-
-// not needed

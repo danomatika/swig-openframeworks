@@ -157,18 +157,6 @@ namespace std {
 	%template(ofPolyline) ofPolyline_<ofDefaultVertexType>;
 #endif
 
-// ----- ofRendererCollection.h -----
-
-// not needed
-
-// ----- ofCairoRenderer.h -----
-
-// not needed
-
-// ----- ofBitmapFont.h -----
-
-// not needed
-
 // ----- ofGraphics.h -----
 
 // no PDF or SVG export support on mobile
@@ -195,6 +183,10 @@ void ofDrawBitmapString(const std::string & textString, float x, float y, float 
 
 %include "graphics/ofGraphics.h"
 
+// ----- ofGraphicsCairo.h -----
+
+%include "graphics/ofGraphicsCairo.h"
+
 // ----- of3dGraphics.h -----
 
 // ignore base classes
@@ -205,10 +197,6 @@ void ofDrawBitmapString(const std::string & textString, float x, float y, float 
 // ----- ofImage.h -----
 
 // handled in main.i
-
-// ----- ofTessellator.h -----
-
-// not needed
 
 // ----- ofTrueTypeFont.h -----
 
@@ -247,7 +235,7 @@ void ofDrawBitmapString(const std::string & textString, float x, float y, float 
 // ignore std::initializer
 %ignore ofTrueTypeFontSettings::addRanges(std::initializer_list<ofUnicode::range>);
 
-// DIFF:   replaced ofAlphabet static instances with afAlphabet_ enums
+// DIFF:   replaced ofAlphabet static instances with ofAlphabet_ enums
 %extend ofTrueTypeFontSettings {
 	void addRanges(ofAlphabetEnum alphabet) {
 		switch(alphabet) {

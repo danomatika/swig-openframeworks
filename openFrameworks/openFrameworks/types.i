@@ -1,14 +1,6 @@
 // types folder bindings
 // 2017 Dan Wilcox <danomatika@gmail.com>
 
-// ----- ofParameter.h -----
-
-// not needed
-
-// ----- ofParameterGroup.h -----
-
-// not needed
-
 // ----- ofBaseTypes.h -----
 
 // handled in main.i

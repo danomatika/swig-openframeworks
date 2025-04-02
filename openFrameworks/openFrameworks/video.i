@@ -22,39 +22,3 @@
 %ignore getPlayer() const;
 
 %include "video/ofVideoPlayer.h"
-
-// ----- ofQuickTimGrabber.h -----
-
-// not needed
-
-// ----- ofQuickTimePlayer.h -----
-
-// not needed
-
-// ----- ofQTUtils.h -----
-
-// not needed
-
-// ----- ofQTKitGrabber.h -----
-
-// not needed
-
-// ----- ofQTKitPlayer.h -----
-
-// not needed
-
-// ----- ofQTKitMovieRenderer.h -----
-
-// not needed
-
-// ----- ofAVFoundationVideoGrabber.h -----
-
-// not needed
-
-// ----- ofAVFoundationVideoPlayer.h -----
-
-// not needed
-
-// ----- ofAVFoundationPlayer.h -----
-
-// not needed

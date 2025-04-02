@@ -25,25 +25,30 @@
 #define OF_REPEAT 10497              // 0x2901
 #define OF_MIRRORED_REPEAT 33648     // 0x8370
 
-// ----- ofGLBaseTypes.h -----
-
-// not needed
-
 // ----- ofBufferObject.h -----
 
 %include "gl/ofBufferObject.h"
 
-// ----- ofGLProgrammableRenderer.h -----
+// ----- ofCubeMap.h -----
 
-// not needed
+// DIFF: ofCubeMap.h:
+// DIF::   ignoring ofCubeMapSettings struct
+%ignore ofCubeMapSettings;
+
+// DIFF:   ignoring Data struct
+%ignore ofCubeMap::Data;
+
+// DIFF:   ignoring ofCubeMapsData in OF 0.12.1 prelim, not sure what this is for
+%ignore ofCubeMapsData;
+
+// ignore shadowed copy constructor
+%ignore ofCubeMap::ofCubeMap(ofCubeMap &&);
+
+%include "gl/ofCubeMap.h"
 
 // ----- ofFbo.h -----
 
 // handled in main.i
-
-// ----- ofGLRenderer.h -----
-
-// not needed
 
 // ----- ofGLUtils.h -----
 
@@ -121,6 +126,17 @@ class ofBaseMaterial {};
 %ignore setAttribute4fv;
 
 %include "gl/ofShader.h"
+
+// ----- ofShadow.h -----
+
+// DIFF: ofShadow.h: ignoring GLData and Data structs
+%ignore ofShadow::GLData;
+%ignore ofShadow::Data;
+
+// DIFF:   ignoring ofShadowsData in OF 0.12.1 prelim, not sure what this is for
+%ignore ofShadowsData;
+
+%include "gl/ofShadow.h"
 
 // ----- ofTexture.h -----
 

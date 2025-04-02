@@ -5,22 +5,6 @@
 
 // handled in main.i
 
-// ----- ofFmodSoundPlayer.h -----
-
-// not needed
-
-// ----- ofOpenALSoundPlayer.h -----
-
-// not needed
-
-// ----- ofRtAudioSoundStream.h -----
-
-// not needed
-
-// ----- ofSoundBuffer.h -----
-
-// not needed
-
 // ----- ofSoundStream.h -----
 
 // ignore overloaded functions
@@ -42,7 +26,3 @@ class ofBaseSoundPlayer {};
 %ignore ofSoundGetSpectrum;
 
 %include "sound/ofSoundPlayer.h"
-
-// ----- ofSoundUtils.h -----
-
-// not needed
