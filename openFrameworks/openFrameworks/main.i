@@ -18,9 +18,11 @@ namespace std {
 	%template(UCharVector) std::vector<unsigned char>;
 #ifdef OF_SWIG_RENAME
 	%template(TextureVector) std::vector<ofTexture>;
+	%template(SoundDeviceVector) std::vector<ofSoundDevice>;
 	%template(VideoDeviceVector) std::vector<ofVideoDevice>;
 #else
 	%template(ofTextureVector) std::vector<ofTexture>;
+	%template(ofSoundDeviceVector) std::vector<ofSoundDevice>;
 	%template(ofVideoDeviceVector) std::vector<ofVideoDevice>;
 #endif
 };
