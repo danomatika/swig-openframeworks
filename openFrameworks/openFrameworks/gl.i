@@ -35,10 +35,8 @@
 // DIF::   ignoring ofCubeMapSettings struct
 %ignore ofCubeMapSettings;
 
-// DIFF:   ignoring Data struct
+// DIFF:   ignoring Data struct and ofCubeMapsData
 %ignore ofCubeMap::Data;
-
-// DIFF:   ignoring ofCubeMapsData in OF 0.12.1 prelim, not sure what this is for
 %ignore ofCubeMapsData;
 
 // ignore shadowed copy constructor
@@ -70,7 +68,7 @@
 
 // ----- ofLight.h -----
 
-// DIFF: ofLight.h: ignoring nested Data struct
+// DIFF: ofLight.h: ignoring nested Data struct and ofLightsData
 %ignore ofLight::Data;
 %ignore ofLightsData;
 
@@ -129,11 +127,9 @@ class ofBaseMaterial {};
 
 // ----- ofShadow.h -----
 
-// DIFF: ofShadow.h: ignoring GLData and Data structs
+// DIFF: ofShadow.h: ignoring GLData and Data structs and ofShadowsData
 %ignore ofShadow::GLData;
 %ignore ofShadow::Data;
-
-// DIFF:   ignoring ofShadowsData in OF 0.12.1 prelim, not sure what this is for
 %ignore ofShadowsData;
 
 %include "gl/ofShadow.h"
