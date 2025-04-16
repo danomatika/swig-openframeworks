@@ -9,13 +9,15 @@
 
 // TODO: make sure returned class instances are freed by using %newobject
 
-// tell SWIG about template vectors,
+// tell SWIG about template vectors and maps,
 // needed for functions and return types
 namespace std {
 	%template(IntVector) std::vector<int>;
 	%template(FloatVector) std::vector<float>;
 	%template(StringVector) std::vector<std::string>;
 	%template(UCharVector) std::vector<unsigned char>;
+	%template(StringMap) std::map<std::string,std::string>;
+	%template(IntMap) std::map<int,int>;
 #ifdef OF_SWIG_RENAME
 	%template(TextureVector) std::vector<ofTexture>;
 	%template(SoundDeviceVector) std::vector<ofSoundDevice>;

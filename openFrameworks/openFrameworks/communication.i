@@ -24,6 +24,9 @@
 %ignore ofArduino::sendI2CWriteRequest(char, char *, int);
 %ignore ofArduino::sendI2CWriteRequest(char, std::vector<char>);
 
+// tell SWIG about supportedPinTypes map
+%template(ArduinoSupportedPinTypesMap) std::map<int,supportedPinTypes>;
+
 %include "communication/ofArduino.h"
 
 // clear typemap
