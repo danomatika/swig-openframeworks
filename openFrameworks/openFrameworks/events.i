@@ -33,7 +33,7 @@
 %ignore ofUnregisterGetMessages;
 %ignore ofUnregisterDragEvents;
 
-// OF 0.12.1 prelim replace ofTimeMode with an enum that SWIG doesn't ignore
+// replace ofTimeMode with an enum that SWIG doesn't ignore
 %inline %{
 	enum ofTimeModeEnum : int {
 		TimeMode_System,

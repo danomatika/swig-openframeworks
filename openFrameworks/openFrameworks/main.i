@@ -99,24 +99,6 @@ namespace std {
 // DIFF:   ignoring ofTime::getAsTimespec() as it's Unix only and low-level
 %ignore ofTime::getAsTimespec() const;
 
-// ofUrn was removed from OF 0.12.1 prelim, but leave for now
-// ofUtils.h: ignoring ofUrn
-/*
-%ignore of::urn;
-%ignore of::urn::prepare();
-%ignore of::urn::set;
-%ignore of::urn::valid() const;
-%ignore of::urn::depleted() const;
-%ignore of::urn::capacity() const;
-%ignore of::urn::remain() const;
-%ignore of::urn::refill();
-%ignore of::urn::pull();
-%ignore of::urn::pull_or_empty();
-%ignore of::urn::get_values() const;
-%ignore of::urn::get_phase() const;
-%ignore ofUrn;
-*/
-
 // DIFF:   ignoring ofFromString as templating results in too much overloading
 %ignore ofFromString;
 

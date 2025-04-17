@@ -94,7 +94,7 @@ class std::fstream {};
 %ignore ofDirectory::operator of::filesystem::path();
 %ignore ofDirectory::operator of::filesystem::path() const;
 
-// DIFF:   ignoring OF 0.12.1 prelim FS-related functions
+// DIFF:   ignoring OF 0.12.1 FS-related functions
 %ignore ofGetPathForDirectoryFS;
 %ignore ofGetAbsolutePathFS;
 %ignore getPathForDirectoryFS;
@@ -104,7 +104,7 @@ class std::fstream {};
 %ignore pathFS;
 %ignore ofToDataPathFS;
 
-// DIFF:   ignoring OF 0.12.1 prelim internal helpers:
+// DIFF:   ignoring OF 0.12.1 internal helpers:
 // DIFF:   ofPathToString() & ofGetExtensionLower()
 %ignore ofPathToString;
 %ignore ofGetExtensionLower;

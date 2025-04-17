@@ -37,16 +37,6 @@
 // DIFF: ofSerial.h: pass binary data as full char strings
 %apply(unsigned char *STRING, int LENGTH) {(unsigned char * buffer, int length)};
 
-// DIFF: ofSerial.h:
-// DIFF:   OF 0.12.1 prelim hides OF_SERIAL_ERROR and OF_SERIAL_NO_DATA but
-// DIFF:   ofSerial will return them, so define in the wrapper when needed
-#ifndef OF_SERIAL_NO_DATA
-#define OF_SERIAL_NO_DATA -2
-#endif
-#ifndef OF_SERIAL_ERROR
-#define OF_SERIAL_ERROR -1
-#endif
-
 %include "communication/ofSerial.h"
 
 // clear typemap

@@ -20,7 +20,7 @@
 // ----- ofEasyCam.h -----
 
 // DIFF: ofEasyCam.h: ignoring hasInteraction(int, int) in favor of
-// DIFF:               hasInteraction(TransformType, int, int)
+// DIFF:              hasInteraction(TransformType, int, int)
 %ignore ofEasyCam::hasInteraction(int, int);
 
 %include "3d/ofEasyCam.h"
