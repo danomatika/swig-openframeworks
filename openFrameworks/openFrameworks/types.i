@@ -56,26 +56,6 @@
 	}
 };
 
-%attributeVar(ofColor_<unsigned char>, unsigned char, r, r, r);
-%attributeVar(ofColor_<unsigned char>, unsigned char, g, g, g);
-%attributeVar(ofColor_<unsigned char>, unsigned char, b, b, b);
-%attributeVar(ofColor_<unsigned char>, unsigned char, a, a, a);
-
-%attributeVar(ofColor_<float>, float, r, r, r);
-%attributeVar(ofColor_<float>, float, g, g, g);
-%attributeVar(ofColor_<float>, float, b, b, b);
-%attributeVar(ofColor_<float>, float, a, a, a);
-
-%attributeVar(ofColor_<unsigned short>, unsigned short, r, r, r);
-%attributeVar(ofColor_<unsigned short>, unsigned short, g, g, g);
-%attributeVar(ofColor_<unsigned short>, unsigned short, b, b, b);
-%attributeVar(ofColor_<unsigned short>, unsigned short, a, a, a);
-
-%attributeVar(ofColor_<double>, double, r, r, r);
-%attributeVar(ofColor_<double>, double, g, g, g);
-%attributeVar(ofColor_<double>, double, b, b, b);
-%attributeVar(ofColor_<double>, double, a, a, a);
-
 // tell SWIG about template classes
 #ifdef OF_SWIG_RENAME
 	%template(Color) ofColor_<unsigned char>;

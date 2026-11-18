@@ -78,6 +78,24 @@
 %ignore ofPixels_::ConstLine;
 %ignore ofPixels_::ConstLines;
 
+// silence prev declaration 508 warnings
+%ignore ofPixels_::ConstPixel::operator*() const;
+%ignore ofPixels_::ConstPixel::operator->() const;
+%ignore ofPixels_::Pixel::operator*() const;
+%ignore ofPixels_::Pixel::operator->() const;
+%ignore ofPixels_::Pixels::operator*() const;
+%ignore ofPixels_::Pixels::operator->() const;
+%ignore ofPixels_::Line::operator*() const;
+%ignore ofPixels_::Line::operator->() const;
+%ignore ofPixels_::Lines::operator*() const;
+%ignore ofPixels_::Lines::operator->() const;
+%ignore ofPixels_::ConstPixels::operator*() const;
+%ignore ofPixels_::ConstPixels::operator->() const;
+%ignore ofPixels_::ConstLine::operator*() const;
+%ignore ofPixels_::ConstLine::operator->() const;
+%ignore ofPixels_::ConstLines::operator*() const;
+%ignore ofPixels_::ConstLines::operator->() const;
+
 // DIFF:   ignoring iterators
 %ignore ofPixels_::begin;
 %ignore ofPixels_<unsigned char>::end;

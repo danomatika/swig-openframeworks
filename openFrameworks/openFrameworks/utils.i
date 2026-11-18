@@ -81,6 +81,10 @@ class std::fstream {};
 %ignore ofBuffer::Lines;
 %ignore ofBuffer::getLines();
 
+// silence prev declaration 508 warnings from std_string.i
+%ignore ofBuffer::Line::empty() const;
+%ignore ofBuffer::RLine::empty() const;
+
 // DIFF:   ignoring nested ofBuffer RLine & RLines structs
 %ignore ofBuffer::RLine;
 %ignore ofBuffer::RLines;
