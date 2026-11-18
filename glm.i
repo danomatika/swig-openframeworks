@@ -53,7 +53,7 @@
 %include <std_string.i>
 
 // expanded primitives
-%typedef unsigned int std::size_t;
+typedef unsigned int std::size_t;
 
 // ----- Bindings------
 
@@ -67,7 +67,7 @@ namespace glm {
 %rename(eq) operator==;
 #endif
 
-%typedef int length_t;
+typedef int length_t;
 
 %include "glm/vec2.i"
 %include "glm/vec3.i"

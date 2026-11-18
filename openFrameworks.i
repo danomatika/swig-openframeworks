@@ -33,13 +33,11 @@
 %ignore operator >>;
 
 // expanded primitives
-%typedef unsigned int size_t;
-%typedef long long int64_t;
-%typedef unsigned long long uint64_t;
+typedef unsigned int size_t;
+typedef long long int64_t;
+typedef unsigned long long uint64_t;
 
 %include <stl.i>
-%include <std_string.i>
-%include <std_vector.i>
 
 // ----- Renaming -----
 
