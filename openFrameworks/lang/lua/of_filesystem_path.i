@@ -2,9 +2,9 @@
 // adapted from SWIG Lib/lua/std_string.i
 // 2017,2023 Dan Wilcox <danomatika@gmail.com>
 
-// dummy declarations as oF 0.12+ aliases of::filesystem from boost::filesystem,
-// std::filesystem, or std::experimental::filesystem or SWIG throws an unknown
-// type error when it gets to ofConstants.h
+// dummy declarations as oF 0.12+ aliases of::filesystem from std::filesystem,
+// or std::experimental::filesystem or SWIG throws an unknown type error when it
+// gets to ofConstants.h
 namespace std {
 	namespace filesystem {}
 }
@@ -13,25 +13,28 @@ namespace std {
 		namespace filesystem {}
 	}
 }
-namespace boost {
-	namespace filesystem {}
-}
 
 // of::filesystem::path type alias set in ofConstants.h
 %{
 #include "ofConstants.h"
 %}
 
-namespace of {
+#ifdef OF_USE_EXPERIMENTAL_FS
+namespace std {
+namespace experimental {
 namespace filesystem {
+#else
+namespace std {
+namespace filesystem {
+#endif
 
 %naturalvar path;
 
 // Lua strings and std::string can contain embedded zero bytes
 // Therefore a standard out typemap should not be:
-//     lua_pushstring(L, $1.c_str());
+//     lua_pushstring(L, $1.string().c_str());
 // but
-//     lua_pushlstring(L, $1.data(), $1.size());
+//     lua_pushlstring(L, $1.string().data(), $1.string().size());
 //
 // Similarly for getting the string
 //     $1 = (char*)lua_tostring(L, $input);
@@ -58,19 +61,19 @@ namespace filesystem {
 }
 
 %typemap(out) const path& {
-	lua_pushlstring(L, $1->data(), $1->size());
+	lua_pushlstring(L, $1->string().data(), $1->string().size());
 	SWIG_arg++;
 }
 
 // for throwing of any kind of path, path ref's and path pointers
 // we convert all to lua strings
 %typemap(throws) path, path&, const path& {
-	lua_pushlstring(L, $1.data(), $1.size());
+	lua_pushlstring(L, $1.string().data(), $1.string().size());
 	SWIG_fail;
 }
 
 %typemap(throws) path*, const path* {
-	lua_pushlstring(L, $1->data(), $1->size());
+	lua_pushlstring(L, $1->string().data(), $1->string().size());
 	SWIG_fail;
 }
 
@@ -85,7 +88,7 @@ namespace filesystem {
 }
 
 %typemap(argout) string &OUTPUT {
-	lua_pushlstring(L, $1->data(), $1->size());
+	lua_pushlstring(L, $1->string().data(), $1->string().size());
 	SWIG_arg++;
 }
 
@@ -105,5 +108,11 @@ class path {
 		// it's probably better to do it in lua
 };
 
+#ifdef OF_USE_EXPERIMENTAL_FS
 } // filesystem
-} // of
+} // experimental
+} // std
+#else
+} // filesystem
+} // std
+#endif
