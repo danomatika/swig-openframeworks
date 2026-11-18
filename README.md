@@ -3,7 +3,7 @@ swig-openframeworks
 
 a SWIG interface for openFrameworks with included Makefile
 
-Copyright (c) [Dan Wilcox](danomatika.com) 2015-2025
+Copyright (c) [Dan Wilcox](danomatika.com) 2015-2026
 
 BSD Simplified License.
 
