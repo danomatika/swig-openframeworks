@@ -87,6 +87,10 @@
 //%ignore ofSetupOpenGL(ofAppBaseWindow *, int, int, int);
 //%ignore ofRunApp(ofBaseApp *);
 
+// ----- ofArdunio.h -----
+
+%ignore ofArduino::EI2CDataRecieved;
+
 // ----- ofSerial.h -----
 
 %ignore ofSerial::enumerateDevices;
@@ -147,6 +151,10 @@
 // ----- ofMath.h -----
 
 %ignore ofSeedRandom;
+
+// ----- ofQuaternion.h -----
+
+%ignore ofQuaternion::length2;
 
 // ----- ofVec2f.h -----
 
