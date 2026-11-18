@@ -141,10 +141,7 @@ vec3 smoothstep(const float &, const float &, const vec3 &);
 vec4 smoothstep(const float &, const float &, const vec4 &);
 bool isnan(const float &);
 bool isinf(const float &);
-
-// fma appears to be scalar only now?
-//FLOAT_SCALAR_OR_VECTOR_3_PARAMS(fma);
-float fma(const float &, const float &, const float &);
+FLOAT_SCALAR_OR_VECTOR_3_PARAMS(fma);
 
 // ----- glm/exponential.hpp -----
 
